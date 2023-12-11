@@ -2,6 +2,13 @@
 
 ### FEATURES ###
 
+- types for socket.io server
+- sync socket.io actions with game state
+- create one room per game
+- emit messages only to the same room
+- disconnection logic and alerts
+
 ### DESIGN ####
 
 ### STRUCTURE ###
+- production version of socket.io server

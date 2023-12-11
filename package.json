@@ -13,6 +13,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-node": "^1.3.1",
 		"@sveltejs/kit": "^1.27.4",
 		"prettier": "^3.0.0",
 		"prettier-plugin-svelte": "^3.0.0",
@@ -24,6 +25,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"nanoid": "^5.0.4"
+		"nanoid": "^5.0.4",
+		"socket.io": "^4.7.2",
+		"socket.io-client": "^4.7.2"
 	}
 }

@@ -1,36 +1,38 @@
 <script lang="ts">
 	import { page } from "$app/stores"
+	import { io } from "socket.io-client"
 
 	export let data
 
 	let game = data.game
 
-	async function copy_url() {
-		await window.navigator.clipboard.writeText($page.url.href)
-	}
+	let counter = game.counter
 
-	async function send_value(value: number): Promise<void> {
-		const response = await fetch("/api", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({ value, game_id: game.id })
-		})
-		if (response.ok) {
-			const response_data = await response.json()
-			game = response_data
-		} else {
-			window.alert(response.statusText)
-		}
-	}
+	const socket = io()
+
+	socket.on("connect", () => {
+		console.log("socket connected:", socket.id)
+	})
+
+	socket.on("message", (message) => {
+		console.log(message)
+	})
+
+	socket.on("counter", (new_counter) => {
+		console.log("new counter value:", new_counter)
+		counter = Number(new_counter)
+	})
 
 	function increment() {
-		send_value(1)
+		socket.emit("counter", counter + 1)
 	}
 
 	function decrement() {
-		send_value(-1)
+		socket.emit("counter", counter - 1)
+	}
+
+	async function copy_url() {
+		await window.navigator.clipboard.writeText($page.url.href)
 	}
 </script>
 
@@ -45,7 +47,7 @@
 </p>
 
 <p>
-	Counter: {game.counter}
+	Counter: {counter}
 </p>
 
 <menu>
