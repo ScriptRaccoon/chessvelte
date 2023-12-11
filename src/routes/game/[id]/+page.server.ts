@@ -1,4 +1,4 @@
-import { add_player, get_game, is_already_in_game } from "$lib/games.js"
+import { add_player, get_game, is_in_game } from "$lib/games.js"
 import { error, redirect } from "@sveltejs/kit"
 
 export const load = (event) => {
@@ -13,7 +13,7 @@ export const load = (event) => {
 	const game = get_game(game_id)
 	if (!game) throw error(404, "Game not found")
 
-	if (is_already_in_game(game_id, client_id)) {
+	if (is_in_game(game_id, client_id)) {
 		return { game }
 	}
 

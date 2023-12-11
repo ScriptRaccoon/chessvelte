@@ -15,6 +15,7 @@ declare global {
 	type Game = {
 		id: string
 		players: Player[]
+		counter: number
 	}
 }
 

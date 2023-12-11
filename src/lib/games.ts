@@ -3,7 +3,8 @@ const games: Record<string, Game> = {}
 export function create_new_game(game_id: string) {
 	const game: Game = {
 		id: game_id,
-		players: []
+		players: [],
+		counter: 0
 	}
 	games[game_id] = game
 }
@@ -22,11 +23,14 @@ export function add_player(game_id: string, player: Player) {
 	game.players.push(player)
 }
 
-export function is_already_in_game(
-	game_id: string,
-	client_id: string
-): boolean {
+export function is_in_game(game_id: string, client_id: string): boolean {
 	const game = games[game_id]
 	if (!game) return false
 	return game.players.some((player) => player.id === client_id)
+}
+
+export function update_game(game_id: string, value: number): Game {
+	const game = games[game_id]
+	game.counter += value
+	return game
 }
