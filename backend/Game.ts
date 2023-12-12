@@ -10,16 +10,23 @@ export class Game {
 
 	constructor(
 		public id: string,
-		public counter: number = 0
+		public counter: number = 0,
+		public turn: number = 0
 	) {
 		Game.dictionary[id] = this
 	}
 
-	increment() {
+	increment_counter() {
 		this.counter++
+		this.switch_turn()
 	}
 
-	decrement() {
+	decrement_counter() {
 		this.counter--
+		this.switch_turn()
+	}
+
+	switch_turn() {
+		this.turn = 1 - this.turn
 	}
 }

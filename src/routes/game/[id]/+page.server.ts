@@ -13,18 +13,17 @@ export const load = (event) => {
 	const pairing = Pairing.get_by_id(game_id)
 	if (!pairing) throw error(404, "Game not found")
 
-	if (pairing.has_player(client_id)) {
-		return { game_id }
+	let player = pairing.get_player(client_id)
+
+	if (player) {
+		return { game_id, turn: player.turn }
 	}
 
 	if (pairing.is_full) {
 		throw error(401, "Game is already full")
 	}
 
-	pairing.add_player({
-		name,
-		id: client_id
-	})
+	player = pairing.add_player(client_id)
 
-	return { game_id }
+	return { game_id, my_turn: player.turn }
 }

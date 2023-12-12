@@ -1,14 +1,7 @@
 import { Pairing } from "$lib/Pairing"
+import { COOKIE_OPTIONS } from "$lib/utils.js"
 import { error, redirect } from "@sveltejs/kit"
 import { nanoid } from "nanoid"
-
-const COOKIE_OPTIONS = {
-	maxAge: 365 * 24 * 60 * 60,
-	path: "/",
-	sameSite: "lax",
-	httpOnly: true,
-	secure: true
-} as const
 
 export const load = (event) => {
 	const name = event.cookies.get("name")

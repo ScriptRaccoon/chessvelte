@@ -1,6 +1,6 @@
 export type Player = {
 	id: string
-	name: string
+	turn: number
 }
 
 export class Pairing {
@@ -21,12 +21,23 @@ export class Pairing {
 		Pairing.dictionary[id] = this
 	}
 
-	add_player(player: Player): void {
+	add_player(player_id: string): Player {
+		let turn: number
+		if (this.players.length === 0) {
+			turn = Number(Math.random() < 0.5)
+		} else {
+			turn = 1 - this.players[0].turn
+		}
+		const player = {
+			id: player_id,
+			turn
+		}
 		this.players.push(player)
+		return player
 	}
 
-	has_player(player_id: string): boolean {
-		return this.players.some((player) => player.id === player_id)
+	get_player(player_id: string): Player | undefined {
+		return this.players.find((player) => player.id === player_id)
 	}
 
 	get is_full(): boolean {

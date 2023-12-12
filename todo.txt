@@ -2,9 +2,9 @@
 
 ### FEATURES ###
 
-- sync socket.io actions with game state
-- create one room per game
-- emit messages only to the same room
+- game started property, false by default
+- game start button on client when 2 players are present
+- make sure that player cannot change their turn parameter client-side
 - disconnection logic and alerts
 
 ### DESIGN ####

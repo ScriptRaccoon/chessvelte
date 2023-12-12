@@ -22,23 +22,23 @@ export default {
 				socket.join(game_id)
 				console.log("socket " + socket.id + " joins game" + game_id)
 				const game = Game.get_by_id(game_id) ?? new Game(game_id)
-				socket.emit("counter", game.counter)
+				socket.emit("game_state", game.counter, game.turn)
 			})
 
 			socket.on("increment", (game_id) => {
 				const game = Game.get_by_id(game_id)
 				if (!game) return
 				console.log("increment counter in backend")
-				game.increment()
-				io.to(game_id).emit("counter", game.counter)
+				game.increment_counter()
+				io.to(game_id).emit("game_state", game.counter, game.turn)
 			})
 
 			socket.on("decrement", (game_id) => {
 				const game = Game.get_by_id(game_id)
 				if (!game) return
 				console.log("decrement counter in backend")
-				game.decrement()
-				io.to(game_id).emit("counter", game.counter)
+				game.decrement_counter()
+				io.to(game_id).emit("game_state", game.counter, game.turn)
 			})
 
 			socket.on("disconnect", () => {
