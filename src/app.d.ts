@@ -7,16 +7,6 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
-	type Player = {
-		id: string
-		name: string
-	}
-
-	type Game = {
-		id: string
-		players: Player[]
-		counter: number
-	}
 }
 
 export {}

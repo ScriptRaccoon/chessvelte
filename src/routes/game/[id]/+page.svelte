@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { page } from "$app/stores"
-	import { io } from "socket.io-client"
+	import { io, Socket } from "socket.io-client"
+
+	import type {
+		server_to_client_event,
+		client_to_server_event
+	} from "$lib/types"
 
 	export let data
 
@@ -8,7 +13,7 @@
 
 	let counter = game.counter
 
-	const socket = io()
+	const socket: Socket<server_to_client_event, client_to_server_event> = io()
 
 	socket.on("connect", () => {
 		console.log("socket connected:", socket.id)
@@ -20,7 +25,7 @@
 
 	socket.on("counter", (new_counter) => {
 		console.log("new counter value:", new_counter)
-		counter = Number(new_counter)
+		counter = new_counter
 	})
 
 	function increment() {

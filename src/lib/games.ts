@@ -1,3 +1,5 @@
+import type { Game, Player } from "./types"
+
 const games: Record<string, Game> = {}
 
 export function create_new_game(game_id: string) {

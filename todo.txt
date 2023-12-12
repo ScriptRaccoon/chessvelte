@@ -2,7 +2,6 @@
 
 ### FEATURES ###
 
-- types for socket.io server
 - sync socket.io actions with game state
 - create one room per game
 - emit messages only to the same room
