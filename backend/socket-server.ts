@@ -3,7 +3,7 @@ import { Server } from "socket.io"
 import type {
 	client_to_server_event,
 	server_to_client_event
-} from "./src/lib/types"
+} from "../src/lib/types"
 
 export default {
 	name: "socket server",
