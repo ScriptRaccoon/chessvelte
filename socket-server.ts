@@ -20,10 +20,6 @@ export default {
 			socket.on("disconnect", () => {
 				console.log("socket disconnected:", socket.id)
 			})
-
-			socket.on("counter", (counter) => {
-				io.emit("counter", counter)
-			})
 		})
 	}
 }

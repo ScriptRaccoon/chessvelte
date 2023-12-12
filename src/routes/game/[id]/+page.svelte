@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores"
 	import { io, Socket } from "socket.io-client"
-
 	import type {
 		server_to_client_event,
 		client_to_server_event
@@ -9,9 +8,7 @@
 
 	export let data
 
-	let game = data.game
-
-	let counter = game.counter
+	const game_id = data.game_id
 
 	const socket: Socket<server_to_client_event, client_to_server_event> = io()
 
@@ -23,19 +20,6 @@
 		console.log(message)
 	})
 
-	socket.on("counter", (new_counter) => {
-		console.log("new counter value:", new_counter)
-		counter = new_counter
-	})
-
-	function increment() {
-		socket.emit("counter", counter + 1)
-	}
-
-	function decrement() {
-		socket.emit("counter", counter - 1)
-	}
-
 	async function copy_url() {
 		await window.navigator.clipboard.writeText($page.url.href)
 	}
@@ -45,23 +29,8 @@
 	<a href="/">Home</a>
 </span>
 
-<h1>Game {game.id}</h1>
+<h1>Game {game_id}</h1>
 
 <p>
 	<button on:click={copy_url}>Copy URL</button>
 </p>
-
-<p>
-	Counter: {counter}
-</p>
-
-<menu>
-	<button on:click={increment}>Increment</button>
-	<button on:click={decrement}>Decrement</button>
-</menu>
-
-<style>
-	menu {
-		padding: 0;
-	}
-</style>

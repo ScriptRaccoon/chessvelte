@@ -1,7 +1,6 @@
-import { create_new_game, game_exists } from "$lib/games.js"
+import { Pairing } from "$lib/pairing"
 import { error, redirect } from "@sveltejs/kit"
-import { customAlphabet } from "nanoid"
-const nanoid = customAlphabet("abcdefABCDEF0123456789")
+import { nanoid } from "nanoid"
 
 const COOKIE_OPTIONS = {
 	maxAge: 365 * 24 * 60 * 60,
@@ -37,8 +36,8 @@ export const actions = {
 			game_id = nanoid(6)
 		}
 
-		if (!game_exists(game_id)) {
-			create_new_game(game_id)
+		if (!Pairing.exists(game_id)) {
+			new Pairing(game_id)
 		}
 
 		throw redirect(303, `/game/${game_id}`)

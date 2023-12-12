@@ -1,4 +1,4 @@
-import { add_player, get_game, is_in_game } from "$lib/games.js"
+import { Pairing } from "$lib/pairing"
 import { error, redirect } from "@sveltejs/kit"
 
 export const load = (event) => {
@@ -10,23 +10,21 @@ export const load = (event) => {
 	const name = event.cookies.get("name")
 	if (!name) throw redirect(303, `/?id=${game_id}`)
 
-	const game = get_game(game_id)
-	if (!game) throw error(404, "Game not found")
+	const pairing = Pairing.get_by_id(game_id)
+	if (!pairing) throw error(404, "Game not found")
 
-	if (is_in_game(game_id, client_id)) {
-		return { game }
+	if (pairing.has_player(client_id)) {
+		return { game_id }
 	}
 
-	if (game.players.length >= 2) {
-		throw error(404, "Game is already full")
+	if (pairing.is_full) {
+		throw error(401, "Game is already full")
 	}
 
-	const player = {
+	pairing.add_player({
 		name,
 		id: client_id
-	}
+	})
 
-	add_player(game_id, player)
-
-	return { game }
+	return { game_id }
 }
