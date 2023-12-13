@@ -3,7 +3,7 @@
 </script>
 
 <header>
-	<h1>Chessvelte</h1>
+	<h1>Game Pairing with SvelteKit</h1>
 </header>
 
 <slot />

@@ -2,8 +2,6 @@
 
 ### FEATURES ###
 
-- actually implement the chess game
-
 ### DESIGN ####
 
 ### STRUCTURE ###
