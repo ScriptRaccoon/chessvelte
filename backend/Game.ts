@@ -1,8 +1,8 @@
 import type { Game_State } from "$lib/types"
 
 export type Player = {
-	client_id: string,
-	socket_id: string,
+	client_id: string
+	socket_id: string
 	turn: number
 }
 
@@ -14,6 +14,12 @@ export class Game {
 
 	static get_by_id(id: string): Game | undefined {
 		return Game.dictionary[id]
+	}
+
+	static find_by_player(socket_id: string): Game | undefined {
+		return Object.values(Game.dictionary).find((game) =>
+			game.players.some((player) => player.socket_id === socket_id)
+		)
 	}
 
 	constructor(
@@ -40,19 +46,23 @@ export class Game {
 	}
 
 	add_player(socket_id: string, client_id: string): Player | null {
-		const player: Player | undefined = this.players.find(player => player.client_id === client_id)
-		
+		const player: Player | undefined = this.players.find(
+			(player) => player.client_id === client_id
+		)
+
 		if (player) {
 			player.socket_id = socket_id
 			return player
 		}
-		
-		if (this.ready || this.started) 
-			return null
 
-		const turn = this.players.length === 0 ? Number(Math.random() < 0.5) : 1 - this.players[0].turn
-	
-		const new_player: Player = {socket_id, client_id, turn}	
+		if (this.ready || this.started) return null
+
+		const turn =
+			this.players.length === 0
+				? Number(Math.random() < 0.5)
+				: 1 - this.players[0].turn
+
+		const new_player: Player = { socket_id, client_id, turn }
 		this.players.push(new_player)
 
 		return new_player
@@ -67,13 +77,13 @@ export class Game {
 		this.counter++
 		this.switch_turn()
 	}
-	
+
 	decrement_counter() {
 		if (!this.started) return
 		this.counter--
 		this.switch_turn()
 	}
-	
+
 	switch_turn() {
 		if (!this.started) return
 		this.turn = 1 - this.turn

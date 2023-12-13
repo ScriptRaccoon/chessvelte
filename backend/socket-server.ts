@@ -22,9 +22,12 @@ export default {
 			socket.on("me", (game_id, client_id) => {
 				socket.join(game_id)
 				const game = Game.get_by_id(game_id) ?? new Game(game_id)
+				if (game.ready) {
+					io.to(game.id).emit("alert", "Player has reconnected")
+				}
 				const player = game.add_player(socket.id, client_id)
 				if (player) {
-					socket.emit("turn", player.turn)				
+					socket.emit("turn", player.turn)
 					emit_game_state(game)
 				}
 			})
@@ -42,12 +45,18 @@ export default {
 				game.decrement_counter()
 				emit_game_state(game)
 			})
-			
+
 			socket.on("start", (game_id) => {
 				const game = Game.get_by_id(game_id)
 				if (!game || game.started) return
 				game.start()
 				emit_game_state(game)
+			})
+
+			socket.on("disconnect", () => {
+				const game = Game.find_by_player(socket.id)
+				if (!game) return
+				io.to(game.id).emit("alert", "Player has disconnected")
 			})
 		})
 	}

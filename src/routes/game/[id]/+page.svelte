@@ -16,10 +16,13 @@
 	let game_state: Game_State | null = null
 
 	let copied: boolean = false
+	let alert: string | null = null
 
 	$: its_my_turn = game_state?.turn !== null && game_state?.turn === my_turn
 
 	const socket: Socket<server_to_client_event, client_to_server_event> = io()
+
+	socket.emit("me", game_id, client_id)
 
 	socket.on("turn", (_turn) => {
 		my_turn = _turn
@@ -29,7 +32,12 @@
 		game_state = _game_state
 	})
 
-	socket.emit("me", game_id, client_id)
+	socket.on("alert", (message) => {
+		alert = message
+		setTimeout(() => {
+			alert = null
+		}, 1000)
+	})
 
 	function increment() {
 		if (!its_my_turn) return
@@ -59,6 +67,10 @@
 </span>
 
 <h1>Game {game_id}</h1>
+
+{#if alert}
+	<p>{alert}</p>
+{/if}
 
 <p>
 	<button on:click={copy_url}>Copy URL</button>
