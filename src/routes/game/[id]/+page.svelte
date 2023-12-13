@@ -20,23 +20,13 @@
 
 	const socket: Socket<server_to_client_event, client_to_server_event> = io()
 
-	socket.on("connect", () => {
-		console.log("socket connected:", socket.id)
-	})
-
-	socket.on("message", (message) => {
-		console.log(message)
-	})
-
 	socket.on("turn", (_turn) => {
 		my_turn = _turn
-		console.log("my turn", my_turn)
 	})
 
 	socket.on("game_state", (_counter, _current_turn) => {
 		counter = _counter
 		current_turn = _current_turn
-		console.log("current turn", current_turn)
 	})
 
 	socket.emit("me", game_id, client_id)
