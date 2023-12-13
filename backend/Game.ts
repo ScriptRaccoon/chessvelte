@@ -1,7 +1,8 @@
 import type { Game_State } from "$lib/types"
 
 export type Player = {
-	id: string,
+	client_id: string,
+	socket_id: string,
 	turn: number
 }
 
@@ -38,20 +39,23 @@ export class Game {
 		this.started = true
 	}
 
-	add_player(id: string): Player | null {
-		let player = this.players.find(player => player.id === id)
-		if (player) 
+	add_player(socket_id: string, client_id: string): Player | null {
+		const player: Player | undefined = this.players.find(player => player.client_id === client_id)
+		
+		if (player) {
+			player.socket_id = socket_id
 			return player
+		}
 		
 		if (this.ready || this.started) 
 			return null
 
 		const turn = this.players.length === 0 ? Number(Math.random() < 0.5) : 1 - this.players[0].turn
 	
-		player = {id, turn}	
-		this.players.push(player)
+		const new_player: Player = {socket_id, client_id, turn}	
+		this.players.push(new_player)
 
-		return player
+		return new_player
 	}
 
 	get ready(): boolean {

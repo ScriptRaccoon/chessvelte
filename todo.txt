@@ -3,6 +3,7 @@
 ### FEATURES ###
 
 - disconnection logic and alerts
+- check correct turn also in socket server (not just client-side)
 
 ### DESIGN ####
 

@@ -22,9 +22,11 @@ export default {
 			socket.on("me", (game_id, client_id) => {
 				socket.join(game_id)
 				const game = Game.get_by_id(game_id) ?? new Game(game_id)
-				const player = game.add_player(client_id)
-				if (player) socket.emit("turn", player.turn)				
-				emit_game_state(game)
+				const player = game.add_player(socket.id, client_id)
+				if (player) {
+					socket.emit("turn", player.turn)				
+					emit_game_state(game)
+				}
 			})
 
 			socket.on("increment", (game_id) => {
