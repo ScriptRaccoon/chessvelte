@@ -41,6 +41,12 @@ export class Game {
 		}
 	}
 
+	is_playing(socket_id: string): boolean {
+		return this.players.some(
+			(player) => player.socket_id === socket_id && player.turn === this.turn
+		)
+	}
+
 	start(): void {
 		this.started = true
 	}

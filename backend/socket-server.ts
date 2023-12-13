@@ -35,6 +35,7 @@ export default {
 			socket.on("increment", (game_id) => {
 				const game = Game.get_by_id(game_id)
 				if (!game) return
+				if (!game.is_playing(socket.id)) return
 				game.increment_counter()
 				emit_game_state(game)
 			})
@@ -42,6 +43,7 @@ export default {
 			socket.on("decrement", (game_id) => {
 				const game = Game.get_by_id(game_id)
 				if (!game) return
+				if (!game.is_playing(socket.id)) return
 				game.decrement_counter()
 				emit_game_state(game)
 			})
