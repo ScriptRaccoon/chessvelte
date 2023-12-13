@@ -24,15 +24,21 @@ export class Game {
 		Game.dictionary[id] = this
 	}
 
-	add_player(client_id: string): void {
-		if (this.is_full) return
-		if (this.players.some(player => player.id === client_id)) return
-		const player = {
+	add_player(client_id: string): Player | null {
+		let player = this.players.find(player => player.id === client_id)
+		if (player) 
+			return player
+		
+		if (this.is_full) 
+			return null
+	
+		player = {
 			id: client_id,
 			turn: this.players.length === 0 ? Number(Math.random() < 0.5) : 1 - this.players[0].turn
 		}	
 		this.players.push(player)
-		console.log("players in game",this.players);
+		
+		return player
 	}
 
 	get is_full():boolean {

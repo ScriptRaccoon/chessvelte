@@ -1,6 +1,7 @@
 export type server_to_client_event = {
 	message: (msg: string) => void
-	game_state: (counter: number, turn: number) => void
+	game_state: (counter: number, turn: number) => void,
+	turn: (_:number) => void
 }
 
 export type client_to_server_event = {
