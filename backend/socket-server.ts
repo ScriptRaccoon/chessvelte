@@ -14,31 +14,36 @@ export default {
 			server.httpServer
 		)
 		io.on("connection", (socket) => {
-
-
 			socket.on("me", (game_id, client_id) => {
 				socket.join(game_id)
 				const game = Game.get_by_id(game_id) ?? new Game(game_id)
 				const player = game.add_player(client_id)
 				if (player) socket.emit("turn", player.turn)				
-				socket.emit("game_state", game.counter, game.turn)
+				socket.emit("game_state", game.counter, game.turn, game.started)
+				if (!game.started && game.is_full) io.to(game_id).emit("ready")
 			})
 
 			socket.on("increment", (game_id) => {
 				const game = Game.get_by_id(game_id)
 				if (!game) return
 				game.increment_counter()
-				io.to(game_id).emit("game_state", game.counter, game.turn)
+				io.to(game_id).emit("game_state", game.counter, game.turn, game.started)
 			})
 
 			socket.on("decrement", (game_id) => {
 				const game = Game.get_by_id(game_id)
 				if (!game) return
 				game.decrement_counter()
-				io.to(game_id).emit("game_state", game.counter, game.turn)
+				io.to(game_id).emit("game_state", game.counter, game.turn, game.started)
 			})
-
 			
+			socket.on("start", (game_id) => {
+				const game = Game.get_by_id(game_id)
+				if (!game) return
+				if (game.started) return
+				game.started = true
+				io.to(game_id).emit("start")
+			})
 		})
 	}
 }

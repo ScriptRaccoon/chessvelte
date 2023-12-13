@@ -29,15 +29,17 @@ export class Game {
 		if (player) 
 			return player
 		
-		if (this.is_full) 
+		if (this.is_full || this.started) 
 			return null
+
+		const turn = this.players.length === 0 ? Number(Math.random() < 0.5) : 1 - this.players[0].turn
 	
 		player = {
 			id: client_id,
-			turn: this.players.length === 0 ? Number(Math.random() < 0.5) : 1 - this.players[0].turn
+			turn
 		}	
 		this.players.push(player)
-		
+
 		return player
 	}
 
@@ -46,16 +48,19 @@ export class Game {
 	}
 
 	increment_counter() {
+		if (!this.started) return
 		this.counter++
 		this.switch_turn()
 	}
-
+	
 	decrement_counter() {
+		if (!this.started) return
 		this.counter--
 		this.switch_turn()
 	}
-
+	
 	switch_turn() {
+		if (!this.started) return
 		this.turn = 1 - this.turn
 	}
 }

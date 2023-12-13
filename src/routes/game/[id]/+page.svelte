@@ -14,6 +14,7 @@
 	let counter: number | null = null
 	let current_turn: number | null = null
 	let started: boolean = false
+	let ready: boolean = false
 	let my_turn: number | null = null
 
 	$: its_my_turn = current_turn !== null && current_turn === my_turn
@@ -24,9 +25,18 @@
 		my_turn = _turn
 	})
 
-	socket.on("game_state", (_counter, _current_turn) => {
+	socket.on("game_state", (_counter, _current_turn, _started) => {
+		started = _started
 		counter = _counter
 		current_turn = _current_turn
+	})
+
+	socket.on("ready", () => {
+		ready = true
+	})
+
+	socket.on("start", () => {
+		started = true
 	})
 
 	socket.emit("me", game_id, client_id)
@@ -44,6 +54,10 @@
 	async function copy_url() {
 		await window.navigator.clipboard.writeText($page.url.href)
 	}
+
+	function start_game() {
+		socket.emit("start", game_id)
+	}
 </script>
 
 <span>
@@ -53,24 +67,33 @@
 <h1>Game {game_id}</h1>
 
 <p>
-	{#if its_my_turn}
-		It is your turn!
-	{:else}
-		It is your opponent's turn!
-	{/if}
-</p>
-
-<p>
 	<button on:click={copy_url}>Copy URL</button>
 </p>
 
-<div>
-	<button on:click={increment} disabled={!its_my_turn}> Increment </button>
-	<button on:click={decrement} disabled={!its_my_turn}> Decrement </button>
-</div>
+{#if ready && !started}
+	<p>Two players are present. Do you want to start the game?</p>
+	<p>
+		<button on:click={start_game}>Start</button>
+	</p>
+{/if}
 
-{#if counter !== null}
-	<div>{counter}</div>
+{#if started}
+	<p>
+		{#if its_my_turn}
+			It is your turn!
+		{:else}
+			It is your opponent's turn!
+		{/if}
+	</p>
+
+	<div>
+		<button on:click={increment} disabled={!its_my_turn}> Increment </button>
+		<button on:click={decrement} disabled={!its_my_turn}> Decrement </button>
+	</div>
+
+	{#if counter !== null}
+		<div>{counter}</div>
+	{/if}
 {/if}
 
 <style>
