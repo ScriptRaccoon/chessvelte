@@ -1,8 +1,13 @@
+export type Game_State = {
+	counter: number,
+	ready: boolean,
+	started: boolean,
+	turn: number,
+}
+
 export type server_to_client_event = {
-	game_state: (counter: number, turn: number, started: boolean) => void,
+	game_state: (state: Game_State) => void,
 	turn: (_:number) => void,
-	ready: () => void,
-	start: () => void
 }
 
 export type client_to_server_event = {
