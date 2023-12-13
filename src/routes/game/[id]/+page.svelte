@@ -9,12 +9,11 @@
 	export let data
 
 	const game_id = data.game_id
-	const my_turn = data.my_turn
+	const client_id = data.client_id
 
 	let counter: number | null = null
 	let current_turn: number | null = null
-
-	$: its_my_turn = my_turn === current_turn
+	let started: boolean = false
 
 	const socket: Socket<server_to_client_event, client_to_server_event> = io()
 
@@ -31,15 +30,13 @@
 		current_turn = _current_turn
 	})
 
-	socket.emit("game_id", game_id)
+	socket.emit("me", game_id, client_id)
 
 	function increment() {
-		if (!its_my_turn) return
 		socket.emit("increment", game_id)
 	}
 
 	function decrement() {
-		if (!its_my_turn) return
 		socket.emit("decrement", game_id)
 	}
 
@@ -59,16 +56,8 @@
 </p>
 
 <div>
-	{#if its_my_turn}
-		It is your turn
-	{:else}
-		It is your opponent's turn
-	{/if}
-</div>
-
-<div>
-	<button on:click={increment} disabled={!its_my_turn}> Increment </button>
-	<button on:click={decrement} disabled={!its_my_turn}> Decrement </button>
+	<button on:click={increment}> Increment </button>
+	<button on:click={decrement}> Decrement </button>
 </div>
 
 {#if counter !== null}

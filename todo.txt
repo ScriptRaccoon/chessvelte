@@ -2,9 +2,9 @@
 
 ### FEATURES ###
 
+- reactivate turns
 - game started property, false by default
 - game start button on client when 2 players are present
-- make sure that player cannot change their turn parameter client-side
 - disconnection logic and alerts
 
 ### DESIGN ####

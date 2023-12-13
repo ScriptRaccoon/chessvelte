@@ -16,7 +16,7 @@ export const load = (event) => {
 	let player = pairing.get_player(client_id)
 
 	if (player) {
-		return { game_id, turn: player.turn }
+		return { game_id, client_id }
 	}
 
 	if (pairing.is_full) {
@@ -25,5 +25,5 @@ export const load = (event) => {
 
 	player = pairing.add_player(client_id)
 
-	return { game_id, my_turn: player.turn }
+	return { game_id, client_id }
 }

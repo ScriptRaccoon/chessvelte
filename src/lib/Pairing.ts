@@ -1,6 +1,5 @@
 export type Player = {
 	id: string
-	turn: number
 }
 
 export class Pairing {
@@ -22,15 +21,9 @@ export class Pairing {
 	}
 
 	add_player(player_id: string): Player {
-		let turn: number
-		if (this.players.length === 0) {
-			turn = Number(Math.random() < 0.5)
-		} else {
-			turn = 1 - this.players[0].turn
-		}
+	
 		const player = {
 			id: player_id,
-			turn
 		}
 		this.players.push(player)
 		return player

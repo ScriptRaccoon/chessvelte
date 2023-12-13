@@ -18,10 +18,11 @@ export default {
 
 			socket.emit("message", "Hello from the server!")
 
-			socket.on("game_id", (game_id) => {
+			socket.on("me", (game_id, client_id) => {
 				socket.join(game_id)
 				console.log("socket " + socket.id + " joins game" + game_id)
 				const game = Game.get_by_id(game_id) ?? new Game(game_id)
+				game.add_player(client_id)
 				socket.emit("game_state", game.counter, game.turn)
 			})
 
