@@ -1,7 +1,7 @@
 import { Pairing } from "$lib/Pairing"
-import { COOKIE_OPTIONS } from "$lib/utils.js"
+import { COOKIE_OPTIONS } from "$lib/config"
+import { generate_game_id } from "$lib/utils.js"
 import { error, redirect } from "@sveltejs/kit"
-import { nanoid } from "nanoid"
 
 export const load = (event) => {
 	const name = event.cookies.get("name")
@@ -26,7 +26,7 @@ export const actions = {
 
 		let game_id = form_data.get("game_id") as string
 		if (!game_id) {
-			game_id = nanoid(6)
+			game_id = generate_game_id()
 		}
 
 		if (!Pairing.exists(game_id)) {

@@ -4,9 +4,10 @@ import type {
 	client_to_server_event,
 	server_to_client_event
 } from "../src/lib/types"
-import { Game } from "./Game"
+import { Game } from "./Game" // TODO: replace this with the actual chess game class
 
 export default {
+	// TODO: implement the game actions from Game.svelte
 	name: "socket server",
 	configureServer(server: ViteDevServer) {
 		if (!server.httpServer) return

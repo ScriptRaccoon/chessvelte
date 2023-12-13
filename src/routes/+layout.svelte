@@ -1,9 +1,12 @@
 <script lang="ts">
+	import Header from "$lib/components/Header.svelte"
 	import "../app.css"
 </script>
 
-<header>
-	<h1>Game Pairing with SvelteKit</h1>
-</header>
+<svelte:head>
+	<title>Chessvelte</title>
+</svelte:head>
+
+<Header />
 
 <slot />

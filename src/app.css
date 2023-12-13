@@ -1,9 +1,70 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	--light-square-color: hsl(40, 70%, 60%);
+	--dark-square-color: hsl(20, 82%, 30%);
+	--border-color: hsl(20, 82%, 20%);
+	--selected-color: rgba(129, 205, 213, 0.9);
+	--highlight-color: rgba(129, 205, 213, 0.5);
+	--button-color: rgb(42, 126, 159);
+	--width: min(95vmin, 45rem);
+	--font-color: white;
+	--secondary-font-color: #aaa;
+}
+
 body {
-	background-color: #112;
+	font-family:
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		"Open Sans",
+		"Helvetica Neue",
+		sans-serif;
+	background-color: #222;
 	color: white;
-	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 a {
 	color: inherit;
+}
+
+button {
+	font-family: inherit;
+	color: inherit;
+	font-size: inherit;
+	background: none;
+	border: none;
+	cursor: pointer;
+	outline: none;
+}
+
+.button {
+	background-color: var(--button-color);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 0.25rem;
+	outline-offset: 0.1rem;
+	font-size: 1.125rem;
+}
+
+.button:focus-visible {
+	outline: 0.2rem solid var(--button-color);
+}
+
+.button[disabled] {
+	opacity: 0.8;
+	cursor: not-allowed;
+}
+
+img {
+	display: block;
 }

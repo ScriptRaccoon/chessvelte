@@ -66,14 +66,14 @@
 	<a href="/">Home</a>
 </span>
 
-<h1>Game {game_id}</h1>
+<h2>Game {game_id}</h2>
 
 {#if alert}
 	<p>{alert}</p>
 {/if}
 
 <p>
-	<button on:click={copy_url}>Copy URL</button>
+	<button class="button" on:click={copy_url}>Copy URL</button>
 	{#if copied}
 		<div>Copied to clipboard!</div>
 	{/if}
@@ -82,7 +82,7 @@
 {#if game_state?.ready && !game_state?.started}
 	<p>Two players are present. Do you want to start the game?</p>
 	<p>
-		<button on:click={start_game}>Start</button>
+		<button class="button" on:click={start_game}>Start</button>
 	</p>
 {/if}
 
@@ -96,16 +96,13 @@
 	</p>
 
 	<div>
-		<button on:click={increment} disabled={!its_my_turn}>Increment</button>
-		<button on:click={decrement} disabled={!its_my_turn}>Decrement</button>
+		<button class="button" on:click={increment} disabled={!its_my_turn}>
+			Increment
+		</button>
+		<button class="button" on:click={decrement} disabled={!its_my_turn}>
+			Decrement
+		</button>
 	</div>
 
 	<div>{game_state.counter}</div>
 {/if}
-
-<style>
-	button[disabled] {
-		opacity: 0.8;
-		cursor: not-allowed;
-	}
-</style>

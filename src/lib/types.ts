@@ -1,3 +1,5 @@
+// frontend types
+
 export type Game_State = {
 	counter: number
 	ready: boolean
@@ -17,3 +19,15 @@ export type client_to_server_event = {
 	decrement: (game_id: string) => void
 	start: (game_id: string) => void
 }
+
+export type PIECE_TYPE =
+	| "pawn"
+	| "rook"
+	| "knight"
+	| "bishop"
+	| "queen"
+	| "king"
+
+export type Coord = [number, number]
+
+export type Color = "black" | "white"

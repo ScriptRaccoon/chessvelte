@@ -21,7 +21,7 @@
 		/>
 	</p>
 	<p>
-		<button>Start</button>
+		<button class="button">Start</button>
 	</p>
 </form>
 
