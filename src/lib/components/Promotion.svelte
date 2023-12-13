@@ -1,18 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte"
-
-	import { piece_src } from "$lib/utils"
 	import Dialog from "./Dialog.svelte"
 
 	import type { Color } from "$lib/types"
-	import type { PIECE_TYPE } from "$lib/types"
-
-	const PROMOTION_PIECE_TYPES: PIECE_TYPE[] = [
-		"queen",
-		"rook",
-		"bishop",
-		"knight"
-	]
+	import { piece_src } from "$lib/utils"
+	import { PROMOTION_PIECE_TYPES } from "$lib/config"
 
 	export let color: Color
 

@@ -5,6 +5,7 @@ import type { Color, Coord, Move, PIECE_TYPE } from "../types"
 import { SIZE, VALUES } from "../config"
 import { is_valid } from "../coordinates"
 import { generate_piece_id } from "../utils"
+import type { Piece_Display } from "$lib/types"
 
 export abstract class Piece {
 	constructor(
@@ -13,6 +14,14 @@ export abstract class Piece {
 		public value: number = VALUES[type],
 		public id: string = generate_piece_id()
 	) {}
+
+	to_display(): Piece_Display {
+		return {
+			type: this.type,
+			color: this.color,
+			value: this.value
+		}
+	}
 
 	abstract copy(): any
 

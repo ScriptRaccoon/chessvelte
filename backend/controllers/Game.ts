@@ -1,14 +1,43 @@
-import type { Callback, Capture, Color, Coord, Coord_Key, Move } from "../types"
+import type {
+	Callback,
+	Capture,
+	Color,
+	Coord,
+	Coord_Key,
+	GAME_STATUS,
+	Move
+} from "../types"
 import type { Piece } from "./Piece"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
 import { key } from "../coordinates"
+import type { Game_State } from "$lib/types"
+
+export type Player = {
+	client_id: string
+	socket_id: string
+	turn: number
+}
 
 export class Game {
+	static dictionary: Record<string, Game> = {}
+
+	static get_by_id(id: string): Game | undefined {
+		return Game.dictionary[id]
+	}
+
+	static find_by_player(socket_id: string): Game | undefined {
+		return Object.values(Game.dictionary).find((game) =>
+			game.players.some((player) => player.socket_id === socket_id)
+		)
+	}
+
+	public id: string
+	public turn: number = 0
 	private move_history: MoveHistory = new MoveHistory()
 	public board: Board = new Board()
 	public current_color: Color = "white"
-	public status: "playing" | "check" | "checkmate" | "stalemate" = "playing"
+	public status: GAME_STATUS = "waiting"
 	public rerender: boolean = true
 	private all_moves: Record<Coord_Key, Move[]> = {}
 	private number_all_moves: number = 0
@@ -16,9 +45,60 @@ export class Game {
 	public move_start_coord: Coord | null = null
 	public promotion_move: Move | null = null
 	public captures: Capture[] = []
+	public players: Player[] = []
 
-	constructor() {
+	constructor(id: string) {
+		this.id = id
 		this.compute_all_moves()
+		Game.dictionary[id] = this
+	}
+
+	get state(): Game_State {
+		return {
+			turn: this.turn,
+			selected_coord: this.move_start_coord,
+			possible_targets: this.possible_moves.map((move) => move.end),
+			board_map: this.board.reduced_map,
+			status: this.status,
+			captured_pieces: this.captures.map((capture) => capture.piece)
+		}
+	}
+
+	is_playing(socket_id: string): boolean {
+		return this.players.some(
+			(player) => player.socket_id === socket_id && player.turn === this.turn
+		)
+	}
+
+	start(): void {
+		this.status = "playing"
+	}
+
+	add_player(socket_id: string, client_id: string): Player | null {
+		const player: Player | undefined = this.players.find(
+			(player) => player.client_id === client_id
+		)
+
+		if (player) {
+			player.socket_id = socket_id
+			return player
+		}
+
+		if (this.status != "waiting") return null
+
+		const turn =
+			this.players.length === 0
+				? Number(Math.random() < 0.5)
+				: 1 - this.players[0].turn
+
+		const new_player: Player = { socket_id, client_id, turn }
+		this.players.push(new_player)
+
+		return new_player
+	}
+
+	switch_turn() {
+		this.turn = 1 - this.turn
 	}
 
 	public get has_ended(): boolean {
@@ -76,6 +156,7 @@ export class Game {
 		this.current_color = this.current_color === "white" ? "black" : "white"
 		this.move_start_coord = null
 		this.possible_moves = []
+		this.turn = 1 - this.turn
 	}
 
 	private update_status(): void {

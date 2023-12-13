@@ -1,10 +1,9 @@
 <script lang="ts">
-	import type { Piece } from "../../../backend/controllers/Piece"
 	import { piece_src } from "$lib/utils"
-	import type { Coord } from "$lib/types"
+	import type { Coord, Piece_Display } from "$lib/types"
 
 	export let coord: Coord
-	export let piece: Piece
+	export let piece: Piece_Display
 	export let flipped: boolean
 </script>
 

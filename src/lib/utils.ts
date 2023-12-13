@@ -1,4 +1,4 @@
-import type { Coord, PIECE_TYPE } from "$lib/types"
+import type { Coord, Coord_Key, PIECE_TYPE } from "$lib/types"
 
 import { customAlphabet } from "nanoid"
 
@@ -17,4 +17,8 @@ export function gen_coord(row: number, col: number): Coord {
 
 export function has_coord(coords: Coord[], coord: Coord): boolean {
 	return coords.some((_coord) => coord.toString() === _coord.toString())
+}
+
+export function key(coord: Coord): Coord_Key {
+	return `${coord[0]}${coord[1]}`
 }

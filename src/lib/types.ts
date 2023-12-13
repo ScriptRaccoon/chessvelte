@@ -1,12 +1,5 @@
 // frontend types
 
-export type Game_State = {
-	counter: number
-	ready: boolean
-	started: boolean
-	turn: number
-}
-
 export type server_to_client_event = {
 	game_state: (state: Game_State) => void
 	turn: (_: number) => void
@@ -20,6 +13,8 @@ export type client_to_server_event = {
 	start: (game_id: string) => void
 }
 
+export type Color = "black" | "white"
+
 export type PIECE_TYPE =
 	| "pawn"
 	| "rook"
@@ -28,6 +23,32 @@ export type PIECE_TYPE =
 	| "queen"
 	| "king"
 
+export type Piece_Display = {
+	type: PIECE_TYPE
+	color: Color
+	value: number
+}
+
+export type Coord_Key = `${number}${number}`
+
+export type Board_Map = Record<Coord_Key, Piece_Display>
+
 export type Coord = [number, number]
 
-export type Color = "black" | "white"
+export type GAME_STATUS =
+	| "waiting"
+	| "ready"
+	| "playing"
+	| "check"
+	| "checkmate"
+	| "stalemate"
+
+export type Game_State = {
+	turn: number
+	selected_coord: Coord | null
+	possible_targets: Coord[]
+	board_map: Board_Map
+	status: GAME_STATUS
+	captured_pieces: Piece_Display[]
+	// todo: promotion
+}

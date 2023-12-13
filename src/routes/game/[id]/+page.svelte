@@ -6,6 +6,7 @@
 		client_to_server_event,
 		Game_State
 	} from "$lib/types"
+	import Game from "$lib/components/Game.svelte"
 
 	export let data
 
@@ -39,16 +40,6 @@
 		}, 1000)
 	})
 
-	function increment() {
-		if (!its_my_turn) return
-		socket.emit("increment", game_id)
-	}
-
-	function decrement() {
-		if (!its_my_turn) return
-		socket.emit("decrement", game_id)
-	}
-
 	async function copy_url() {
 		await window.navigator.clipboard.writeText($page.url.href)
 		copied = true
@@ -79,14 +70,14 @@
 	{/if}
 </p>
 
-{#if game_state?.ready && !game_state?.started}
+{#if game_state?.status === "ready"}
 	<p>Two players are present. Do you want to start the game?</p>
 	<p>
 		<button class="button" on:click={start_game}>Start</button>
 	</p>
 {/if}
 
-{#if game_state?.started}
+{#if game_state?.status === "playing"}
 	<p>
 		{#if its_my_turn}
 			It is your turn!
@@ -94,15 +85,8 @@
 			It is your opponent's turn!
 		{/if}
 	</p>
+{/if}
 
-	<div>
-		<button class="button" on:click={increment} disabled={!its_my_turn}>
-			Increment
-		</button>
-		<button class="button" on:click={decrement} disabled={!its_my_turn}>
-			Decrement
-		</button>
-	</div>
-
-	<div>{game_state.counter}</div>
+{#if game_state}
+	<Game {game_state} />
 {/if}

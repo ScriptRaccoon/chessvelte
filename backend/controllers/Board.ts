@@ -4,6 +4,7 @@ import { deep_copy, typed_keys } from "../utils"
 import { key, unkey } from "../coordinates"
 import type { Piece } from "./Piece"
 import { create_piece } from "../pieces/create"
+import type { Board_Map } from "../../src/lib/types"
 
 type Map = Record<Coord_Key, Piece | undefined>
 
@@ -12,6 +13,15 @@ export class Board {
 
 	constructor(map: Map | null = null) {
 		this.map = map ?? deep_copy(INITIAL_CONFIG)
+	}
+
+	get reduced_map(): Board_Map {
+		return Object.fromEntries(
+			Object.entries(this.map).map(([coord, piece]) => [
+				coord,
+				piece!.to_display()
+			])
+		)
 	}
 
 	public copy(): Board {

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Piece } from "../../../backend/controllers/Piece"
+	import type { Piece_Display } from "$lib/types"
 	import { piece_src } from "$lib/utils"
 
-	export let captured_pieces: Piece[] = []
+	export let captured_pieces: Piece_Display[] = []
 
 	$: white_group = captured_pieces
 		.filter((piece) => piece.color === "white")
@@ -18,7 +18,7 @@
 <div class="captures">
 	{#each groups as pieces}
 		<div class="group">
-			{#each pieces as piece (piece.id)}
+			{#each pieces as piece}
 				<svg class="capture">
 					<use xlink:href={piece_src(piece.type, piece.color)} />
 				</svg>

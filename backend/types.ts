@@ -32,3 +32,11 @@ export type PIECE_TYPE =
 	| "bishop"
 	| "queen"
 	| "king"
+
+export type GAME_STATUS =
+	| "waiting"
+	| "ready"
+	| "playing"
+	| "check"
+	| "checkmate"
+	| "stalemate"

@@ -2,15 +2,14 @@
 	import Piece from "./Piece.svelte"
 	import Square from "./Square.svelte"
 
-	import type { Coord } from "$lib/types"
-	import type { Board as BoardController } from "../../../backend/controllers/Board"
-	import { COLS, ROWS, SIZE } from "$lib/config"
-	import { has_coord, gen_coord } from "$lib/utils"
+	import type { Board_Map, Coord } from "$lib/types"
+	import { COLS, ROWS, SIZE, COORDINATES } from "$lib/config"
+	import { has_coord, gen_coord, key } from "$lib/utils"
 
 	export let move_counter = 0
-	export let board: BoardController
+	export let board_map: Board_Map
 	export let possible_targets: Coord[] = []
-	export let move_start_coord: Coord | null = null
+	export let selected_coord: Coord | null = null
 	export let flipped: boolean = false
 
 	const SHOW_COORDS = import.meta.env.VITE_SHOW_COORDS === "1"
@@ -26,16 +25,15 @@
 					light={(row + col) % 2 == 0}
 					highlighted={has_coord(possible_targets, coord)}
 					{SHOW_COORDS}
-					selected={move_start_coord != null &&
-						coord.toString() == move_start_coord.toString()}
+					selected={selected_coord != null && key(coord) == key(selected_coord)}
 					on:click
 				/>
 			{/each}
 		{/each}
 	</div>
 	{#key move_counter}
-		{#each board.coords as coord}
-			{@const piece = board.get(coord)}
+		{#each COORDINATES as coord}
+			{@const piece = board_map[key(coord)]}
 			{#if piece}
 				<Piece {coord} {piece} {flipped} />
 			{/if}

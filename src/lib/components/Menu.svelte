@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Color } from "$lib/types"
 	import { createEventDispatcher } from "svelte"
 	const dispatch = createEventDispatcher()
 
-	export let color: Color
+	export let turn: number
+
+	$: color = turn === 0 ? "white" : 1
 </script>
 
 <div class="wrapper">

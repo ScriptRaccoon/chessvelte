@@ -20,8 +20,10 @@
 ### DESIGN ####
 
 ### STRUCTURE ###
+- one type file for the whole project (frontend and backend)
 - production version of socket.io server
 - backend code should be separate from frontend code,
-  in particular no import dependencies
+  in particular no import dependencies - except for the types which need a shared folder
 - overwriting the current game state with the one from the backend
   should remove the move_counter and game.rerender hacks
+- reduce god class "game" to simpler modules

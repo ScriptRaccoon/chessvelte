@@ -4,7 +4,7 @@ import type {
 	client_to_server_event,
 	server_to_client_event
 } from "../src/lib/types"
-import { Game } from "./Game" // TODO: replace this with the actual chess game class
+import { Game } from "./controllers/Game"
 
 export default {
 	// TODO: implement the game actions from Game.svelte
@@ -23,7 +23,7 @@ export default {
 			socket.on("me", (game_id, client_id) => {
 				socket.join(game_id)
 				const game = Game.get_by_id(game_id) ?? new Game(game_id)
-				if (game.ready) {
+				if (game.status === "playing") {
 					io.to(game.id).emit("alert", "Player has reconnected")
 				}
 				const player = game.add_player(socket.id, client_id)
@@ -33,25 +33,9 @@ export default {
 				}
 			})
 
-			socket.on("increment", (game_id) => {
-				const game = Game.get_by_id(game_id)
-				if (!game) return
-				if (!game.is_playing(socket.id)) return
-				game.increment_counter()
-				emit_game_state(game)
-			})
-
-			socket.on("decrement", (game_id) => {
-				const game = Game.get_by_id(game_id)
-				if (!game) return
-				if (!game.is_playing(socket.id)) return
-				game.decrement_counter()
-				emit_game_state(game)
-			})
-
 			socket.on("start", (game_id) => {
 				const game = Game.get_by_id(game_id)
-				if (!game || game.started) return
+				if (!game || game.status === "playing") return
 				game.start()
 				emit_game_state(game)
 			})
