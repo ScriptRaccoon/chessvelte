@@ -15,6 +15,8 @@
 	let my_turn: number | null = null
 	let game_state: Game_State | null = null
 
+	let copied: boolean = false
+
 	$: its_my_turn = game_state?.turn !== null && game_state?.turn === my_turn
 
 	const socket: Socket<server_to_client_event, client_to_server_event> = io()
@@ -41,6 +43,10 @@
 
 	async function copy_url() {
 		await window.navigator.clipboard.writeText($page.url.href)
+		copied = true
+		setTimeout(() => {
+			copied = false
+		}, 1000)
 	}
 
 	function start_game() {
@@ -56,6 +62,9 @@
 
 <p>
 	<button on:click={copy_url}>Copy URL</button>
+	{#if copied}
+		<div>Copied to clipboard!</div>
+	{/if}
 </p>
 
 {#if game_state?.ready && !game_state?.started}
