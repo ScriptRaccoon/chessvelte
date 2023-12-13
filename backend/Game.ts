@@ -7,7 +7,7 @@ export type Player = {
 }
 
 /**
- * temporary basic game class to test web socket communication
+ * basic game class to test web socket communication
  */
 export class Game {
 	static dictionary: Record<string, Game> = {}
