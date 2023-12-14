@@ -4,7 +4,8 @@
 	import type {
 		server_to_client_event,
 		client_to_server_event,
-		Game_State
+		Game_State,
+		Coord
 	} from "$lib/types"
 	import Game from "$lib/components/Game.svelte"
 
@@ -51,6 +52,15 @@
 	function start_game() {
 		socket.emit("start", game_id)
 	}
+
+	function select(event: CustomEvent<Coord>) {
+		const coord = event.detail
+		socket.emit("select", game_id, coord)
+	}
+
+	function restart() {
+		socket.emit("restart", game_id)
+	}
 </script>
 
 <span>
@@ -61,6 +71,10 @@
 
 {#if alert}
 	<p>{alert}</p>
+{/if}
+
+{#if game_state?.status === "waiting"}
+	The game hasn't started yet. Invite others to join!
 {/if}
 
 <p>
@@ -87,6 +101,6 @@
 	</p>
 {/if}
 
-{#if game_state}
-	<Game {game_state} />
+{#if game_state && my_turn !== null}
+	<Game {game_state} {my_turn} on:select={select} on:restart={restart} />
 {/if}

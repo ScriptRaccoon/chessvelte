@@ -1,29 +1,13 @@
 ### BUGS ###
+- moves are available for both
+- restarting should initialize the turn
 
 ### FEATURES ###
-- connected chess components to backend logic
-- what we need for emitted gamestate from server to client:
-   - selected coordinate (currently called move_start_coord: rename this)
-   - possible targets (of selected piece)
-   - a dictionary coord -> piece | null where pieces only need
-     type, color, not all the rest from the backend
-   - the game.status   
-   - game.promotion_move (but maybe ignore promotion first)
-- everything else, that currently depends on the game state,
-  can actually be made independent from it -> remove feature envyness
-- emitted events from client to backend:
-  - square is clicked / selected
-  - promotion piece type is chosen
-  - promotion is cancelled
-  - restart
+- bring back promotion feature
 
 ### DESIGN ####
 
 ### STRUCTURE ###
 - one type file for the whole project (frontend and backend)
 - production version of socket.io server
-- backend code should be separate from frontend code,
-  in particular no import dependencies - except for the types which need a shared folder
-- overwriting the current game state with the one from the backend
-  should remove the move_counter and game.rerender hacks
 - reduce god class "game" to simpler modules

@@ -9,7 +9,7 @@ export function generate_game_id() {
 }
 
 export const piece_src = (type: PIECE_TYPE, color: "white" | "black") =>
-	`sprite.svg#${type}_${color}`
+	`../sprite.svg#${type}_${color}`
 
 export function gen_coord(row: number, col: number): Coord {
 	return [row, col]

@@ -7,7 +7,6 @@ import type {
 import { Game } from "./controllers/Game"
 
 export default {
-	// TODO: implement the game actions from Game.svelte
 	name: "socket server",
 	configureServer(server: ViteDevServer) {
 		if (!server.httpServer) return
@@ -17,6 +16,10 @@ export default {
 
 		function emit_game_state(game: Game) {
 			io.to(game.id).emit("game_state", game.state)
+		}
+
+		function send_alert(game: Game, msg: string) {
+			io.to(game.id).emit("alert", msg)
 		}
 
 		io.on("connection", (socket) => {
@@ -40,10 +43,24 @@ export default {
 				emit_game_state(game)
 			})
 
+			socket.on("select", (game_id, coord) => {
+				const game = Game.get_by_id(game_id)
+				if (!game || game.status !== "playing") return
+				game.select_coord(coord)
+				emit_game_state(game)
+			})
+
+			socket.on("restart", (game_id) => {
+				const game = Game.get_by_id(game_id)
+				if (!game) return
+				game.reset()
+				emit_game_state(game)
+			})
+
 			socket.on("disconnect", () => {
 				const game = Game.find_by_player(socket.id)
 				if (!game) return
-				io.to(game.id).emit("alert", "Player has disconnected")
+				send_alert(game, "Player has disconnected")
 			})
 		})
 	}

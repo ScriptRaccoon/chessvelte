@@ -38,7 +38,6 @@ export class Game {
 	public board: Board = new Board()
 	public current_color: Color = "white"
 	public status: GAME_STATUS = "waiting"
-	public rerender: boolean = true
 	private all_moves: Record<Coord_Key, Move[]> = {}
 	private number_all_moves: number = 0
 	public possible_moves: Move[] = []
@@ -64,12 +63,6 @@ export class Game {
 		}
 	}
 
-	is_playing(socket_id: string): boolean {
-		return this.players.some(
-			(player) => player.socket_id === socket_id && player.turn === this.turn
-		)
-	}
-
 	start(): void {
 		this.status = "playing"
 	}
@@ -93,6 +86,10 @@ export class Game {
 
 		const new_player: Player = { socket_id, client_id, turn }
 		this.players.push(new_player)
+
+		if (this.players.length === 2) {
+			this.status = "ready"
+		}
 
 		return new_player
 	}
@@ -196,6 +193,7 @@ export class Game {
 		this.possible_moves = []
 		this.promotion_move = null
 		this.captures = []
+		this.turn = 0
 		this.move_history.clear()
 		this.board.reset()
 		this.compute_all_moves()

@@ -4,7 +4,7 @@
 
 	export let turn: number
 
-	$: color = turn === 0 ? "white" : 1
+	$: color = turn === 0 ? "white" : "black"
 </script>
 
 <div class="wrapper">

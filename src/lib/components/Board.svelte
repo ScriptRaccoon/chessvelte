@@ -26,7 +26,7 @@
 					highlighted={has_coord(possible_targets, coord)}
 					{SHOW_COORDS}
 					selected={selected_coord != null && key(coord) == key(selected_coord)}
-					on:click
+					on:select
 				/>
 			{/each}
 		{/each}

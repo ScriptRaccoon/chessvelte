@@ -11,11 +11,12 @@
 	const dispatch = createEventDispatcher()
 
 	export let game_state: Game_State
+	export let my_turn: number
 
 	let alert_message: string | null = null
-	let flipped: boolean = false
+	let flipped: boolean = my_turn === 1
 
-	function handle_board_click(event: CustomEvent<Coord>): void {
+	function select_coord(event: CustomEvent<Coord>): void {
 		const coord = event.detail
 		dispatch("select", coord)
 	}
@@ -35,7 +36,6 @@
 	// function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
 	// 	const type = e.detail
 	// 	game.finish_promotion(type, finish_move)
-	// 	game.rerender = true
 	// }
 
 	function restart(): void {
@@ -45,7 +45,6 @@
 
 	// function cancel_promotion() {
 	// 	game.cancel_promotion()
-	// 	game.rerender = true
 	// }
 
 	function flip_board() {
@@ -55,7 +54,7 @@
 
 <Board
 	board_map={game_state.board_map}
-	on:click={handle_board_click}
+	on:select={select_coord}
 	possible_targets={game_state.possible_targets}
 	selected_coord={game_state.selected_coord}
 	{flipped}

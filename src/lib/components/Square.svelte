@@ -8,14 +8,14 @@
 	export let SHOW_COORDS: boolean
 	export let selected: boolean = false
 
-	const dispatch = createEventDispatcher<{ click: Coord }>()
+	const dispatch = createEventDispatcher<{ select: Coord }>()
 </script>
 
 <button
 	class="square"
 	class:light
 	class:dark={!light}
-	on:click={() => dispatch("click", coord)}
+	on:click={() => dispatch("select", coord)}
 	class:selected
 	class:highlighted
 >
