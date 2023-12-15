@@ -102,8 +102,11 @@ export class Game {
 		return this.status === "checkmate" || this.status === "stalemate"
 	}
 
-	public select_coord(coord: Coord, callback?: Callback): void {
-		if (this.has_ended) return
+	public select_coord(coord: Coord, callback?: Callback): boolean {
+		let actionable = false
+		if (this.has_ended) {
+			return actionable
+		}
 		const piece = this.board.get(coord)
 		if (this.move_start_coord) {
 			if (key(this.move_start_coord) == key(coord)) {
@@ -112,10 +115,12 @@ export class Game {
 				this.start_move(coord)
 			} else {
 				this.generate_move(coord, callback)
+				actionable = true
 			}
 		} else if (piece?.color === this.current_color) {
 			this.start_move(coord)
 		}
+		return actionable
 	}
 
 	private cancel_move(): void {

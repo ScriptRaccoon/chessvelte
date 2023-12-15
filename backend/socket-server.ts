@@ -46,8 +46,12 @@ export default {
 			socket.on("select", (game_id, coord) => {
 				const game = Game.get_by_id(game_id)
 				if (!game || game.status !== "playing") return
-				game.select_coord(coord)
-				emit_game_state(game)
+				const actionable = game.select_coord(coord)
+				if (actionable) {
+					emit_game_state(game)
+				} else {
+					socket.emit("game_state", game.state)
+				}
 			})
 
 			socket.on("restart", (game_id) => {

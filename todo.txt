@@ -1,9 +1,11 @@
 ### BUGS ###
-- moves are available for both
-- restarting should initialize the turn
 
 ### FEATURES ###
 - bring back promotion feature
+- resign feature
+- allow restart only when game is finished and both players agree
+  - then also rename it "rematch"
+- check turn-allowance also on server
 
 ### DESIGN ####
 

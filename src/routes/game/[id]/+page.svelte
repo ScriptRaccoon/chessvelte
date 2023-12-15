@@ -54,6 +54,7 @@
 	}
 
 	function select(event: CustomEvent<Coord>) {
+		if (!its_my_turn) return
 		const coord = event.detail
 		socket.emit("select", game_id, coord)
 	}
