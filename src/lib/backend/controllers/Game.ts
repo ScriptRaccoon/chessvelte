@@ -7,9 +7,9 @@ import type {
 	GAME_STATUS,
 	Game_State,
 	Move,
-	Player
+	Player,
+	PIECE_TYPE
 } from "$lib/types"
-import type { Piece } from "./Piece"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
 import { key } from "$lib/utils"
@@ -36,7 +36,7 @@ export class Game {
 	private all_moves: Record<Coord_Key, Move[]> = {}
 	private number_all_moves: number = 0
 	public possible_moves: Move[] = []
-	public move_start_coord: Coord | null = null
+	public selected_coord: Coord | null = null
 	public promotion_move: Move | null = null
 	public captures: Capture[] = []
 	public players: Player[] = []
@@ -50,7 +50,7 @@ export class Game {
 	get state(): Game_State {
 		return {
 			turn: this.turn,
-			selected_coord: this.move_start_coord,
+			selected_coord: this.selected_coord,
 			possible_targets: this.possible_moves.map((move) => move.end),
 			board_map: this.board.reduced_map,
 			status: this.status,
@@ -103,8 +103,8 @@ export class Game {
 			return actionable
 		}
 		const piece = this.board.get(coord)
-		if (this.move_start_coord) {
-			if (key(this.move_start_coord) == key(coord)) {
+		if (this.selected_coord) {
+			if (key(this.selected_coord) == key(coord)) {
 				this.cancel_move()
 			} else if (piece?.color === this.current_color) {
 				this.start_move(coord)
@@ -119,17 +119,17 @@ export class Game {
 	}
 
 	private cancel_move(): void {
-		this.move_start_coord = null
+		this.selected_coord = null
 		this.possible_moves = []
 	}
 
 	private start_move(coord: Coord): void {
-		this.move_start_coord = coord
+		this.selected_coord = coord
 		this.possible_moves = this.all_moves[key(coord)]
 	}
 
 	private generate_move(coord: Coord, callback?: Callback): void {
-		if (!this.move_start_coord) return
+		if (!this.selected_coord) return
 		const move = this.possible_moves?.find(
 			(move) => key(move.end) == key(coord)
 		)
@@ -151,7 +151,7 @@ export class Game {
 
 	private switch_color(): void {
 		this.current_color = this.current_color === "white" ? "black" : "white"
-		this.move_start_coord = null
+		this.selected_coord = null
 		this.possible_moves = []
 		this.turn = 1 - this.turn
 	}
@@ -173,7 +173,7 @@ export class Game {
 		if (callback) callback()
 	}
 
-	public finish_promotion(type: Piece["type"], callback: Callback): void {
+	public finish_promotion(type: PIECE_TYPE, callback: Callback): void {
 		if (!this.promotion_move) return
 		this.promotion_move.promotion_type = type
 		this.finish_move(this.promotion_move, callback)
@@ -182,14 +182,14 @@ export class Game {
 
 	public cancel_promotion(): void {
 		this.promotion_move = null
-		this.move_start_coord = null
+		this.selected_coord = null
 		this.possible_moves = []
 	}
 
 	public reset(): void {
 		this.current_color = "white"
 		this.status = "playing"
-		this.move_start_coord = null
+		this.selected_coord = null
 		this.possible_moves = []
 		this.promotion_move = null
 		this.captures = []
