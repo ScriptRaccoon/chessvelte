@@ -5,27 +5,29 @@
 		server_to_client_event,
 		client_to_server_event,
 		Game_State,
-		Coord
+		Coord,
+		Color
 	} from "$lib/types"
 	import Game from "$lib/components/Game.svelte"
 	import Toast, { send_toast } from "$lib/components/Toast.svelte"
+	import Dialog from "$lib/components/Dialog.svelte"
 
 	export let data
 
 	const game_id = data.game_id
 	const client_id = data.client_id
 
-	let my_turn: number | null = null
+	let my_color: Color | null = null
 	let game_state: Game_State | null = null
 
-	$: its_my_turn = game_state?.turn !== null && game_state?.turn === my_turn
+	$: my_turn = game_state !== null && game_state.current_color === my_color
 
 	const socket: Socket<server_to_client_event, client_to_server_event> = io()
 
 	socket.emit("me", game_id, client_id)
 
-	socket.on("turn", (_turn) => {
-		my_turn = _turn
+	socket.on("your_color", (color) => {
+		my_color = color
 	})
 
 	socket.on("game_state", (_game_state) => {
@@ -47,12 +49,8 @@
 		})
 	}
 
-	function start_game() {
-		socket.emit("start", game_id)
-	}
-
 	function select(event: CustomEvent<Coord>) {
-		if (!its_my_turn) return
+		if (!my_turn) return
 		const coord = event.detail
 		socket.emit("select", game_id, coord)
 	}
@@ -64,31 +62,26 @@
 
 <Toast />
 
-{#if game_state?.status === "waiting"}
-	The game hasn't started yet. Invite others to join!
-{/if}
-
-<p>
-	<button class="button" on:click={copy_url}>Copy URL</button>
-</p>
-
-{#if game_state?.status === "ready"}
-	<p>Two players are present. Do you want to start the game?</p>
+<Dialog open={!game_state?.is_started}>
+	<p class="invite_message">Invite others to join the game!</p>
 	<p>
-		<button class="button" on:click={start_game}>Start</button>
+		<button class="button" on:click={copy_url}>Copy URL</button>
 	</p>
+</Dialog>
+
+{#if game_state && my_color}
+	<Game
+		{game_state}
+		{my_turn}
+		{my_color}
+		on:select={select}
+		on:restart={restart}
+	/>
 {/if}
 
-{#if game_state?.status === "playing"}
-	<p>
-		{#if its_my_turn}
-			It is your turn!
-		{:else}
-			It is your opponent's turn!
-		{/if}
-	</p>
-{/if}
-
-{#if game_state && my_turn !== null}
-	<Game {game_state} {my_turn} on:select={select} on:restart={restart} />
-{/if}
+<style>
+	.invite_message {
+		font-size: 1.25rem;
+		margin-bottom: 1rem;
+	}
+</style>

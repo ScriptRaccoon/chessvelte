@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Coord, Game_State } from "$lib/types"
+	import type { Color, Coord, Game_State } from "$lib/types"
 
 	import Menu from "./Menu.svelte"
 	import Alert from "./Alert.svelte"
@@ -11,10 +11,11 @@
 	const dispatch = createEventDispatcher()
 
 	export let game_state: Game_State
-	export let my_turn: number
+	export let my_turn: boolean = false
+	export let my_color: Color
 
 	let alert_message: string | null = null
-	let flipped: boolean = my_turn === 1
+	let flipped: boolean = my_color === "black"
 
 	function select_coord(event: CustomEvent<Coord>): void {
 		const coord = event.detail
@@ -60,7 +61,14 @@
 	{flipped}
 />
 
-<Menu on:restart={restart} turn={game_state.turn} on:flip={flip_board} />
+{#if game_state.is_started}
+	<Menu
+		current_color={game_state.current_color}
+		{my_turn}
+		on:flip={flip_board}
+		on:restart={restart}
+	/>
+{/if}
 
 <Captures captured_pieces={game_state.captured_pieces} />
 

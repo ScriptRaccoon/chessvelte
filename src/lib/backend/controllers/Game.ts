@@ -49,17 +49,22 @@ export class Game {
 
 	get state(): Game_State {
 		return {
-			turn: this.turn,
+			current_color: this.current_color,
 			selected_coord: this.selected_coord,
 			possible_targets: this.possible_moves.map((move) => move.end),
 			board_map: this.board.reduced_map,
 			status: this.status,
-			captured_pieces: this.captures.map((capture) => capture.piece)
+			captured_pieces: this.captures.map((capture) => capture.piece),
+			is_started: this.is_started
 		}
 	}
 
 	start(): void {
 		this.status = "playing"
+	}
+
+	get is_started(): boolean {
+		return this.status !== "waiting"
 	}
 
 	add_player(socket_id: string, client_id: string): Player | null {
@@ -72,7 +77,7 @@ export class Game {
 			return player
 		}
 
-		if (this.status != "waiting") return null
+		if (this.is_started) return null
 
 		const turn =
 			this.players.length === 0
@@ -83,7 +88,7 @@ export class Game {
 		this.players.push(new_player)
 
 		if (this.players.length === 2) {
-			this.status = "ready"
+			this.status = "playing"
 		}
 
 		return new_player
@@ -156,7 +161,7 @@ export class Game {
 		this.turn = 1 - this.turn
 	}
 
-	private update_status(): void {
+	private check_for_ending(): void {
 		const checked = this.board.is_check(this.current_color)
 		if (this.number_all_moves === 0) {
 			this.status = checked ? "checkmate" : "stalemate"
@@ -169,7 +174,7 @@ export class Game {
 		this.execute_move(move)
 		this.switch_color()
 		this.compute_all_moves()
-		this.update_status()
+		this.check_for_ending()
 		if (callback) callback()
 	}
 

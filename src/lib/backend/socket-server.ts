@@ -26,16 +26,9 @@ export default {
 
 				const player = game.add_player(socket.id, client_id)
 				if (player) {
-					socket.emit("turn", player.turn)
 					emit_game_state(game)
+					socket.emit("your_color", player.turn === 0 ? "white" : "black")
 				}
-			})
-
-			socket.on("start", (game_id) => {
-				const game = Game.get_by_id(game_id)
-				if (!game || game.status === "playing") return
-				game.start()
-				emit_game_state(game)
 			})
 
 			socket.on("select", (game_id, coord) => {

@@ -31,19 +31,19 @@ export type Board_Map = Record<Coord_Key, Piece_Display>
 
 export type GAME_STATUS =
 	| "waiting"
-	| "ready"
 	| "playing"
 	| "check"
 	| "checkmate"
 	| "stalemate"
 
 export type Game_State = {
-	turn: number
+	current_color: Color
 	selected_coord: Coord | null
 	possible_targets: Coord[]
 	board_map: Board_Map
 	status: GAME_STATUS
 	captured_pieces: Piece_Display[]
+	is_started: boolean
 	// todo: promotion
 }
 
@@ -66,13 +66,12 @@ export type Callback = () => void
 
 export type server_to_client_event = {
 	game_state: (state: Game_State) => void
-	turn: (_: number) => void
 	toast: (msg: string, variant: toast_variant) => void
+	your_color: (_: Color) => void
 }
 
 export type client_to_server_event = {
 	me: (game_id: string, client_id: string) => void
-	start: (game_id: string) => void
 	select: (game_id: string, coord: Coord) => void
 	restart: (game_id: string) => void
 }
