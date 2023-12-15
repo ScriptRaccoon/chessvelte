@@ -12,7 +12,7 @@
 	export let selected_coord: Coord | null = null
 	export let flipped: boolean = false
 
-	const SHOW_COORDS = import.meta.env.VITE_SHOW_COORDS === "1"
+	const SHOW_COORDS = Boolean(import.meta.env.VITE_SHOW_COORDS)
 </script>
 
 <div class="board" class:flipped style:--size={SIZE}>
