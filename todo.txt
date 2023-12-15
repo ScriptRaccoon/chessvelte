@@ -4,6 +4,7 @@
 ### FEATURES ###
 - bring back promotion feature
 - resign feature
+- offer draw feature
 - allow restart only when game is finished and both players agree
   - then also rename it "rematch"
 - check turn-allowance also on server
@@ -13,14 +14,8 @@
 - show turn only after game start
 
 ### DESIGN ####
-- loading spinner
-- show "your turn" text in menu bar
-- improve "home" link
-- remove "game xyz" heading
-- remove "copy url" button after game has started
 
 ### STRUCTURE ###
-- one type file for the whole project (frontend and backend)
 - production version of socket.io server
 - reduce god class "game" to simpler modules
-- move class
+- move class maybe
