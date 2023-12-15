@@ -1,5 +1,5 @@
 import type { Piece } from "../controllers/Piece"
-import type { Color } from "../types"
+import type { Color } from "$lib/types"
 import { King } from "./King"
 import { Bishop } from "./Bishop"
 import { Knight } from "./Knight"

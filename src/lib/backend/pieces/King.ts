@@ -1,10 +1,9 @@
-import type { Color, Coord, Move } from "../types"
+import type { Color, Coord, Move } from "$lib/types"
 import type { Board } from "../controllers/Board"
 import type { MoveHistory } from "../controllers/MoveHistory"
 import { Piece } from "../controllers/Piece"
-import { is_valid } from "../coordinates"
-import { COLS } from "../config"
-import { inner_range } from "../utils"
+import { COLS } from "$lib/config"
+import { inner_range, is_valid } from "$lib/utils"
 
 export class King extends Piece {
 	constructor(color: Color) {

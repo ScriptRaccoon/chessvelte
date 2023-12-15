@@ -1,4 +1,5 @@
 ### BUGS ###
+- when chess happens, the app crashes
 
 ### FEATURES ###
 - bring back promotion feature
@@ -11,9 +12,12 @@
 - error messages for clients when game does not exist
 - show turn only after game start
 
-
 ### DESIGN ####
 - loading spinner
+- show "your turn" text in menu bar
+- improve "home" link
+- remove "game xyz" heading
+- remove "copy url" button after game has started
 
 ### STRUCTURE ###
 - one type file for the whole project (frontend and backend)

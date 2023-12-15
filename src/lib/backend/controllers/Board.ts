@@ -1,10 +1,15 @@
-import type { Coord, Coord_Key, Move, Color, Capture } from "../types"
+import type {
+	Coord,
+	Coord_Key,
+	Move,
+	Color,
+	Capture,
+	Board_Map
+} from "$lib/types"
 import { INITIAL_CONFIG } from "../pieces/pieces.config"
-import { deep_copy, typed_keys } from "../utils"
-import { key, unkey } from "../coordinates"
+import { deep_copy, typed_keys, key, unkey } from "$lib/utils"
 import type { Piece } from "./Piece"
 import { create_piece } from "../pieces/create"
-import type { Board_Map } from "../../types"
 
 type Map = Record<Coord_Key, Piece | undefined>
 

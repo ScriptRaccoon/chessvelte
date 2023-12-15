@@ -1,6 +1,6 @@
-import { Pairing } from "$lib/Pairing"
+import { Pairing } from "$lib/backend/controllers/Pairing"
 import { COOKIE_OPTIONS } from "$lib/config"
-import { generate_game_id } from "$lib/utils.js"
+import { generate_game_id } from "$lib/utils"
 import { error, redirect } from "@sveltejs/kit"
 import type { RequestEvent } from "./$types"
 

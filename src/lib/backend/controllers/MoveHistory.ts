@@ -1,4 +1,4 @@
-import type { Move } from "../types"
+import type { Move } from "$lib/types"
 import type { Piece } from "./Piece"
 
 export class MoveHistory {

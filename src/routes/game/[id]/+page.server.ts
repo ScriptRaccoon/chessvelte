@@ -1,4 +1,4 @@
-import { Pairing } from "$lib/Pairing"
+import { Pairing } from "$lib/backend/controllers/Pairing"
 import { error, redirect } from "@sveltejs/kit"
 
 export const load = (event) => {

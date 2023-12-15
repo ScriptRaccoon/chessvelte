@@ -1,9 +1,9 @@
-import type { Color, Coord, Move } from "../types"
 import type { Board } from "../controllers/Board"
 import type { MoveHistory } from "../controllers/MoveHistory"
-import { DIRECTION, ROWS } from "../config"
-import { is_valid } from "../coordinates"
 import { Piece } from "../controllers/Piece"
+import { DIRECTION, ROWS } from "$lib/config"
+import { is_valid } from "$lib/utils"
+import type { Color, Coord, Move } from "$lib/types"
 
 export class Pawn extends Piece {
 	constructor(color: Color) {

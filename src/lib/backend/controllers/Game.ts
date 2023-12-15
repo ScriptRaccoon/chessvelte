@@ -5,19 +5,14 @@ import type {
 	Coord,
 	Coord_Key,
 	GAME_STATUS,
-	Move
-} from "../types"
+	Game_State,
+	Move,
+	Player
+} from "$lib/types"
 import type { Piece } from "./Piece"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
-import { key } from "../coordinates"
-import type { Game_State } from "$lib/types"
-
-export type Player = {
-	client_id: string
-	socket_id: string
-	turn: number
-}
+import { key } from "$lib/utils"
 
 export class Game {
 	static dictionary: Record<string, Game> = {}

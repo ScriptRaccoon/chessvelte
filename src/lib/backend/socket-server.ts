@@ -1,6 +1,6 @@
 import type { ViteDevServer } from "vite"
 import { Server } from "socket.io"
-import type { client_to_server_event, server_to_client_event } from "../types"
+import type { client_to_server_event, server_to_client_event } from "$lib/types"
 import { Game } from "./controllers/Game"
 
 export default {
