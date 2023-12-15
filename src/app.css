@@ -14,6 +14,8 @@
 	--width: min(95vmin, 45rem);
 	--font-color: white;
 	--secondary-font-color: #aaa;
+	--bg-color: #222;
+	--card-color: #333540;
 }
 
 body {
@@ -29,8 +31,8 @@ body {
 		"Open Sans",
 		"Helvetica Neue",
 		sans-serif;
-	background-color: #222;
-	color: white;
+	background-color: var(--bg-color);
+	color: var(--font-color);
 }
 
 a {
@@ -50,14 +52,14 @@ button {
 .button {
 	background-color: var(--button-color);
 	color: white;
-	padding: 0.5rem 1rem;
+	padding: 0.3rem 0.6rem;
 	border-radius: 0.25rem;
 	outline-offset: 0.1rem;
 	font-size: 1.125rem;
 }
 
 .button:focus-visible {
-	outline: 0.2rem solid var(--button-color);
+	outline: 0.1rem solid var(--font-color);
 }
 
 .button[disabled] {
@@ -67,4 +69,28 @@ button {
 
 img {
 	display: block;
+}
+
+input[type="text"] {
+	font-family: inherit;
+	color: inherit;
+	font-size: inherit;
+	border: none;
+	cursor: pointer;
+	max-width: 100%;
+}
+
+.input {
+	background-color: var(--card-color);
+	padding: 0.4rem;
+	border-radius: 0.25rem;
+	outline: 1px solid var(--secondary-font-color);
+}
+
+.input:focus-visible {
+	outline: 0.1rem solid var(--font-color);
+}
+
+label {
+	color: var(--secondary-font-color);
 }
