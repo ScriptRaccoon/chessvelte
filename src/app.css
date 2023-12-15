@@ -37,6 +37,12 @@ body {
 
 a {
 	color: inherit;
+	border-radius: 0.125rem;
+}
+
+a:focus-visible {
+	outline-offset: 0.2rem;
+	outline: 0.1rem solid var(--font-color);
 }
 
 button {

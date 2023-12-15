@@ -64,12 +64,6 @@
 	}
 </script>
 
-<span>
-	<a href="/">Home</a>
-</span>
-
-<h2>Game {game_id}</h2>
-
 {#if alert}
 	<p>{alert}</p>
 {/if}
