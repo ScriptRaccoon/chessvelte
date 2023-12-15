@@ -1,5 +1,4 @@
 import type {
-	Callback,
 	Capture,
 	Color,
 	Coord,
@@ -102,7 +101,7 @@ export class Game {
 		return this.status === "checkmate" || this.status === "stalemate"
 	}
 
-	public select_coord(coord: Coord, callback?: Callback): boolean {
+	public select_coord(coord: Coord): boolean {
 		let actionable = false
 		if (this.has_ended) {
 			return actionable
@@ -114,7 +113,7 @@ export class Game {
 			} else if (piece?.color === this.current_color) {
 				this.start_move(coord)
 			} else {
-				this.generate_move(coord, callback)
+				this.generate_move(coord)
 				actionable = true
 			}
 		} else if (piece?.color === this.current_color) {
@@ -133,7 +132,7 @@ export class Game {
 		this.possible_moves = this.all_moves[key(coord)]
 	}
 
-	private generate_move(coord: Coord, callback?: Callback): void {
+	private generate_move(coord: Coord): void {
 		if (!this.selected_coord) return
 		const move = this.possible_moves?.find(
 			(move) => key(move.end) == key(coord)
@@ -142,7 +141,7 @@ export class Game {
 		if (move.type === "promotion") {
 			this.promotion_move = move
 		} else {
-			this.finish_move(move, callback)
+			this.finish_move(move)
 		}
 	}
 
@@ -170,18 +169,17 @@ export class Game {
 		}
 	}
 
-	private finish_move(move: Move, callback?: Callback): void {
+	private finish_move(move: Move): void {
 		this.execute_move(move)
 		this.switch_color()
 		this.compute_all_moves()
 		this.check_for_ending()
-		if (callback) callback()
 	}
 
-	public finish_promotion(type: PIECE_TYPE, callback: Callback): void {
+	public finish_promotion(type: PIECE_TYPE): void {
 		if (!this.promotion_move) return
 		this.promotion_move.promotion_type = type
-		this.finish_move(this.promotion_move, callback)
+		this.finish_move(this.promotion_move)
 		this.promotion_move = null
 	}
 

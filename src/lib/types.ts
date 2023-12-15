@@ -62,8 +62,6 @@ export type Capture = {
 	piece: Piece
 }
 
-export type Callback = () => void
-
 export type server_to_client_event = {
 	game_state: (state: Game_State) => void
 	toast: (msg: string, variant: toast_variant) => void
