@@ -7,7 +7,7 @@ import type {
 	Game_State,
 	Move,
 	Player,
-	PIECE_TYPE
+	PIECE_TYPE,
 } from "../../types"
 
 import { MoveHistory } from "./MoveHistory"
@@ -23,7 +23,7 @@ export class Game {
 
 	public static find_by_player(socket_id: string): Game | undefined {
 		return Object.values(Game.dictionary).find((game) =>
-			game.players.some((player) => player.socket_id === socket_id)
+			game.players.some((player) => player.socket_id === socket_id),
 		)
 	}
 
@@ -59,7 +59,8 @@ export class Game {
 			board_map: this.board.reduced_map,
 			status: this.status,
 			captured_pieces: this.captures.map((capture) => capture.piece),
-			is_started: this.is_started
+			is_started: this.is_started,
+			is_ended: this.is_ended,
 		}
 	}
 
@@ -71,9 +72,13 @@ export class Game {
 		return this.status !== "waiting"
 	}
 
+	public get is_ended(): boolean {
+		return this.status === "checkmate" || this.status === "stalemate"
+	}
+
 	public add_player(socket_id: string, client_id: string): Player | null {
 		const player: Player | undefined = this.players.find(
-			(player) => player.client_id === client_id
+			(player) => player.client_id === client_id,
 		)
 
 		if (player) {
@@ -138,7 +143,7 @@ export class Game {
 	private generate_move(coord: Coord): void {
 		if (!this.selected_coord) return
 		const move = this.possible_moves?.find(
-			(move) => key(move.end) == key(coord)
+			(move) => key(move.end) == key(coord),
 		)
 		if (!move) return
 		if (move.type === "promotion") {

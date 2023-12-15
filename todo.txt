@@ -1,5 +1,5 @@
 ### BUGS ###
-- when chess happens, the app crashes
+- 
 
 ### FEATURES ###
 - bring back promotion feature
@@ -18,3 +18,4 @@
 - production version of socket.io server
 - reduce god class "game" to simpler modules
 - move class maybe
+- find_by_player is not good since it iterates through all games

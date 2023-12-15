@@ -8,7 +8,7 @@ export default {
 	configureServer(server: ViteDevServer) {
 		if (!server.httpServer) return
 		const io = new Server<client_to_server_event, server_to_client_event>(
-			server.httpServer
+			server.httpServer,
 		)
 
 		function emit_game_state(game: Game) {
@@ -37,9 +37,6 @@ export default {
 				const actionable = game.select_coord(coord)
 				if (actionable) {
 					emit_game_state(game)
-					if (game.has_ended) {
-						socket.to(game.id).emit("toast", game.ending_message, "info")
-					}
 				} else {
 					socket.emit("game_state", game.state)
 				}
@@ -50,6 +47,7 @@ export default {
 				if (!game) return
 				game.reset()
 				emit_game_state(game)
+				io.to(game.id).emit("toast", "Restarted", "info")
 			})
 
 			socket.on("disconnect", () => {
@@ -59,5 +57,5 @@ export default {
 				socket.leave(game.id)
 			})
 		})
-	}
+	},
 }

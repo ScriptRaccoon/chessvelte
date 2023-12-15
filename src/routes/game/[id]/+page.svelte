@@ -6,7 +6,7 @@
 		client_to_server_event,
 		Game_State,
 		Coord,
-		Color
+		Color,
 	} from "$lib/types"
 	import Game from "$lib/components/Game.svelte"
 	import Toast, { send_toast } from "$lib/components/Toast.svelte"
@@ -24,6 +24,8 @@
 
 	const socket: Socket<server_to_client_event, client_to_server_event> = io()
 
+	let show_ending_dialog = true
+
 	socket.emit("me", game_id, client_id)
 
 	socket.on("your_color", (color) => {
@@ -37,7 +39,7 @@
 	socket.on("toast", (message, variant) => {
 		send_toast({
 			description: message,
-			variant
+			variant,
 		})
 	})
 
@@ -45,7 +47,7 @@
 		await window.navigator.clipboard.writeText($page.url.href)
 		send_toast({
 			description: "Copied URL to clipboard!",
-			variant: "success"
+			variant: "success",
 		})
 	}
 
@@ -57,6 +59,9 @@
 
 	function restart() {
 		socket.emit("restart", game_id)
+		setTimeout(() => {
+			show_ending_dialog = true
+		}, 1000)
 	}
 </script>
 
@@ -79,9 +84,26 @@
 	/>
 {/if}
 
+<Dialog
+	open={show_ending_dialog && game_state?.is_ended}
+	with_close_button={true}
+	on:close={() => (show_ending_dialog = false)}
+>
+	<p class="outcome">
+		{#if game_state?.status === "checkmate"}
+			Checkmate against {game_state.current_color}!
+		{:else if game_state?.status === "stalemate"}
+			Stalemate!
+		{/if}
+	</p>
+</Dialog>
+
 <style>
 	.invite_message {
 		font-size: 1.25rem;
 		margin-bottom: 1rem;
+	}
+	.outcome {
+		font-size: 1.25rem;
 	}
 </style>
