@@ -5,13 +5,14 @@ export type Coord = [number, number]
 
 export type Coord_Key = `${number}${number}`
 
+export type Color = "black" | "white"
+
 export type Player = {
 	client_id: string
 	socket_id: string
 	turn: number
+	color: Color
 }
-
-export type Color = "black" | "white"
 
 export type PIECE_TYPE =
 	| "pawn"

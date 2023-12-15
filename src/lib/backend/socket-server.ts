@@ -27,13 +27,13 @@ export default {
 				const player = game.add_player(socket.id, client_id)
 				if (player) {
 					emit_game_state(game)
-					socket.emit("your_color", player.turn === 0 ? "white" : "black")
+					socket.emit("your_color", player.color)
 				}
 			})
 
 			socket.on("select", (game_id, coord) => {
 				const game = Game.get_by_id(game_id)
-				if (!game || game.status !== "playing") return
+				if (!game || !game.is_started) return
 				const actionable = game.select_coord(coord)
 				if (actionable) {
 					emit_game_state(game)

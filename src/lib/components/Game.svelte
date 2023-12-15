@@ -72,9 +72,9 @@
 
 <Captures captured_pieces={game_state.captured_pieces} />
 
-<!-- {#if game.promotion_move != null}
+<!-- {#if game_state.promotion_move != null}
 	<Promotion
-		color={game.current_color}
+		color={game_state.current_color}
 		on:type={finish_promotion}
 		on:cancel={cancel_promotion}
 	/>
