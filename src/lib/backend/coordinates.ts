@@ -1,5 +1,5 @@
 import type { Coord, Coord_Key } from "./types"
-import { COLS, ROWS } from "../src/lib/config"
+import { COLS, ROWS } from "../config"
 
 export function is_valid(coord: Coord): boolean {
 	const [row, col] = coord

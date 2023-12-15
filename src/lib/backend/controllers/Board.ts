@@ -4,7 +4,7 @@ import { deep_copy, typed_keys } from "../utils"
 import { key, unkey } from "../coordinates"
 import type { Piece } from "./Piece"
 import { create_piece } from "../pieces/create"
-import type { Board_Map } from "../../src/lib/types"
+import type { Board_Map } from "../../types"
 
 type Map = Record<Coord_Key, Piece | undefined>
 

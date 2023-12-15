@@ -9,10 +9,14 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
+- show turn only after game start
+
 
 ### DESIGN ####
+- loading spinner
 
 ### STRUCTURE ###
 - one type file for the whole project (frontend and backend)
 - production version of socket.io server
 - reduce god class "game" to simpler modules
+- move class
