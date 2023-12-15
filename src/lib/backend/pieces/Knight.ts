@@ -1,6 +1,6 @@
-import type { Coord, Move, Color } from "$lib/types"
+import type { Coord, Move, Color } from "../../types"
 import type { Board } from "../controllers/Board"
-import { is_valid } from "$lib/utils"
+import { is_valid } from "../../utils"
 import { Piece } from "../controllers/Piece"
 
 export class Knight extends Piece {

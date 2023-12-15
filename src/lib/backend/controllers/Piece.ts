@@ -1,10 +1,8 @@
 import type { MoveHistory } from "./MoveHistory"
 import type { Board } from "./Board"
-import type { Color, Coord, Move, PIECE_TYPE } from "$lib/types"
-
-import { SIZE, PIECE_VALUES } from "$lib/config"
-import { generate_piece_id, is_valid } from "$lib/utils"
-import type { Piece_Display } from "$lib/types"
+import type { Color, Coord, Move, PIECE_TYPE, Piece_Display } from "../../types"
+import { SIZE, PIECE_VALUES } from "../../config"
+import { generate_piece_id, is_valid } from "../../utils"
 
 export abstract class Piece {
 	constructor(

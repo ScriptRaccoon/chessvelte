@@ -1,4 +1,4 @@
-import type { Coord_Key } from "$lib/types"
+import type { Coord_Key } from "../../types"
 import type { Piece } from "../controllers/Piece"
 import { Bishop } from "./Bishop"
 import { King } from "./King"

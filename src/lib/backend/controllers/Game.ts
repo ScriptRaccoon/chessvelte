@@ -9,10 +9,10 @@ import type {
 	Move,
 	Player,
 	PIECE_TYPE
-} from "$lib/types"
+} from "../../types"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
-import { key } from "$lib/utils"
+import { key } from "../../utils"
 
 export class Game {
 	static dictionary: Record<string, Game> = {}

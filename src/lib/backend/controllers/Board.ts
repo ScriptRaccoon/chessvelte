@@ -7,7 +7,7 @@ import type {
 	Board_Map
 } from "$lib/types"
 import { INITIAL_CONFIG } from "../pieces/pieces.config"
-import { deep_copy, typed_keys, key, unkey } from "$lib/utils"
+import { deep_copy, typed_keys, key, unkey } from "../../utils"
 import type { Piece } from "./Piece"
 import { create_piece } from "../pieces/create"
 

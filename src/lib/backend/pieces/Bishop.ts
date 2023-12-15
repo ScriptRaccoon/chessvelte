@@ -1,4 +1,4 @@
-import type { Color, Coord, Move } from "$lib/types"
+import type { Color, Coord, Move } from "../../types"
 import type { Board } from "../controllers/Board"
 import { Piece } from "../controllers/Piece"
 
