@@ -172,6 +172,13 @@ export class Game {
 		}
 	}
 
+	public get ending_message(): string {
+		if (this.status === "checkmate")
+			return `Checkmate against ${this.current_color}!`
+		if (this.status === "stalemate") return `Stalemate!`
+		return ""
+	}
+
 	private finish_move(move: Move): void {
 		this.execute_move(move)
 		this.switch_color()

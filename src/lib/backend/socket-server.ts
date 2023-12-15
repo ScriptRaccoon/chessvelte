@@ -37,6 +37,9 @@ export default {
 				const actionable = game.select_coord(coord)
 				if (actionable) {
 					emit_game_state(game)
+					if (game.has_ended) {
+						socket.to(game.id).emit("toast", game.ending_message, "info")
+					}
 				} else {
 					socket.emit("game_state", game.state)
 				}

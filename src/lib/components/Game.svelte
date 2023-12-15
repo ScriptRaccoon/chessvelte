@@ -2,7 +2,6 @@
 	import type { Color, Coord, Game_State } from "$lib/types"
 
 	import Menu from "./Menu.svelte"
-	import Alert from "./Alert.svelte"
 	// import Promotion from "./Promotion.svelte"
 	import Board from "./Board.svelte"
 	import Captures from "./Captures.svelte"
@@ -14,24 +13,11 @@
 	export let my_turn: boolean = false
 	export let my_color: Color
 
-	let alert_message: string | null = null
 	let flipped: boolean = my_color === "black"
 
 	function select_coord(event: CustomEvent<Coord>): void {
 		const coord = event.detail
 		dispatch("select", coord)
-	}
-
-	function finish_move(): void {
-		send_alert()
-	}
-
-	function send_alert(): void {
-		if (game_state.status === "checkmate") {
-			alert_message = "Checkmate!"
-		} else if (game_state.status === "stalemate") {
-			alert_message = "Stalemate! It's a draw."
-		}
 	}
 
 	// function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
@@ -41,7 +27,6 @@
 
 	function restart(): void {
 		dispatch("restart")
-		alert_message = null
 	}
 
 	// function cancel_promotion() {
@@ -79,5 +64,3 @@
 		on:cancel={cancel_promotion}
 	/>
 {/if} -->
-
-<Alert bind:alert_message />
