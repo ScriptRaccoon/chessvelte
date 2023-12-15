@@ -58,7 +58,7 @@
 	on:select={select_coord}
 	possible_targets={game_state.possible_targets}
 	selected_coord={game_state.selected_coord}
-	{flipped}
+	flipped={game_state.is_started && flipped}
 />
 
 {#if game_state.is_started}
