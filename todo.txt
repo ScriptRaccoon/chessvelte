@@ -6,6 +6,9 @@
 - allow restart only when game is finished and both players agree
   - then also rename it "rematch"
 - check turn-allowance also on server
+- save gamestates in redis to prevent data loss
+  e.g. during deployment
+- error messages for clients when game does not exist
 
 ### DESIGN ####
 
