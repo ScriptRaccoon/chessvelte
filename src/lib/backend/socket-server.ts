@@ -15,17 +15,15 @@ export default {
 			io.to(game.id).emit("game_state", game.state)
 		}
 
-		function send_alert(game: Game, msg: string) {
-			io.to(game.id).emit("alert", msg)
-		}
-
 		io.on("connection", (socket) => {
 			socket.on("me", (game_id, client_id) => {
 				socket.join(game_id)
 				const game = Game.get_by_id(game_id) ?? new Game(game_id)
-				if (game.status === "playing") {
-					io.to(game.id).emit("alert", "Player has reconnected")
-				}
+
+				socket.broadcast
+					.to(game.id)
+					.emit("toast", "Player has connected", "success")
+
 				const player = game.add_player(socket.id, client_id)
 				if (player) {
 					socket.emit("turn", player.turn)
@@ -61,7 +59,8 @@ export default {
 			socket.on("disconnect", () => {
 				const game = Game.find_by_player(socket.id)
 				if (!game) return
-				send_alert(game, "Player has disconnected")
+				io.to(game.id).emit("toast", "Player has disconnected", "error")
+				socket.leave(game.id)
 			})
 		})
 	}

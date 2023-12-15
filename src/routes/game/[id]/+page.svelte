@@ -8,6 +8,7 @@
 		Coord
 	} from "$lib/types"
 	import Game from "$lib/components/Game.svelte"
+	import Toast, { send_toast } from "$lib/components/Toast.svelte"
 
 	export let data
 
@@ -16,9 +17,6 @@
 
 	let my_turn: number | null = null
 	let game_state: Game_State | null = null
-
-	let copied: boolean = false
-	let alert: string | null = null
 
 	$: its_my_turn = game_state?.turn !== null && game_state?.turn === my_turn
 
@@ -34,19 +32,19 @@
 		game_state = _game_state
 	})
 
-	socket.on("alert", (message) => {
-		alert = message
-		setTimeout(() => {
-			alert = null
-		}, 1000)
+	socket.on("toast", (message, variant) => {
+		send_toast({
+			description: message,
+			variant
+		})
 	})
 
 	async function copy_url() {
 		await window.navigator.clipboard.writeText($page.url.href)
-		copied = true
-		setTimeout(() => {
-			copied = false
-		}, 1000)
+		send_toast({
+			description: "Copied URL to clipboard!",
+			variant: "success"
+		})
 	}
 
 	function start_game() {
@@ -64,9 +62,7 @@
 	}
 </script>
 
-{#if alert}
-	<p>{alert}</p>
-{/if}
+<Toast />
 
 {#if game_state?.status === "waiting"}
 	The game hasn't started yet. Invite others to join!
@@ -74,9 +70,6 @@
 
 <p>
 	<button class="button" on:click={copy_url}>Copy URL</button>
-	{#if copied}
-		<div>Copied to clipboard!</div>
-	{/if}
 </p>
 
 {#if game_state?.status === "ready"}

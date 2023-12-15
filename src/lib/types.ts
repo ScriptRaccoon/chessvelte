@@ -1,4 +1,5 @@
 import type { Piece } from "$lib/backend/controllers/Piece"
+import type { toast_variant } from "./components/Toast.svelte"
 
 export type Coord = [number, number]
 
@@ -66,7 +67,7 @@ export type Callback = () => void
 export type server_to_client_event = {
 	game_state: (state: Game_State) => void
 	turn: (_: number) => void
-	alert: (msg: string) => void
+	toast: (msg: string, variant: toast_variant) => void
 }
 
 export type client_to_server_event = {
