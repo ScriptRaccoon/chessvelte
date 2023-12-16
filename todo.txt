@@ -15,7 +15,14 @@
 ### DESIGN ####
 
 ### STRUCTURE ###
-- production version of socket.io server
+- prevent the need for .js imports in server app
+- setup path alias in server app for shared folder
+- fix dev environment for server app
 - reduce god class "game" to simpler modules
 - move class maybe
 - find_by_player is not good since it iterates through all games
+
+
+### DEPLOYMENT ###
+- deploy sveltekit app on netlify
+- deploy socket server separately, for example on fly.io

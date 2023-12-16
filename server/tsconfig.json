@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"outDir": "./dist",
+		"target": "es6",
+		"removeComments": true,
+		"moduleResolution": "Bundler"
+	},
+	"include": ["./src/**/*.ts", "../shared/**/*.ts"],
+	"exclude": ["./node_modules"]
+}
