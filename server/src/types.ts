@@ -1,5 +1,5 @@
-import { Coord, PIECE_TYPE } from "../../shared/types.js"
-import { Piece } from "./controllers/Piece.js"
+import { Coord, PIECE_TYPE } from "$shared/types"
+import { Piece } from "./controllers/Piece"
 
 export type Move = {
 	type: "regular" | "en passant" | "promotion" | "castle"

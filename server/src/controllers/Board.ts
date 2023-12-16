@@ -1,14 +1,9 @@
-import type {
-	Coord,
-	Coord_Key,
-	Color,
-	Board_Map,
-} from "../../../shared/types.js"
-import { INITIAL_CONFIG } from "../pieces/pieces.config.js"
-import { deep_copy, typed_keys, key, unkey } from "../../../shared/utils.js"
-import type { Piece } from "./Piece.js"
-import { create_piece } from "../pieces/create.js"
-import { Capture, Move } from "../types.js"
+import type { Coord, Coord_Key, Color, Board_Map } from "$shared/types"
+import { INITIAL_CONFIG } from "../pieces/pieces.config"
+import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
+import type { Piece } from "./Piece"
+import { create_piece } from "../pieces/create"
+import { Capture, Move } from "../types"
 
 type Map = Record<Coord_Key, Piece | undefined>
 

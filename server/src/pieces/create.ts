@@ -1,11 +1,11 @@
-import type { Piece } from "../controllers/Piece.js"
-import type { Color } from "../../../shared/types.js"
-import { King } from "./King.js"
-import { Bishop } from "./Bishop.js"
-import { Knight } from "./Knight.js"
-import { Pawn } from "./Pawn.js"
-import { Queen } from "./Queen.js"
-import { Rook } from "./Rook.js"
+import type { Piece } from "../controllers/Piece"
+import type { Color } from "$shared/types"
+import { King } from "./King"
+import { Bishop } from "./Bishop"
+import { Knight } from "./Knight"
+import { Pawn } from "./Pawn"
+import { Queen } from "./Queen"
+import { Rook } from "./Rook"
 
 const constructor_map: Record<Piece["type"], Function> = {
 	bishop: Bishop,

@@ -1,11 +1,11 @@
-import type { Coord_Key } from "../../../shared/types.js"
-import type { Piece } from "../controllers/Piece.js"
-import { Bishop } from "./Bishop.js"
-import { King } from "./King.js"
-import { Knight } from "./Knight.js"
-import { Pawn } from "./Pawn.js"
-import { Queen } from "./Queen.js"
-import { Rook } from "./Rook.js"
+import type { Coord_Key } from "$shared/types"
+import type { Piece } from "../controllers/Piece"
+import { Bishop } from "./Bishop"
+import { King } from "./King"
+import { Knight } from "./Knight"
+import { Pawn } from "./Pawn"
+import { Queen } from "./Queen"
+import { Rook } from "./Rook"
 
 type Config = Record<Coord_Key, Piece>
 

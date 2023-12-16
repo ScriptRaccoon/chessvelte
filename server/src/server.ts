@@ -1,12 +1,9 @@
 import { Server } from "socket.io"
 import express from "express"
 
-import {
-	client_to_server_event,
-	server_to_client_event,
-} from "../../shared/types.js"
+import { client_to_server_event, server_to_client_event } from "$shared/types"
 
-import { Game } from "./controllers/Game.js"
+import { Game } from "./controllers/Game"
 
 const app = express()
 const PORT = process.env.PORT ?? 5000

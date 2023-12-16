@@ -1,10 +1,10 @@
-import type { Color, Coord } from "../../../shared/types.js"
-import type { Board } from "../controllers/Board.js"
-import type { MoveHistory } from "../controllers/MoveHistory.js"
-import type { Move } from "../types.js"
-import { Piece } from "../controllers/Piece.js"
-import { COLS } from "../../../shared/config.js"
-import { inner_range, is_valid } from "../../../shared/utils.js"
+import type { Color, Coord } from "$shared/types"
+import type { Board } from "../controllers/Board"
+import type { MoveHistory } from "../controllers/MoveHistory"
+import type { Move } from "../types"
+import { Piece } from "../controllers/Piece"
+import { COLS } from "$shared/config"
+import { inner_range, is_valid } from "$shared/utils"
 
 export class King extends Piece {
 	constructor(color: Color) {

@@ -1,7 +1,7 @@
-import type { Color, Coord } from "../../../shared/types.js"
-import type { Board } from "../controllers/Board.js"
-import type { Move } from "../types.js"
-import { Piece } from "../controllers/Piece.js"
+import type { Color, Coord } from "$shared/types"
+import type { Board } from "../controllers/Board"
+import type { Move } from "../types"
+import { Piece } from "../controllers/Piece"
 
 export class Queen extends Piece {
 	constructor(color: Color) {

@@ -1,5 +1,5 @@
 import { Move } from "../types"
-import type { Piece } from "./Piece.js"
+import type { Piece } from "./Piece"
 
 export class MoveHistory {
 	private moves: Move[] = []

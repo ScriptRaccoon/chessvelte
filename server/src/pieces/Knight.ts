@@ -1,8 +1,8 @@
-import type { Coord, Color } from "../../../shared/types.js"
-import type { Board } from "../controllers/Board.js"
-import type { Move } from "../types.js"
-import { is_valid } from "../../../shared/utils.js"
-import { Piece } from "../controllers/Piece.js"
+import type { Coord, Color } from "$shared/types"
+import type { Board } from "../controllers/Board"
+import type { Move } from "../types"
+import { is_valid } from "$shared/utils"
+import { Piece } from "../controllers/Piece"
 
 export class Knight extends Piece {
 	constructor(color: Color) {

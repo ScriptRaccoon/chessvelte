@@ -1,7 +1,7 @@
 import { customAlphabet } from "nanoid"
-import { COLS, ROWS } from "./config.js"
+import { COLS, ROWS } from "./config"
 
-import type { Color, Coord, Coord_Key, PIECE_TYPE } from "./types.js"
+import type { Color, Coord, Coord_Key, PIECE_TYPE } from "./types"
 
 export function key(coord: Coord): Coord_Key {
 	return `${coord[0]}${coord[1]}`

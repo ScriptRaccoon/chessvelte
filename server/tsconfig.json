@@ -1,11 +1,14 @@
 {
 	"compilerOptions": {
-		"strict": true,
+		"target": "ESNext",
+		"module": "commonjs",
 		"outDir": "./dist",
-		"target": "es6",
-		"removeComments": true,
-		"moduleResolution": "Bundler"
+		"strict": true,
+		"esModuleInterop": true,
+		"paths": {
+			"$shared/*": ["../shared/*"]
+		}
 	},
-	"include": ["./src/**/*.ts", "../shared/**/*.ts"],
-	"exclude": ["./node_modules"]
+	"include": ["src/**/*.ts", "../shared/**/*.ts"],
+	"exclude": ["node_modules"]
 }

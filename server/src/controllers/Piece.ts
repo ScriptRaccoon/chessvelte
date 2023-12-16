@@ -1,13 +1,8 @@
-import type { MoveHistory } from "./MoveHistory.js"
-import type { Board } from "./Board.js"
-import type {
-	Color,
-	Coord,
-	PIECE_TYPE,
-	Piece_Display,
-} from "../../../shared/types"
-import { SIZE, PIECE_VALUES } from "../../../shared/config.js"
-import { generate_piece_id, is_valid } from "../../../shared/utils.js"
+import type { MoveHistory } from "./MoveHistory"
+import type { Board } from "./Board"
+import type { Color, Coord, PIECE_TYPE, Piece_Display } from "$shared/types"
+import { SIZE, PIECE_VALUES } from "$shared/config"
+import { generate_piece_id, is_valid } from "$shared/utils"
 import { Move } from "../types"
 
 export abstract class Piece {

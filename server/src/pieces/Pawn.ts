@@ -1,10 +1,10 @@
-import type { Board } from "../controllers/Board.js"
-import type { MoveHistory } from "../controllers/MoveHistory.js"
-import { Piece } from "../controllers/Piece.js"
-import { DIRECTION, ROWS } from "../../../shared/config.js"
-import { is_valid } from "../../../shared/utils.js"
-import type { Color, Coord } from "../../../shared/types.js"
-import type { Move } from "../types.js"
+import type { Board } from "../controllers/Board"
+import type { MoveHistory } from "../controllers/MoveHistory"
+import { Piece } from "../controllers/Piece"
+import { DIRECTION, ROWS } from "$shared/config"
+import { is_valid } from "$shared/utils"
+import type { Color, Coord } from "$shared/types"
+import type { Move } from "../types"
 
 export class Pawn extends Piece {
 	constructor(color: Color) {

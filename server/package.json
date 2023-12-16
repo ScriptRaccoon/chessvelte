@@ -2,18 +2,17 @@
 	"name": "server",
 	"version": "1.0.0",
 	"description": "",
-	"type": "module",
+	"type": "commonjs",
 	"scripts": {
-		"dev": "concurrently \"pnpm:build:watch\" \"pnpm:start:watch\"",
-		"build": "tsc",
-		"build:watch": "tsc --watch",
-		"start:watch": "nodemon dist/server/src/server.js",
-		"start": "node dist/server/src/server.js"
+		"build": "esbuild src/server.ts --minify --bundle --outfile=dist/server.js --platform=node --target=node16",
+		"dev": "tsx --watch src/server.ts",
+		"start": "node dist/server.js"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"esbuild": "^0.19.9",
 		"express": "^4.18.2",
 		"socket.io": "^4.7.2"
 	},

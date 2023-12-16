@@ -6,11 +6,11 @@ import type {
 	Game_State,
 	Player,
 	PIECE_TYPE,
-} from "../../../shared/types"
+} from "$shared/types"
 
-import { MoveHistory } from "./MoveHistory.js"
-import { Board } from "./Board.js"
-import { key } from "../../../shared/utils.js"
+import { MoveHistory } from "./MoveHistory"
+import { Board } from "./Board"
+import { key } from "$shared/utils"
 import { Capture, Move } from "../types"
 
 export class Game {
