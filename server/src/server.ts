@@ -1,10 +1,12 @@
 import { Server } from "socket.io"
 import express from "express"
 import chalk from "chalk"
+import dotenv from "dotenv"
 
 import { client_to_server_event, server_to_client_event } from "$shared/types"
-
 import { Game } from "./controllers/Game"
+
+dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT ?? 5000
@@ -13,7 +15,12 @@ const server = app.listen(PORT, () => {
 	console.log(chalk.cyan("Server listening on port ") + chalk.cyan.bold(PORT))
 })
 
-const io = new Server<client_to_server_event, server_to_client_event>(server)
+const io = new Server<client_to_server_event, server_to_client_event>(server, {
+	cors: {
+		origin: process.env.CLIENT_URL,
+		methods: ["GET", "POST"],
+	},
+})
 
 function emit_game_state(game: Game) {
 	io.to(game.id).emit("game_state", game.state)
