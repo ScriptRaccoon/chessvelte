@@ -59,6 +59,13 @@
 		socket.emit("select", game_id, coord)
 	}
 
+	function resign() {
+		socket.emit("resign", game_id)
+		setTimeout(() => {
+			show_ending_dialog = true
+		}, 1000)
+	}
+
 	function restart() {
 		socket.emit("restart", game_id)
 		setTimeout(() => {
@@ -82,6 +89,7 @@
 		{my_turn}
 		{my_color}
 		on:select={select}
+		on:resign={resign}
 		on:restart={restart}
 	/>
 {/if}

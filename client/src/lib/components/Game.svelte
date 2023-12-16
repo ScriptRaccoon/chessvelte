@@ -25,10 +25,6 @@
 	// 	game.finish_promotion(type, finish_move)
 	// }
 
-	function restart(): void {
-		dispatch("restart")
-	}
-
 	// function cancel_promotion() {
 	// 	game.cancel_promotion()
 	// }
@@ -53,7 +49,8 @@
 		current_color={game_state.current_color}
 		{my_turn}
 		on:flip={flip_board}
-		on:restart={restart}
+		on:resign
+		on:restart
 	/>
 {/if}
 

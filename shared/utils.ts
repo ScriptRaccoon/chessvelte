@@ -67,3 +67,7 @@ export function inner_range(a: number, b: number): number[] {
 	}
 	return range
 }
+
+export function capitalize(str: string): string {
+	return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
+}

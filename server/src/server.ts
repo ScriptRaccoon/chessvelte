@@ -45,12 +45,18 @@ io.on("connection", (socket) => {
 		}
 	})
 
+	socket.on("resign", (game_id) => {
+		const game = Game.get_by_id(game_id)
+		if (!game || !game.is_started || game.is_ended) return
+		game.resign(socket.id)
+		emit_game_state(game)
+	})
+
 	socket.on("restart", (game_id) => {
 		const game = Game.get_by_id(game_id)
-		if (!game) return
+		if (!game || !game.is_ended) return
 		game.reset()
 		emit_game_state(game)
-		io.to(game.id).emit("toast", "Restarted", "info")
 	})
 
 	socket.on("disconnect", () => {

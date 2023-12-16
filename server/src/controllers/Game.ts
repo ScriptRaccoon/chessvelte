@@ -10,7 +10,7 @@ import type {
 
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
-import { key } from "$shared/utils"
+import { capitalize, key } from "$shared/utils"
 import { Capture, Move } from "../types"
 
 export class Game {
@@ -39,6 +39,8 @@ export class Game {
 	private promotion_move: Move | null = null
 	private captures: Capture[] = []
 	private players: Player[] = []
+	private resigned_player: Player | null = null
+	public is_ended: boolean = false
 
 	constructor(id: string) {
 		this._id = id
@@ -74,16 +76,15 @@ export class Game {
 		return this.status !== "waiting"
 	}
 
-	public get is_ended(): boolean {
-		return this.status === "checkmate" || this.status === "stalemate"
-	}
-
 	public get outcome(): string {
 		if (this.status === "checkmate") {
 			return `Checkmate against ${this.current_color}!`
 		}
 		if (this.status === "stalemate") {
 			return `Stalemate!`
+		}
+		if (this.status === "resigned" && this.resigned_player !== null) {
+			return `${capitalize(this.resigned_player.color)} has resigned`
 		}
 		return ""
 	}
@@ -117,13 +118,9 @@ export class Game {
 		return new_player
 	}
 
-	public get has_ended(): boolean {
-		return this.status === "checkmate" || this.status === "stalemate"
-	}
-
 	public select_coord(coord: Coord): boolean {
 		let actionable = false
-		if (this.has_ended) {
+		if (this.is_ended) {
 			return actionable
 		}
 		const piece = this.board.get(coord)
@@ -182,7 +179,9 @@ export class Game {
 
 	private check_for_ending(): void {
 		const checked = this.board.is_check(this.current_color)
-		if (this.number_all_moves === 0) {
+		const no_moves_left = this.number_all_moves === 0
+		if (no_moves_left) {
+			this.is_ended = true
 			this.status = checked ? "checkmate" : "stalemate"
 		} else {
 			this.status = checked ? "check" : "playing"
@@ -217,6 +216,8 @@ export class Game {
 		this.promotion_move = null
 		this.captures = []
 		this.turn = 0
+		this.resigned_player = null
+		this.is_ended = false
 		this.move_history.clear()
 		this.board.reset()
 		this.compute_all_moves()
@@ -238,5 +239,15 @@ export class Game {
 		}
 		this.all_moves = all_moves
 		this.number_all_moves = number_all_moves
+	}
+
+	public resign(socket_id: string): void {
+		const player = this.players.find(
+			(player) => player.socket_id === socket_id
+		)
+		if (!player) return
+		this.status = "resigned"
+		this.resigned_player = player
+		this.is_ended = true
 	}
 }
