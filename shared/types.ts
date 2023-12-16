@@ -45,6 +45,7 @@ export type Game_State = {
 	captured_pieces: Piece_Display[]
 	is_started: boolean
 	is_ended: boolean
+	outcome: string
 	// TODO: promotion
 }
 

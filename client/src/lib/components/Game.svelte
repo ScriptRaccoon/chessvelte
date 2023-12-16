@@ -48,6 +48,8 @@
 
 {#if game_state.is_started}
 	<Menu
+		is_ended={game_state.is_ended}
+		outcome={game_state.outcome}
 		current_color={game_state.current_color}
 		{my_turn}
 		on:flip={flip_board}

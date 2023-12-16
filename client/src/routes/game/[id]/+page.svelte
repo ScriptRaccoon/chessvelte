@@ -92,11 +92,7 @@
 	on:close={() => (show_ending_dialog = false)}
 >
 	<p class="outcome">
-		{#if game_state?.status === "checkmate"}
-			Checkmate against {game_state.current_color}!
-		{:else if game_state?.status === "stalemate"}
-			Stalemate!
-		{/if}
+		{game_state?.outcome}
 	</p>
 </Dialog>
 

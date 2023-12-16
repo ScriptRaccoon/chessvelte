@@ -62,6 +62,7 @@ export class Game {
 			),
 			is_started: this.is_started,
 			is_ended: this.is_ended,
+			outcome: this.outcome,
 		}
 	}
 
@@ -75,6 +76,16 @@ export class Game {
 
 	public get is_ended(): boolean {
 		return this.status === "checkmate" || this.status === "stalemate"
+	}
+
+	public get outcome(): string {
+		if (this.status === "checkmate") {
+			return `Checkmate against ${this.current_color}!`
+		}
+		if (this.status === "stalemate") {
+			return `Stalemate!`
+		}
+		return ""
 	}
 
 	public add_player(socket_id: string, client_id: string): Player | null {
@@ -176,13 +187,6 @@ export class Game {
 		} else {
 			this.status = checked ? "check" : "playing"
 		}
-	}
-
-	public get ending_message(): string {
-		if (this.status === "checkmate")
-			return `Checkmate against ${this.current_color}!`
-		if (this.status === "stalemate") return `Stalemate!`
-		return ""
 	}
 
 	private finish_move(move: Move): void {

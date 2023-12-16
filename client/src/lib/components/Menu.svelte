@@ -5,13 +5,19 @@
 
 	export let my_turn: boolean
 	export let current_color: Color
+	export let is_ended: boolean
+	export let outcome: string
 
 	$: turn_message = my_turn ? "It's your turn" : "Wait for other player"
 </script>
 
 <div class="wrapper">
 	<span class="circle {current_color}"></span>
-	<span class="turn_message">{turn_message}</span>
+	{#if !is_ended}
+		<span class="turn_message">{turn_message}</span>
+	{:else if outcome}
+		<span class="outcome">{outcome}</span>
+	{/if}
 
 	<menu>
 		<button class="button" on:click={() => dispatch("flip")}>Flip</button>
@@ -48,7 +54,8 @@
 		outline: 0.1rem solid white;
 	}
 
-	.turn_message {
+	.turn_message,
+	.outcome {
 		color: var(--secondary-font-color);
 		margin-right: auto;
 		margin-left: 0.5rem;
