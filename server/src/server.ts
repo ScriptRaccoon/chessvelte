@@ -1,5 +1,6 @@
 import { Server } from "socket.io"
 import express from "express"
+import chalk from "chalk"
 
 import { client_to_server_event, server_to_client_event } from "$shared/types"
 
@@ -9,7 +10,7 @@ const app = express()
 const PORT = process.env.PORT ?? 5000
 
 const server = app.listen(PORT, () => {
-	console.log(`Server listening on port: ${PORT}`)
+	console.log(chalk.cyan("Server listening on port ") + chalk.cyan.bold(PORT))
 })
 
 const io = new Server<client_to_server_event, server_to_client_event>(server)
