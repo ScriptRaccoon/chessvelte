@@ -1,6 +1,6 @@
-# Chessvelte (Multi Player)
+# Chessvelte
 
-This is a multi-player chess game written in SvelteKit, using a separate express server with socket.io for the communication between the players.
+This is a multi-player chess game made with SvelteKit and a separate express server using socket.io for the communication between the players.
 
 https://chessvelte.netlify.app
 
