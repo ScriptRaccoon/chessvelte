@@ -185,7 +185,8 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return
 		const player = game.get_player_by_socket(socket.id)
-		io.to(game.id).emit("toast", `${player.name} has disconnected`, "error")
+		const name = player?.name ?? "Player"
+		io.to(game.id).emit("toast", `${name} has disconnected`, "error")
 		socket.leave(game.id)
 	})
 })

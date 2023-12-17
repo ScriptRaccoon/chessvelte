@@ -18,6 +18,7 @@
 	} from "$lib/components/ui/Modal.svelte"
 	import { page } from "$app/stores"
 	import Promotion from "$lib/components/Promotion.svelte"
+	import { onDestroy } from "svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -149,6 +150,10 @@
 			cancel: { text: "Cancel", action: cancel_promotion },
 		})
 	}
+
+	onDestroy(() => {
+		socket.disconnect()
+	})
 </script>
 
 <Toast />
