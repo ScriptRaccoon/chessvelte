@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte"
-	import { fade } from "svelte/transition"
 
 	export let open: boolean = false
 	export let with_close_button: boolean = false
@@ -10,28 +9,38 @@
 	const dispatch = createEventDispatcher()
 </script>
 
-{#if open}
-	<div class="overlay" transition:fade={{ duration: 100 }} />
-{/if}
-
 <dialog {open} style:--w={w}>
-	<slot />
-	{#if with_close_button || with_cancel_button}
-		<menu>
-			{#if with_close_button}
-				<button class="button" on:click={() => dispatch("close")}> Ok </button>
-			{/if}
-			{#if with_cancel_button}
-				<button class="button" on:click={() => dispatch("cancel")}>
-					Cancel
-				</button>
-			{/if}
-		</menu>
-	{/if}
+	<div class="content">
+		<slot />
+		{#if with_close_button || with_cancel_button}
+			<menu>
+				{#if with_close_button}
+					<button class="button" on:click={() => dispatch("close")}>
+						Ok
+					</button>
+				{/if}
+				{#if with_cancel_button}
+					<button class="button" on:click={() => dispatch("cancel")}>
+						Cancel
+					</button>
+				{/if}
+			</menu>
+		{/if}
+	</div>
 </dialog>
 
 <style>
 	dialog {
+		z-index: 10;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #0006;
+	}
+
+	.content {
 		width: min(var(--w), 95vw);
 		z-index: 20;
 		position: absolute;
@@ -45,16 +54,7 @@
 		border: none;
 		border-radius: 0.25rem;
 		box-shadow: 0rem 0rem 2rem #0005;
-	}
-
-	.overlay {
-		z-index: 10;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: #0006;
+		font-size: 1.25rem;
 	}
 
 	menu {
@@ -62,5 +62,6 @@
 		justify-content: center;
 		gap: 0.5rem;
 		margin-top: 1rem;
+		font-size: 1rem;
 	}
 </style>

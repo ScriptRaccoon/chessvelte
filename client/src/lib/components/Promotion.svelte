@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte"
-	import Dialog from "./Dialog.svelte"
+	import Modal from "./Modal.svelte"
 
 	import type { Color } from "$shared/types"
 	import { piece_src } from "$shared/utils"
@@ -11,7 +11,7 @@
 	const dispatch = createEventDispatcher()
 </script>
 
-<Dialog
+<Modal
 	open={true}
 	with_cancel_button={true}
 	w="25rem"
@@ -26,7 +26,7 @@
 			</button>
 		{/each}
 	</div>
-</Dialog>
+</Modal>
 
 <style>
 	.choices {

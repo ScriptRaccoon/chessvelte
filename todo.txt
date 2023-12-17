@@ -10,11 +10,14 @@
 
 ### DESIGN ####
 - find good usage of player name, and if none exists just drop it
+- prevent layout shift when first piece is captured
 
 ### STRUCTURE ###
 - reduce god class "game" to simpler modules
 - move class maybe
 - find_by_player is not good since it iterates through all games
+- update to sveltekit v2
+- style:--w={w}
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify
