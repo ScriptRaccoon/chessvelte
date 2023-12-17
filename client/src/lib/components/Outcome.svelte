@@ -1,14 +1,14 @@
 <script lang="ts">
 	import Modal from "./Modal.svelte"
 
-	export let show_outcome_dialog: boolean
+	export let show_outcome_modal: boolean
 	export let outcome: string
 </script>
 
 <Modal
-	open={show_outcome_dialog && outcome != ""}
+	open={show_outcome_modal && outcome != ""}
 	with_close_button={true}
-	on:close={() => (show_outcome_dialog = false)}
+	on:close={() => (show_outcome_modal = false)}
 >
 	<p class="outcome">
 		{outcome}

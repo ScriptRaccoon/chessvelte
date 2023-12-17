@@ -9,7 +9,6 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
-- confirm to resign
 
 ### DESIGN ####
 - find good usage of player name, and if none exists just drop it

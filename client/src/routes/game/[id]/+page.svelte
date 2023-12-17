@@ -13,6 +13,7 @@
 	import { PUBLIC_SERVER_URL } from "$env/static/public"
 	import Outcome from "$lib/components/Outcome.svelte"
 	import Invitation from "$lib/components/Invitation.svelte"
+	import Resign from "$lib/components/Resign.svelte"
 
 	export let data
 
@@ -21,7 +22,8 @@
 
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
-	let show_outcome_dialog: boolean = true
+	let show_outcome_modal: boolean = false
+	let show_resign_modal: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -32,7 +34,7 @@
 
 	socket.on("game_state", (server_game_state) => {
 		game_state = server_game_state
-		show_outcome_dialog = game_state.is_ended
+		show_outcome_modal = game_state.is_ended
 		my_color = game_state.colors[socket.id]
 	})
 
@@ -81,11 +83,13 @@
 		{my_turn}
 		{my_color}
 		on:select={select}
-		on:resign={resign}
+		on:resign={() => (show_resign_modal = true)}
 		on:restart={restart}
 		on:finish_promotion={finish_promotion}
 		on:cancel_promotion={cancel_promotion}
 	/>
 {/if}
 
-<Outcome bind:show_outcome_dialog outcome={game_state?.outcome ?? ""} />
+<Resign bind:show_resign_modal on:resign={resign} />
+
+<Outcome bind:show_outcome_modal outcome={game_state?.outcome ?? ""} />
