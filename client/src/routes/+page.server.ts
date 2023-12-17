@@ -23,27 +23,27 @@ export const actions = {
 		const name = form_data.get("name")
 		const valid_name = typeof name === "string" && name.length > 0
 		if (!valid_name) {
-			throw error(400, "Name has to be provided")
+			error(400, "Name has to be provided")
 		}
 		set_cookies(event, name)
 
 		const game_id = form_data.get("game_id")
 		const valid_game_id = typeof game_id === "string" && game_id.length > 0
 		if (!valid_game_id) {
-			throw error(400, "Game ID has to be provided")
+			error(400, "Game ID has to be provided")
 		}
 
 		if (!Pairing.exists(game_id)) {
 			new Pairing(game_id)
 		}
-		throw redirect(303, `/game/${game_id}`)
+		redirect(303, `/game/${game_id}`)
 	},
 	start: async (event) => {
 		const form_data = await event.request.formData()
 		const name = form_data.get("name")
 		const valid_name = typeof name === "string" && name.length > 0
 		if (!valid_name) {
-			throw error(400, "Name has to be provided")
+			error(400, "Name has to be provided")
 		}
 		set_cookies(event, name)
 
@@ -51,6 +51,6 @@ export const actions = {
 		if (!Pairing.exists(game_id)) {
 			new Pairing(game_id)
 		}
-		throw redirect(303, `/game/${game_id}`)
+		redirect(303, `/game/${game_id}`)
 	},
 }

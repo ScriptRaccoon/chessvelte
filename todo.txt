@@ -1,4 +1,7 @@
 ### BUGS ###
+- when joining a game, the invitation modal is shown for a short time
+- when game has ended, the current player will still click on the board
+  and get the outcome modal again
 
 ### FEATURES ###
 - offer draw feature
@@ -16,7 +19,6 @@
 - reduce god class "game" to simpler modules
 - move class maybe
 - find_by_player is not good since it iterates through all games
-- update to sveltekit v2
 - style:--w={w}
 
 ### DEPLOYMENT ###
