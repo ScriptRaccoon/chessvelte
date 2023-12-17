@@ -17,12 +17,8 @@ export class Game {
 	private static dictionary: Record<string, Game> = {}
 
 	public static get_by_id(id: string): Game | undefined {
-		return Game.dictionary[id]
-	}
-
-	public static find_by_player(socket_id: string): Game | undefined {
-		for (const game of Object.values(Game.dictionary)) {
-			if (socket_id in game.players) return game
+		if (typeof id === "string" && id.length > 0) {
+			return Game.dictionary[id]
 		}
 	}
 

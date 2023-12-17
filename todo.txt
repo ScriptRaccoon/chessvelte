@@ -18,12 +18,6 @@
 - reduce god class "game" to simpler modules
 - move class maybe
 - player class maybe
-- style:--w={w}
-- move auth checks from server.ts to Game.ts
-- remove code dupli in App.svelte with
-   game_state?.is_started || game_state?.is_ended
-- attach game_id as socket data, simplify events and server logic with that
-
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify
