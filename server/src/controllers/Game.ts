@@ -53,6 +53,7 @@ export class Game {
 			status: this.status,
 			is_started: this.is_started,
 			is_ended: this.is_ended,
+			is_playing: this.is_playing,
 			outcome: this.outcome,
 			current_color: this.current_color,
 			colors: this.colors,

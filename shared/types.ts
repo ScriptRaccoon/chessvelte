@@ -48,6 +48,7 @@ export type Game_State = {
 	captured_pieces: Piece_Display[]
 	is_started: boolean
 	is_ended: boolean
+	is_playing: boolean
 	outcome: string
 	colors: Record<string, Color>
 }

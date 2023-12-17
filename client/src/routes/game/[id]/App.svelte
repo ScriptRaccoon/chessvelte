@@ -58,45 +58,45 @@
 	}
 
 	function select(event: CustomEvent<Coord>) {
-		if (!my_turn || !game_state?.is_started || game_state?.is_ended) return
+		if (!my_turn || !game_state?.is_playing) return
 		const coord = event.detail
 		socket.emit("select", game_id, coord)
 	}
 
 	function resign() {
-		if (!game_state?.is_started || game_state?.is_ended) return
+		if (!game_state?.is_playing) return
 		socket.emit("resign", game_id)
 	}
 
 	function restart() {
-		if (!game_state?.is_started || !game_state?.is_ended) return
+		if (game_state?.is_playing) return
 		socket.emit("restart", game_id)
 	}
 
 	function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
-		if (!game_state?.is_started || game_state?.is_ended) return
+		if (!game_state?.is_playing) return
 		close_modal()
 		const type = e.detail
 		socket.emit("finish_promotion", game_id, type)
 	}
 
 	function cancel_promotion() {
-		if (!game_state?.is_started || game_state?.is_ended) return
+		if (!game_state?.is_playing) return
 		socket.emit("cancel_promotion", game_id)
 	}
 
 	function offer_draw() {
-		if (!game_state?.is_started || game_state?.is_ended) return
+		if (!game_state?.is_playing) return
 		socket.emit("offer_draw", game_id)
 	}
 
 	function accept_draw() {
-		if (!game_state?.is_started || game_state?.is_ended) return
+		if (!game_state?.is_playing) return
 		socket.emit("accept_draw", game_id)
 	}
 
 	function reject_draw() {
-		if (!game_state?.is_started || game_state?.is_ended) return
+		if (!game_state?.is_playing) return
 		socket.emit("reject_draw", game_id)
 	}
 
@@ -133,11 +133,13 @@
 	}
 
 	function open_outcome_modal() {
-		open_modal({
-			text: game_state?.outcome,
-			confirm: { text: "Ok", action: () => {} },
-			cancel: null,
-		})
+		if (game_state?.outcome) {
+			open_modal({
+				text: game_state.outcome,
+				confirm: { text: "Ok", action: () => {} },
+				cancel: null,
+			})
+		}
 	}
 
 	function open_promotion_modal() {

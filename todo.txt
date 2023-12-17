@@ -6,6 +6,7 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
+- do not send other socket_id to clients since that is not secure
 
 ### DESIGN ####
 - find good usage of player name, and if none exists just drop it
@@ -20,7 +21,6 @@
 - move auth checks from server.ts to Game.ts
 - remove code dupli in App.svelte with
    game_state?.is_started || game_state?.is_ended
-- create_modal function to remove all the modal components and just use one
 - attach game_id as socket data, simplify events and server logic with that
 
 
