@@ -42,3 +42,6 @@ export const PIECE_VALUES: Record<PIECE_TYPE, number> = {
 	queen: 9,
 	king: Number.POSITIVE_INFINITY,
 }
+
+export const CHARACTERS =
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"

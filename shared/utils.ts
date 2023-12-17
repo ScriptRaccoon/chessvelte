@@ -1,7 +1,14 @@
-import { customAlphabet } from "nanoid"
-import { COLS, ROWS } from "./config"
-
+import { CHARACTERS, COLS, ROWS } from "./config"
 import type { Color, Coord, Coord_Key, PIECE_TYPE } from "./types"
+
+export function generate_short_id(length: number): string {
+	let result = ""
+	for (let i = 0; i < length; i++) {
+		const index = Math.floor(Math.random() * CHARACTERS.length)
+		result += CHARACTERS.charAt(index)
+	}
+	return result
+}
 
 export function key(coord: Coord): Coord_Key {
 	return `${coord[0]}${coord[1]}`
@@ -23,16 +30,6 @@ export function is_valid(coord: Coord): boolean {
 	const [row, col] = coord
 	return row >= 0 && col >= 0 && row < ROWS.length && col < COLS.length
 }
-
-export const generate_game_id: () => string = customAlphabet(
-	"abcdefABCDEF0123456789",
-	6
-)
-
-export const generate_piece_id: () => string = customAlphabet(
-	"1234567890abcdefghiklmnopqrstuvwxyz",
-	4
-)
 
 export function piece_src(type: PIECE_TYPE, color: Color): string {
 	return `../sprite.svg#${type}_${color}`

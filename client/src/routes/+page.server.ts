@@ -1,6 +1,6 @@
 import { Pairing } from "$lib/Pairing"
 import { COOKIE_OPTIONS } from "$shared/config"
-import { generate_game_id } from "$shared/utils"
+import { generate_short_id } from "$shared/utils"
 import { redirect } from "@sveltejs/kit"
 import type { RequestEvent } from "./$types"
 import type { login_error } from "$shared/types"
@@ -52,7 +52,7 @@ export const actions = {
 		}
 		set_cookies(event, name)
 
-		const game_id = generate_game_id()
+		const game_id = generate_short_id(6)
 		if (!Pairing.exists(game_id)) {
 			new Pairing(game_id)
 		}

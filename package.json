@@ -11,9 +11,6 @@
 		"build": "pnpm run build:client && pnpm run build:server"
 	},
 	"license": "ISC",
-	"dependencies": {
-		"nanoid": "^5.0.4"
-	},
 	"devDependencies": {
 		"concurrently": "^8.2.2"
 	}

@@ -2,7 +2,7 @@ import type { MoveHistory } from "./MoveHistory"
 import type { Board } from "./Board"
 import type { Color, Coord, PIECE_TYPE, Piece_Display } from "$shared/types"
 import { SIZE, PIECE_VALUES } from "$shared/config"
-import { generate_piece_id, is_valid } from "$shared/utils"
+import { generate_short_id, is_valid } from "$shared/utils"
 import { Move } from "../types"
 
 export abstract class Piece {
@@ -10,7 +10,7 @@ export abstract class Piece {
 		public type: PIECE_TYPE,
 		public color: Color,
 		public value: number = PIECE_VALUES[type],
-		public id: string = generate_piece_id()
+		public id: string = generate_short_id(4)
 	) {}
 
 	to_display(): Piece_Display {
