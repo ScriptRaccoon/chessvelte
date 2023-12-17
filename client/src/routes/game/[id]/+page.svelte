@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores"
-	import { io, Socket } from "socket.io-client"
+	import { io, type Socket } from "socket.io-client"
 	import type {
 		server_to_client_event,
 		client_to_server_event,
@@ -27,7 +27,7 @@
 	const socket: Socket<server_to_client_event, client_to_server_event> =
 		io(PUBLIC_SERVER_URL)
 
-	let show_ending_dialog = true
+	let show_outcome_dialog = true
 
 	socket.emit("me", game_id, client_id)
 
@@ -37,6 +37,7 @@
 
 	socket.on("game_state", (_game_state) => {
 		game_state = _game_state
+		show_outcome_dialog = game_state.is_ended
 	})
 
 	socket.on("toast", (message, variant) => {
@@ -62,16 +63,10 @@
 
 	function resign() {
 		socket.emit("resign", game_id)
-		setTimeout(() => {
-			show_ending_dialog = true
-		}, 1000)
 	}
 
 	function restart() {
 		socket.emit("restart", game_id)
-		setTimeout(() => {
-			show_ending_dialog = true
-		}, 1000)
 	}
 
 	function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
@@ -107,9 +102,9 @@
 {/if}
 
 <Dialog
-	open={show_ending_dialog && game_state?.is_ended}
+	open={show_outcome_dialog}
 	with_close_button={true}
-	on:close={() => (show_ending_dialog = false)}
+	on:close={() => (show_outcome_dialog = false)}
 >
 	<p class="outcome">
 		{game_state?.outcome}

@@ -9,13 +9,12 @@
 - confirm to resign
 
 ### DESIGN ####
-- find usage of player name, and if none exists just drop it
+- find good usage of player name, and if none exists just drop it
 
 ### STRUCTURE ###
 - reduce god class "game" to simpler modules
 - move class maybe
 - find_by_player is not good since it iterates through all games
-- the "show_ending_dialog = true" solution is dirty and error-prone
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify
