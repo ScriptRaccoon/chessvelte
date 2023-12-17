@@ -8,7 +8,7 @@
 	export let is_ended: boolean
 	export let outcome: string
 
-	$: turn_message = my_turn ? "It's your turn" : "Wait for other player"
+	$: turn_message = my_turn ? "It's your turn" : "It is your opponent's turn"
 </script>
 
 <div class="wrapper">

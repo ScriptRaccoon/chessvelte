@@ -12,6 +12,7 @@ export type Player = {
 	client_id: string
 	turn: number
 	color: Color
+	name: string
 }
 
 export type PIECE_TYPE =
