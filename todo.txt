@@ -8,6 +8,7 @@
 - error messages for clients when game does not exist
 - do not send other socket_id to clients since that is not secure
 - personalize outcome message
+- more defensive programming
 
 ### DESIGN ####
 - find good usage of player name, and if none exists just drop it

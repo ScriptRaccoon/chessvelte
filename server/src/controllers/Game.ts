@@ -7,10 +7,14 @@ import type {
 	Player,
 	PIECE_TYPE,
 } from "$shared/types"
-
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
-import { capitalize, key } from "$shared/utils"
+import {
+	capitalize,
+	get_other_color,
+	get_random_color,
+	key,
+} from "$shared/utils"
 import { Capture, Move } from "../types"
 
 export class Game {
@@ -57,10 +61,6 @@ export class Game {
 			possible_targets: this.possible_targets,
 			captured_pieces: this.captured_pieces,
 		}
-	}
-
-	public start(): void {
-		this.status = "playing"
 	}
 
 	public get is_started(): boolean {
@@ -123,16 +123,10 @@ export class Game {
 
 		if (player_list.length >= 2) return null
 
-		const is_first = player_list.length === 0
-
-		let color: Color
-
-		if (is_first) {
-			color = Math.random() < 0.5 ? "white" : "black"
-		} else {
-			const other_color = player_list[0].color
-			color = other_color === "white" ? "black" : "white"
-		}
+		const color =
+			player_list.length === 0
+				? get_random_color()
+				: get_other_color(player_list[0].color)
 
 		const new_player: Player = { client_id, color, name }
 		this.players[socket_id] = new_player
@@ -193,6 +187,13 @@ export class Game {
 		}
 	}
 
+	private finish_move(move: Move): void {
+		this.execute_move(move)
+		this.switch_color()
+		this.compute_all_moves()
+		this.check_for_ending()
+	}
+
 	private execute_move(move: Move): void {
 		this.move_history.push(move)
 		const capture = this.board.apply_move(move)
@@ -204,23 +205,14 @@ export class Game {
 	private switch_color(): void {
 		this.selected_coord = null
 		this.possible_moves = []
-		this.current_color = this.current_color === "white" ? "black" : "white"
+		this.current_color = get_other_color(this.current_color)
 	}
 
 	private check_for_ending(): void {
-		const no_moves_left = this.number_all_moves === 0
-		if (no_moves_left) {
-			const checked = this.board.is_check(this.current_color)
-			this.is_ended = true
-			this.status = checked ? "checkmate" : "stalemate"
-		}
-	}
-
-	private finish_move(move: Move): void {
-		this.execute_move(move)
-		this.switch_color()
-		this.compute_all_moves()
-		this.check_for_ending()
+		if (this.number_all_moves > 0) return
+		const checked = this.board.is_check(this.current_color)
+		this.is_ended = true
+		this.status = checked ? "checkmate" : "stalemate"
 	}
 
 	public finish_promotion(type: PIECE_TYPE): void {
@@ -253,9 +245,9 @@ export class Game {
 		this.switch_player_colors()
 	}
 
-	public switch_player_colors() {
+	public switch_player_colors(): void {
 		Object.values(this.players).forEach((player) => {
-			player.color = player.color === "white" ? "black" : "white"
+			player.color = get_other_color(player.color)
 		})
 	}
 

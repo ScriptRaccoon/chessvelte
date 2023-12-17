@@ -71,3 +71,11 @@ export function inner_range(a: number, b: number): number[] {
 export function capitalize(str: string): string {
 	return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
 }
+
+export function get_other_color(color: Color): Color {
+	return color === "white" ? "black" : "white"
+}
+
+export function get_random_color(): Color {
+	return Math.random() < 0.5 ? "white" : "black"
+}
