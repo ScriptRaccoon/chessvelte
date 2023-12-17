@@ -6,10 +6,10 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
+- confirm to resign
 
 ### DESIGN ####
 - find usage of player name, and if none exists just drop it
-- overlay of dialog is too small when scrollbars are present
 
 ### STRUCTURE ###
 - reduce god class "game" to simpler modules

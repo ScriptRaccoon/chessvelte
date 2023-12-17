@@ -19,9 +19,7 @@
 	{#if with_close_button || with_cancel_button}
 		<menu>
 			{#if with_close_button}
-				<button class="button" on:click={() => dispatch("close")}>
-					Ok
-				</button>
+				<button class="button" on:click={() => dispatch("close")}> Ok </button>
 			{/if}
 			{#if with_cancel_button}
 				<button class="button" on:click={() => dispatch("cancel")}>
@@ -51,8 +49,11 @@
 
 	.overlay {
 		z-index: 10;
-		position: absolute;
-		inset: 0;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		background-color: #0006;
 	}
 
