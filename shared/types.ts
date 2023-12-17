@@ -10,7 +10,6 @@ export type Color = "black" | "white"
 
 export type Player = {
 	client_id: string
-	turn: number
 	color: Color
 	name: string
 }

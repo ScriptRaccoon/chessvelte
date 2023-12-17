@@ -23,10 +23,8 @@ export class Game {
 	}
 
 	public id: string
-	public turn: number = 0
 	private move_history: MoveHistory = new MoveHistory()
 	private board: Board = new Board()
-	private current_color: Color = "white"
 	private status: GAME_STATUS = "waiting"
 	private all_moves: Record<Coord_Key, Move[]> = {}
 	private number_all_moves: number = 0
@@ -37,6 +35,7 @@ export class Game {
 	private players: Record<string, Player> = {}
 	private resigned_player: Player | null = null
 	public is_ended: boolean = false
+	private current_color: Color = "white"
 
 	constructor(id: string) {
 		this.id = id
@@ -126,13 +125,16 @@ export class Game {
 
 		const is_first = player_list.length === 0
 
-		const turn = is_first
-			? Number(Math.random() < 0.5)
-			: 1 - player_list[0].turn
+		let color: Color
 
-		const color: Color = turn === 0 ? "white" : "black"
+		if (is_first) {
+			color = Math.random() < 0.5 ? "white" : "black"
+		} else {
+			const other_color = player_list[0].color
+			color = other_color === "white" ? "black" : "white"
+		}
 
-		const new_player: Player = { client_id, turn, color, name }
+		const new_player: Player = { client_id, color, name }
 		this.players[socket_id] = new_player
 
 		if (Object.values(this.players).length === 2) {
@@ -143,7 +145,7 @@ export class Game {
 	}
 
 	public is_allowed_to_move(socket_id: string): boolean {
-		return this.players[socket_id].turn === this.turn
+		return this.players[socket_id].color === this.current_color
 	}
 
 	public select_coord(coord: Coord): boolean {
@@ -200,10 +202,9 @@ export class Game {
 	}
 
 	private switch_color(): void {
-		this.current_color = this.current_color === "white" ? "black" : "white"
 		this.selected_coord = null
 		this.possible_moves = []
-		this.turn = 1 - this.turn
+		this.current_color = this.current_color === "white" ? "black" : "white"
 	}
 
 	private check_for_ending(): void {
@@ -244,7 +245,6 @@ export class Game {
 		this.possible_moves = []
 		this.promotion_move = null
 		this.captures = []
-		this.turn = 0
 		this.resigned_player = null
 		this.is_ended = false
 		this.move_history.clear()
@@ -256,7 +256,6 @@ export class Game {
 	public switch_player_colors() {
 		Object.values(this.players).forEach((player) => {
 			player.color = player.color === "white" ? "black" : "white"
-			player.turn = 1 - player.turn
 		})
 	}
 
