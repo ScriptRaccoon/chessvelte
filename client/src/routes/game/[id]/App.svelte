@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { page } from "$app/stores"
+	import { onDestroy } from "svelte"
+	import { PUBLIC_SERVER_URL } from "$env/static/public"
+	import { browser } from "$app/environment"
+
 	import { io, type Socket } from "socket.io-client"
 	import type {
 		server_to_client_event,
@@ -8,17 +13,15 @@
 		Color,
 		PIECE_TYPE,
 	} from "$shared/types"
+
 	import Game from "$lib/components/Game.svelte"
 	import Toast, { send_toast } from "$lib/components/ui/Toast.svelte"
-	import { PUBLIC_SERVER_URL } from "$env/static/public"
-	import { browser } from "$app/environment"
 	import Modal, {
 		close_modal,
 		open_modal,
 	} from "$lib/components/ui/Modal.svelte"
-	import { page } from "$app/stores"
 	import Promotion from "$lib/components/Promotion.svelte"
-	import { onDestroy } from "svelte"
+	import GameHeader from "$lib/components/GameHeader.svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -155,6 +158,8 @@
 		socket.disconnect()
 	})
 </script>
+
+<GameHeader />
 
 <Toast />
 

@@ -1,14 +1,10 @@
 <script lang="ts">
-	import Header from "$lib/components/Header.svelte"
-	import Nav from "$lib/components/Nav.svelte"
+	import { TITLE } from "$shared/config"
 	import "../app.css"
 </script>
 
 <svelte:head>
-	<title>Chessvelte</title>
+	<title>{TITLE}</title>
 </svelte:head>
-
-<Nav />
-<Header />
 
 <slot />

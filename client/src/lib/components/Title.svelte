@@ -1,11 +1,15 @@
+<script lang="ts">
+	import { TITLE } from "$shared/config"
+</script>
+
 <header>
-	<h1>Chessvelte</h1>
+	<h1>{TITLE}</h1>
 	<p>Play chess with anyone</p>
 </header>
 
 <style>
 	header {
-		padding-block: 1rem;
+		padding-block: 2rem 1rem;
 		text-align: center;
 	}
 	h1 {

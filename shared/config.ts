@@ -1,5 +1,7 @@
 import type { Color, Coord, PIECE_TYPE } from "./types"
 
+export const TITLE = "Chessvelte"
+
 export const ROWS = [0, 1, 2, 3, 4, 5, 6, 7]
 export const COLS = [0, 1, 2, 3, 4, 5, 6, 7]
 export const SIZE = 8
