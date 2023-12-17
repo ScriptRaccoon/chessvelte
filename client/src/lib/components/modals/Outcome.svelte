@@ -7,16 +7,8 @@
 
 <Modal
 	open={show_outcome_modal && outcome != ""}
-	with_close_button={true}
-	on:close={() => (show_outcome_modal = false)}
+	with_confirm_button={true}
+	on:confirm={() => (show_outcome_modal = false)}
 >
-	<p class="outcome">
-		{outcome}
-	</p>
+	{outcome}
 </Modal>
-
-<style>
-	.outcome {
-		font-size: 1.25rem;
-	}
-</style>

@@ -1,5 +1,4 @@
 ### BUGS ###
-- when joining a game, the invitation modal is shown for a short time
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss
@@ -16,6 +15,7 @@
 - player class maybe
 - style:--w={w}
 - move auth checks from server.ts to Game.ts
+- remove code dupli in server.ts
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify

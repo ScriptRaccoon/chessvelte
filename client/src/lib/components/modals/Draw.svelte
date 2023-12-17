@@ -9,8 +9,10 @@
 <Modal
 	open={show_draw_modal}
 	with_cancel_button={true}
-	with_close_button={true}
-	on:close={() => {
+	with_confirm_button={true}
+	confirm_text="Accept"
+	cancel_text="Reject"
+	on:confirm={() => {
 		show_draw_modal = false
 		dispatch("accept")
 	}}

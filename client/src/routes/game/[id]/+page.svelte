@@ -27,6 +27,7 @@
 	let show_outcome_modal: boolean = false
 	let show_resign_modal: boolean = false
 	let show_draw_modal: boolean = false
+	let show_invitation_modal: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -41,6 +42,7 @@
 		game_state = server_game_state
 		show_outcome_modal = game_state.is_ended
 		my_color = game_state.colors[socket.id]
+		show_invitation_modal = !game_state.is_started
 	})
 
 	socket.on("toast", (message, variant) => {
@@ -99,7 +101,7 @@
 
 <Toast />
 
-<Invitation is_started={game_state?.is_started === true} />
+<Invitation bind:show_invitation_modal />
 
 {#if game_state && my_color}
 	<Game

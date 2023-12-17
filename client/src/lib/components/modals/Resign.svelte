@@ -9,7 +9,9 @@
 <Modal
 	open={show_resign_modal}
 	with_cancel_button={true}
-	with_close_button={true}
+	with_confirm_button={true}
+	confirm_text="Yes"
+	cancel_text="No"
 	on:close={() => {
 		show_resign_modal = false
 		dispatch("resign")
