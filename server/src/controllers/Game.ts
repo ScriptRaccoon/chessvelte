@@ -112,7 +112,7 @@ export class Game {
 			return player
 		}
 
-		if (this.is_started) return null
+		if (player_list.length >= 2) return null
 
 		const turn =
 			player_list.length === 0

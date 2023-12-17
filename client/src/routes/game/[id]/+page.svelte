@@ -15,6 +15,7 @@
 	import Invitation from "$lib/components/modals/Invitation.svelte"
 	import Resign from "$lib/components/modals/Resign.svelte"
 	import Draw from "$lib/components/modals/Draw.svelte"
+	import { browser } from "$app/environment"
 
 	export let data
 
@@ -32,7 +33,9 @@
 	const socket: Socket<server_to_client_event, client_to_server_event> =
 		io(PUBLIC_SERVER_URL)
 
-	socket.emit("me", game_id, client_id)
+	if (browser) {
+		socket.emit("me", game_id, client_id)
+	}
 
 	socket.on("game_state", (server_game_state) => {
 		game_state = server_game_state

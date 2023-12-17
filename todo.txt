@@ -1,8 +1,5 @@
 ### BUGS ###
 - when joining a game, the invitation modal is shown for a short time
-- when game has ended, the current player will still click on the board
-  and get the outcome modal again
-- there are too many sockets in game.players
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss

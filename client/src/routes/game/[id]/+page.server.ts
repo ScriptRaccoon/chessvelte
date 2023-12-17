@@ -1,6 +1,8 @@
 import { Pairing } from "$lib/Pairing"
 import { error, redirect } from "@sveltejs/kit"
 
+export const prerender = false
+
 export const load = (event) => {
 	const game_id = event.params.id
 
