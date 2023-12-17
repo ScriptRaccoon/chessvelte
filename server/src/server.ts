@@ -28,7 +28,6 @@ const io = new Server<client_to_server_event, server_to_client_event>(server, {
 
 function emit_game_state(game: Game) {
 	io.to(game.id).emit("game_state", game.state)
-	log(game.players)
 }
 
 io.on("connection", (socket) => {
