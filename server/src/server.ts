@@ -42,11 +42,12 @@ io.on("connection", (socket) => {
 		const player_info = game.add_player(socket.id, client_id, name)
 		if (!player_info) return
 		socket.join(game_id)
-		log(socket.id, "alias", player_info.player.name, "joined game", game_id)
-		const action = player_info.is_new ? "connected" : "reconnected"
+		const { is_new, player } = player_info
+		log(socket.id, "with name", player.name, "joined game", game_id)
+		const action = is_new ? "connected" : "reconnected"
 		socket.broadcast
 			.to(game.id)
-			.emit("toast", `Player has ${action}`, "success")
+			.emit("toast", `${player.name} has ${action}`, "success")
 		emit_game_state(game)
 	})
 
@@ -86,7 +87,12 @@ io.on("connection", (socket) => {
 		if (!game?.is_ended) return
 		game.reset()
 		emit_game_state(game)
-		io.to(game.id).emit("toast", "Restarted game", "info")
+		const player = game.get_player_by_socket(socket.id)
+		io.to(game.id).emit(
+			"toast",
+			`${player.name} has restarted the game`,
+			"info"
+		)
 	})
 
 	/**
@@ -96,8 +102,9 @@ io.on("connection", (socket) => {
 		log(socket.id, "offers draw in game", game_id)
 		const game = Game.get_by_id(game_id)
 		if (!game?.is_playing) return
+		const player = game.get_player_by_socket(socket.id)
 		socket.emit("toast", "Draw has been offered", "info")
-		socket.broadcast.to(game.id).emit("offer_draw")
+		socket.broadcast.to(game.id).emit("offer_draw", player.name)
 	})
 
 	/**
@@ -108,7 +115,12 @@ io.on("connection", (socket) => {
 		log(socket.id, "rejects draw in game", game_id)
 		const game = Game.get_by_id(game_id)
 		if (!game?.is_playing) return
-		io.to(game.id).emit("toast", "Draw has been rejected", "error")
+		const player = game.get_player_by_socket(socket.id)
+		io.to(game.id).emit(
+			"toast",
+			`${player.name} has rejected the draw`,
+			"error"
+		)
 	})
 
 	/**
@@ -151,7 +163,8 @@ io.on("connection", (socket) => {
 		log(socket.id, "has disconnected")
 		const game = Game.find_by_player(socket.id)
 		if (!game) return
-		io.to(game.id).emit("toast", "Player has disconnected", "error")
+		const player = game.get_player_by_socket(socket.id)
+		io.to(game.id).emit("toast", `${player.name} has disconnected`, "error")
 		socket.leave(game.id)
 	})
 })

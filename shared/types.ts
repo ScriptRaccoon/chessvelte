@@ -57,7 +57,7 @@ export type Game_State = {
 export type server_to_client_event = {
 	game_state: (state: Game_State) => void
 	toast: (msg: string, variant: toast_variant) => void
-	offer_draw: () => void
+	offer_draw: (name: string) => void
 }
 
 export type client_to_server_event = {

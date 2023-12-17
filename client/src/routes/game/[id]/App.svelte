@@ -53,8 +53,8 @@
 			})
 		})
 
-		socket.on("offer_draw", () => {
-			open_draw_modal()
+		socket.on("offer_draw", (name: string) => {
+			open_draw_modal(name)
 		})
 	}
 
@@ -117,9 +117,9 @@
 		})
 	}
 
-	function open_draw_modal() {
+	function open_draw_modal(name: string) {
 		open_modal({
-			text: "A draw has been offered",
+			text: `${name} has offered a draw`,
 			confirm: { text: "Accept", action: accept_draw },
 			cancel: { text: "Reject", action: reject_draw },
 		})

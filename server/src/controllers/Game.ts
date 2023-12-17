@@ -38,7 +38,7 @@ export class Game {
 	private selected_coord: Coord | null = null
 	private promotion_move: Move | null = null
 	private captures: Capture[] = []
-	public players: Record<string, Player> = {}
+	private players: Record<string, Player> = {}
 	private resigned_player: Player | null = null
 	public is_ended: boolean = false
 
@@ -293,5 +293,9 @@ export class Game {
 	public draw(): void {
 		this.status = "drawn"
 		this.is_ended = true
+	}
+
+	public get_player_by_socket(socket_id: string): Player {
+		return this.players[socket_id]
 	}
 }
