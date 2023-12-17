@@ -20,6 +20,7 @@ export class Pairing {
 	}
 
 	add_player(client_id: Client_ID): void {
+		if (this.is_full) return
 		this.players.push(client_id)
 	}
 
