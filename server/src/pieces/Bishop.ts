@@ -21,7 +21,7 @@ export class Bishop extends Piece {
 				[-1, -1],
 			],
 			coord,
-			board
+			board,
 		)
 	}
 }

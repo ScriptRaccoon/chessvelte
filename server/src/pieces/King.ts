@@ -19,7 +19,7 @@ export class King extends Piece {
 		coord: Coord,
 		board: Board,
 		move_history: MoveHistory | null,
-		include_special_moves: boolean
+		include_special_moves: boolean,
 	): Move[] {
 		const [row, col] = coord
 
@@ -76,7 +76,7 @@ export class King extends Piece {
 	castle_moves(
 		coord: Coord,
 		board: Board,
-		move_history: MoveHistory | null
+		move_history: MoveHistory | null,
 	): Move[] {
 		if (move_history?.contains_piece(this)) return []
 		if (board.is_check(this.color)) return []
@@ -86,11 +86,7 @@ export class King extends Piece {
 
 		for (const rook_col of [0, COLS.length - 1]) {
 			const rook = board.get([row, rook_col])
-			if (
-				!rook ||
-				rook.type !== "rook" ||
-				move_history?.contains_piece(rook)
-			)
+			if (!rook || rook.type !== "rook" || move_history?.contains_piece(rook))
 				continue
 
 			const range = inner_range(rook_col, col)

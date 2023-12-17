@@ -105,12 +105,12 @@ export class Game {
 	public add_player(
 		socket_id: string,
 		client_id: string,
-		name: string
+		name: string,
 	): { is_new: boolean; player: Player } | null {
 		const player_list = Object.values(this.players)
 
 		const old_socket_id = Object.keys(this.players).find(
-			(id) => this.players[id].client_id === client_id
+			(id) => this.players[id].client_id === client_id,
 		)
 
 		if (old_socket_id) {
@@ -174,7 +174,7 @@ export class Game {
 	private generate_move(coord: Coord): boolean {
 		if (!this.selected_coord) return false
 		const move = this.possible_moves?.find(
-			(move) => key(move.end) == key(coord)
+			(move) => key(move.end) == key(coord),
 		)
 		if (!move) return false
 		if (move.type === "promotion") {
@@ -257,11 +257,7 @@ export class Game {
 		for (const coord of this.board.coords) {
 			const piece = this.board.get(coord)
 			if (!piece || piece.color !== this.current_color) continue
-			const moves = piece.get_save_moves(
-				coord,
-				this.board,
-				this.move_history
-			)
+			const moves = piece.get_save_moves(coord, this.board, this.move_history)
 			all_moves[key(coord)] = moves
 			number_all_moves += moves.length
 		}

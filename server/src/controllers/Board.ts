@@ -19,7 +19,7 @@ export class Board {
 			Object.entries(this.map).map(([coord, piece]) => [
 				coord,
 				piece!.to_display(),
-			])
+			]),
 		)
 	}
 
@@ -58,10 +58,7 @@ export class Board {
 		this.remove(move.start)
 		if (move.type === "promotion") {
 			if (move.promotion_type) {
-				const new_piece = create_piece(
-					move.promotion_type,
-					move.piece.color
-				)
+				const new_piece = create_piece(move.promotion_type, move.piece.color)
 				this.set(move.end, new_piece)
 			}
 		} else if (move.type === "castle") {

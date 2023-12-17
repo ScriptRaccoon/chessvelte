@@ -18,7 +18,7 @@ export class Pawn extends Piece {
 	get_moves(
 		coord: Coord,
 		board: Board,
-		move_history: MoveHistory | null
+		move_history: MoveHistory | null,
 	): Move[] {
 		const [row, col] = coord
 		const moves: Move[] = []

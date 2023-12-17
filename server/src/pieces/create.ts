@@ -18,7 +18,7 @@ const constructor_map: Record<Piece["type"], Function> = {
 
 export function create_piece(
 	type: Piece["type"],
-	color: Color
+	color: Color,
 ): Bishop | King | Knight | Pawn | Queen | Rook {
 	// @ts-ignore
 	return new constructor_map[type](color)

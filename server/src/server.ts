@@ -45,7 +45,7 @@ function get_game_of_socket(
 		server_to_client_event,
 		{},
 		socket_data
-	>
+	>,
 ): Game | undefined {
 	return Game.get_by_id(socket.data.game_id ?? "")
 }
@@ -112,7 +112,7 @@ io.on("connection", (socket) => {
 		io.to(game.id).emit(
 			"toast",
 			`${player.name} has restarted the game`,
-			"info"
+			"info",
 		)
 	})
 
@@ -140,7 +140,7 @@ io.on("connection", (socket) => {
 		io.to(game.id).emit(
 			"toast",
 			`${player.name} has rejected the draw`,
-			"error"
+			"error",
 		)
 	})
 

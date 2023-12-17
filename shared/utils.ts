@@ -44,7 +44,7 @@ interface copyable<T> {
 }
 
 export function deep_copy<S extends string | number, T extends copyable<T>>(
-	obj: Record<S, T | undefined>
+	obj: Record<S, T | undefined>,
 ): Record<S, T | undefined> {
 	const keys = typed_keys(obj)
 	const copy = {} as Record<S, T | undefined>

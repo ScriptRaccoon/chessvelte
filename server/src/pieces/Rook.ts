@@ -21,7 +21,7 @@ export class Rook extends Piece {
 				[0, -1],
 			],
 			coord,
-			board
+			board,
 		)
 	}
 }

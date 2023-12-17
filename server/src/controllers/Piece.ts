@@ -10,7 +10,7 @@ export abstract class Piece {
 		public type: PIECE_TYPE,
 		public color: Color,
 		public value: number = PIECE_VALUES[type],
-		public id: string = generate_short_id(4)
+		public id: string = generate_short_id(4),
 	) {}
 
 	to_display(): Piece_Display {
@@ -27,13 +27,13 @@ export abstract class Piece {
 		coord: Coord,
 		board: Board,
 		move_history: MoveHistory | null,
-		include_special_moves: boolean
+		include_special_moves: boolean,
 	): Move[]
 
 	get_save_moves(
 		coord: Coord,
 		board: Board,
-		move_history: MoveHistory | null = null
+		move_history: MoveHistory | null = null,
 	): Move[] {
 		const moves = this.get_moves(coord, board, move_history, true)
 		return moves.filter((move) => {
@@ -46,7 +46,7 @@ export abstract class Piece {
 	directional_moves(
 		directions: [number, number][],
 		coord: Coord,
-		board: Board
+		board: Board,
 	): Move[] {
 		const [row, col] = coord
 		const moves: Move[] = []
