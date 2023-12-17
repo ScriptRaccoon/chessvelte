@@ -21,12 +21,12 @@
 
 	<menu>
 		<button class="button" on:click={() => dispatch("flip")}>Flip</button>
-		<button class="button" on:click={() => dispatch("draw")}>Draw</button>
 		{#if is_ended}
 			<button class="button" on:click={() => dispatch("restart")}>
 				Restart
 			</button>
 		{:else}
+			<button class="button" on:click={() => dispatch("draw")}>Draw</button>
 			<button class="button" on:click={() => dispatch("resign")}>Resign</button>
 		{/if}
 	</menu>

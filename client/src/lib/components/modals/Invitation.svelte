@@ -23,11 +23,5 @@
 	on:confirm={copy_url}
 	on:cancel={() => (show_invitation_modal = false)}
 >
-	<p class="invite_message">Invite others to join the game!</p>
+	<p>Invite others to join the game!</p>
 </Modal>
-
-<style>
-	.invite_message {
-		margin-bottom: 0.75rem;
-	}
-</style>

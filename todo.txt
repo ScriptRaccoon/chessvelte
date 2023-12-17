@@ -1,4 +1,6 @@
 ### BUGS ###
+- when player comes back to the game and the game is ended,
+  the outcome will be cleared
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss
@@ -16,6 +18,7 @@
 - style:--w={w}
 - move auth checks from server.ts to Game.ts
 - remove code dupli in server.ts
+- create_modal function to remove all the modal components and just use one
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify
