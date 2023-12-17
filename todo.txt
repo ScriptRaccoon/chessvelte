@@ -2,10 +2,10 @@
 - when joining a game, the invitation modal is shown for a short time
 - when game has ended, the current player will still click on the board
   and get the outcome modal again
+- there are too many sockets in game.players
 
 ### FEATURES ###
 - offer draw feature
-- check turn-allowance also on server
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
@@ -20,6 +20,7 @@
 - move class maybe
 - player class maybe
 - style:--w={w}
+- move auth checks from server.ts to Game.ts
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify

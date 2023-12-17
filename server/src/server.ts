@@ -41,6 +41,7 @@ io.on("connection", (socket) => {
 	socket.on("select", (game_id, coord) => {
 		const game = Game.get_by_id(game_id)
 		if (!game || !game.is_started || game.is_ended) return
+		if (game.players[socket.id].turn !== game.turn) return
 		const actionable = game.select_coord(coord)
 		if (actionable) {
 			emit_game_state(game)

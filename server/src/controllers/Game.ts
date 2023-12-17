@@ -27,7 +27,7 @@ export class Game {
 	}
 
 	private _id: string
-	private turn: number = 0
+	public turn: number = 0
 	private move_history: MoveHistory = new MoveHistory()
 	private board: Board = new Board()
 	private current_color: Color = "white"
