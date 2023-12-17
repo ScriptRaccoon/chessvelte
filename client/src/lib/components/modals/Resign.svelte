@@ -12,7 +12,7 @@
 	with_confirm_button={true}
 	confirm_text="Yes"
 	cancel_text="No"
-	on:close={() => {
+	on:confirm={() => {
 		show_resign_modal = false
 		dispatch("resign")
 	}}
