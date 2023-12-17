@@ -4,4 +4,4 @@
 	export let data
 </script>
 
-<LoginForm name={data.name} />
+<LoginForm name={data.name} error={data.error} />
