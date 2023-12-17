@@ -1,9 +1,10 @@
 import { Pairing } from "$lib/Pairing"
 import { COOKIE_OPTIONS } from "$shared/config"
 import { generate_short_id } from "$shared/utils"
-import { redirect } from "@sveltejs/kit"
+import { error, redirect } from "@sveltejs/kit"
 import type { RequestEvent } from "./$types"
 import type { login_error } from "$shared/types"
+import { dev } from "$app/environment"
 
 export const load = (event) => {
 	const name = event.cookies.get("name") ?? ""
@@ -21,6 +22,7 @@ function set_cookies(event: RequestEvent, name: string) {
 
 export const actions = {
 	join: async (event) => {
+		if (!dev) error(501, "This feature is not yet implemented.") // remove later
 		const form_data = await event.request.formData()
 		const name = form_data.get("name")
 		const valid_name = typeof name === "string" && name.length > 0
@@ -43,6 +45,7 @@ export const actions = {
 		redirect(303, `/game/${game_id}`)
 	},
 	start: async (event) => {
+		if (!dev) error(501, "This feature is not yet implemented.") // remove later
 		const form_data = await event.request.formData()
 		const name = form_data.get("name")
 		const valid_name = typeof name === "string" && name.length > 0
