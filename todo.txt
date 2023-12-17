@@ -9,6 +9,7 @@
 - do not send other socket_id to clients since that is not secure
 - personalize outcome message
 - more defensive programming
+- navigating to a different page should disconnect
 
 ### DESIGN ####
 - find good usage of player name, and if none exists just drop it
@@ -21,5 +22,5 @@
 - player class maybe
 
 ### DEPLOYMENT ###
-- deploy sveltekit app on netlify
+- deploy sveltekit app on netlify (DONE)
 - deploy socket server separately, for example on fly.io

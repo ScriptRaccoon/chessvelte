@@ -1,31 +1,30 @@
-type player_id = string
-type game_id = string
+type Client_ID = string
+type Game_ID = string
 
 export class Pairing {
-	static dictionary: Record<game_id, Pairing> = {}
+	static dictionary: Record<Game_ID, Pairing> = {}
 
-	static exists(id: game_id): boolean {
+	static exists(id: Game_ID): boolean {
 		return id in Pairing.dictionary
 	}
 
-	static get_by_id(id: game_id): Pairing | undefined {
+	static get_by_id(id: Game_ID): Pairing | undefined {
 		return Pairing.dictionary[id]
 	}
 
 	constructor(
-		public id: game_id,
-		public players: player_id[] = []
+		public id: Game_ID,
+		public players: Client_ID[] = [],
 	) {
 		Pairing.dictionary[id] = this
 	}
 
-	add_player(player_id: player_id): player_id {
-		this.players.push(player_id)
-		return player_id
+	add_player(client_id: Client_ID): void {
+		this.players.push(client_id)
 	}
 
-	get_player(player_id: string): player_id | undefined {
-		return this.players.find((id) => id === player_id)
+	has_player(client_id: Client_ID): boolean {
+		return this.players.some((id) => id === client_id)
 	}
 
 	get is_full(): boolean {
