@@ -47,25 +47,29 @@
 	})
 
 	function select(event: CustomEvent<Coord>) {
-		if (!my_turn) return
+		if (!my_turn || !game_state?.is_started || game_state?.is_ended) return
 		const coord = event.detail
 		socket.emit("select", game_id, coord)
 	}
 
 	function resign() {
+		if (!game_state?.is_started || game_state?.is_ended) return
 		socket.emit("resign", game_id)
 	}
 
 	function restart() {
+		if (!game_state?.is_started || !game_state?.is_ended) return
 		socket.emit("restart", game_id)
 	}
 
 	function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
+		if (!game_state?.is_started || game_state?.is_ended) return
 		const type = e.detail
 		socket.emit("finish_promotion", game_id, type)
 	}
 
 	function cancel_promotion() {
+		if (!game_state?.is_started || game_state?.is_ended) return
 		socket.emit("cancel_promotion", game_id)
 	}
 </script>

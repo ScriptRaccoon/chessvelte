@@ -30,21 +30,18 @@ io.on("connection", (socket) => {
 	socket.on("me", (game_id, client_id) => {
 		socket.join(game_id)
 		const game = Game.get_by_id(game_id) ?? new Game(game_id)
-
+		const player = game.add_player(socket.id, client_id)
+		if (!player) return
 		socket.broadcast
 			.to(game.id)
-			.emit("toast", "Player has connected", "success")
-
-		const player = game.add_player(socket.id, client_id)
-		if (player) {
-			emit_game_state(game)
-			socket.emit("your_color", player.color)
-		}
+			.emit("toast", "Player  has connected", "success")
+		emit_game_state(game)
+		socket.emit("your_color", player.color)
 	})
 
 	socket.on("select", (game_id, coord) => {
 		const game = Game.get_by_id(game_id)
-		if (!game || !game.is_started) return
+		if (!game || !game.is_started || game.is_ended) return
 		const actionable = game.select_coord(coord)
 		if (actionable) {
 			emit_game_state(game)
@@ -62,7 +59,7 @@ io.on("connection", (socket) => {
 
 	socket.on("restart", (game_id) => {
 		const game = Game.get_by_id(game_id)
-		if (!game || !game.is_ended) return
+		if (!game || !game.is_started || !game.is_ended) return
 		game.reset()
 		emit_game_state(game)
 
@@ -75,14 +72,14 @@ io.on("connection", (socket) => {
 
 	socket.on("cancel_promotion", (game_id) => {
 		const game = Game.get_by_id(game_id)
-		if (!game) return
+		if (!game || !game.is_started || game.is_ended) return
 		game.cancel_promotion()
 		emit_game_state(game)
 	})
 
 	socket.on("finish_promotion", (game_id, type) => {
 		const game = Game.get_by_id(game_id)
-		if (!game) return
+		if (!game || !game.is_started || game.is_ended) return
 		game.finish_promotion(type)
 		emit_game_state(game)
 	})
