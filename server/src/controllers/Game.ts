@@ -38,7 +38,7 @@ export class Game {
 	private selected_coord: Coord | null = null
 	private promotion_move: Move | null = null
 	private captures: Capture[] = []
-	private players: Player[] = []
+	public players: Player[] = []
 	private resigned_player: Player | null = null
 	public is_ended: boolean = false
 
@@ -221,6 +221,14 @@ export class Game {
 		this.move_history.clear()
 		this.board.reset()
 		this.compute_all_moves()
+		this.switch_player_colors()
+	}
+
+	public switch_player_colors() {
+		this.players.forEach((player) => {
+			player.color = player.color === "white" ? "black" : "white"
+			player.turn = 1 - player.turn
+		})
 	}
 
 	private compute_all_moves(): void {

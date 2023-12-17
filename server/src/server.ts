@@ -65,6 +65,12 @@ io.on("connection", (socket) => {
 		if (!game || !game.is_ended) return
 		game.reset()
 		emit_game_state(game)
+
+		for (const player of game.players) {
+			const _socket = io.sockets.sockets.get(player.socket_id)
+			if (!_socket) continue
+			_socket.emit("your_color", player.color)
+		}
 	})
 
 	socket.on("disconnect", () => {

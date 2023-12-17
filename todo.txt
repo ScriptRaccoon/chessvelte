@@ -3,16 +3,15 @@
 
 ### FEATURES ###
 - bring back promotion feature
-- resign feature
 - offer draw feature
-- allow restart only when game is finished and both players agree
-  - then also rename it "rematch"
 - check turn-allowance also on server
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
 
 ### DESIGN ####
+- find usage of player name, and if none exists just drop it
+- overlay of dialog is too small when scrollbars are present
 
 ### STRUCTURE ###
 - reduce god class "game" to simpler modules

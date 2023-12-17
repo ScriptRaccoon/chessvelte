@@ -13,7 +13,13 @@
 	export let my_turn: boolean = false
 	export let my_color: Color
 
-	let flipped: boolean = my_color === "black"
+	let flipped = false
+
+	$: if (my_color === "black") {
+		flipped = true
+	} else {
+		flipped = false
+	}
 
 	function select_coord(event: CustomEvent<Coord>): void {
 		const coord = event.detail
