@@ -48,6 +48,7 @@
 		on:flip={flip_board}
 		on:resign
 		on:restart
+		on:draw
 	/>
 {/if}
 

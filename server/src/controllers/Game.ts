@@ -86,6 +86,8 @@ export class Game {
 		}
 		if (this.status === "resigned" && this.resigned_player !== null) {
 			return `${capitalize(this.resigned_player.color)} has resigned`
+		} else if (this.status === "drawn") {
+			return "Drawn by agreement"
 		}
 		return ""
 	}
@@ -268,6 +270,11 @@ export class Game {
 		if (!player) return
 		this.status = "resigned"
 		this.resigned_player = player
+		this.is_ended = true
+	}
+
+	public draw(): void {
+		this.status = "drawn"
 		this.is_ended = true
 	}
 }

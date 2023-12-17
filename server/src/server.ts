@@ -62,6 +62,27 @@ io.on("connection", (socket) => {
 		if (!game || !game.is_started || !game.is_ended) return
 		game.reset()
 		emit_game_state(game)
+		io.to(game.id).emit("toast", "Restarted game", "info")
+	})
+
+	socket.on("offer_draw", (game_id) => {
+		const game = Game.get_by_id(game_id)
+		if (!game || !game.is_started || game.is_ended) return
+		socket.emit("toast", "Draw has been offered", "info")
+		socket.broadcast.to(game.id).emit("offer_draw")
+	})
+
+	socket.on("reject_draw", (game_id) => {
+		const game = Game.get_by_id(game_id)
+		if (!game || !game.is_started || game.is_ended) return
+		io.to(game.id).emit("toast", "Draw has been rejected", "error")
+	})
+
+	socket.on("accept_draw", (game_id) => {
+		const game = Game.get_by_id(game_id)
+		if (!game || !game.is_started || game.is_ended) return
+		game.draw()
+		emit_game_state(game)
 	})
 
 	socket.on("cancel_promotion", (game_id) => {

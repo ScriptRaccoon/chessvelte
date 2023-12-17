@@ -5,7 +5,6 @@
 - there are too many sockets in game.players
 
 ### FEATURES ###
-- offer draw feature
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist

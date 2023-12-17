@@ -9,11 +9,12 @@
 		PIECE_TYPE,
 	} from "$shared/types"
 	import Game from "$lib/components/Game.svelte"
-	import Toast, { send_toast } from "$lib/components/Toast.svelte"
+	import Toast, { send_toast } from "$lib/components/ui/Toast.svelte"
 	import { PUBLIC_SERVER_URL } from "$env/static/public"
-	import Outcome from "$lib/components/Outcome.svelte"
-	import Invitation from "$lib/components/Invitation.svelte"
-	import Resign from "$lib/components/Resign.svelte"
+	import Outcome from "$lib/components/modals/Outcome.svelte"
+	import Invitation from "$lib/components/modals/Invitation.svelte"
+	import Resign from "$lib/components/modals/Resign.svelte"
+	import Draw from "$lib/components/modals/Draw.svelte"
 
 	export let data
 
@@ -24,6 +25,7 @@
 	let game_state: Game_State | null = null
 	let show_outcome_modal: boolean = false
 	let show_resign_modal: boolean = false
+	let show_draw_modal: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -43,6 +45,10 @@
 			description: message,
 			variant,
 		})
+	})
+
+	socket.on("offer_draw", () => {
+		show_draw_modal = true
 	})
 
 	function select(event: CustomEvent<Coord>) {
@@ -71,6 +77,21 @@
 		if (!game_state?.is_started || game_state?.is_ended) return
 		socket.emit("cancel_promotion", game_id)
 	}
+
+	function offer_draw() {
+		if (!game_state?.is_started || game_state?.is_ended) return
+		socket.emit("offer_draw", game_id)
+	}
+
+	function accept_draw() {
+		if (!game_state?.is_started || game_state?.is_ended) return
+		socket.emit("accept_draw", game_id)
+	}
+
+	function reject_draw() {
+		if (!game_state?.is_started || game_state?.is_ended) return
+		socket.emit("reject_draw", game_id)
+	}
 </script>
 
 <Toast />
@@ -87,9 +108,12 @@
 		on:restart={restart}
 		on:finish_promotion={finish_promotion}
 		on:cancel_promotion={cancel_promotion}
+		on:draw={offer_draw}
 	/>
 {/if}
 
 <Resign bind:show_resign_modal on:resign={resign} />
+
+<Draw bind:show_draw_modal on:accept={accept_draw} on:reject={reject_draw} />
 
 <Outcome bind:show_outcome_modal outcome={game_state?.outcome ?? ""} />

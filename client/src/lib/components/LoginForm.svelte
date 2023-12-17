@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms"
 	import { page } from "$app/stores"
-	import Card from "./Card.svelte"
+	import Card from "./ui/Card.svelte"
 
 	export let name: string = ""
 </script>

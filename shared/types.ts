@@ -36,6 +36,7 @@ export type GAME_STATUS =
 	| "stalemate"
 	| "resigned"
 	| "promotion"
+	| "drawn"
 
 export type Game_State = {
 	current_color: Color
@@ -53,6 +54,7 @@ export type Game_State = {
 export type server_to_client_event = {
 	game_state: (state: Game_State) => void
 	toast: (msg: string, variant: toast_variant) => void
+	offer_draw: () => void
 }
 
 export type client_to_server_event = {
@@ -60,6 +62,9 @@ export type client_to_server_event = {
 	select: (game_id: string, coord: Coord) => void
 	restart: (game_id: string) => void
 	resign: (game_id: string) => void
+	offer_draw: (game_id: string) => void
+	accept_draw: (game_id: string) => void
+	reject_draw: (game_id: string) => void
 	finish_promotion: (game_id: string, type: PIECE_TYPE) => void
 	cancel_promotion: (game_id: string) => void
 }

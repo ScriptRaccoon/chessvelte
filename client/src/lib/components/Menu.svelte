@@ -21,6 +21,7 @@
 
 	<menu>
 		<button class="button" on:click={() => dispatch("flip")}>Flip</button>
+		<button class="button" on:click={() => dispatch("draw")}>Draw</button>
 		{#if is_ended}
 			<button class="button" on:click={() => dispatch("restart")}>
 				Restart

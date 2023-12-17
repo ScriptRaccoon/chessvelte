@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte"
-	import Modal from "./Modal.svelte"
+	import Modal from "./modals/Modal.svelte"
 
 	import type { Color } from "$shared/types"
 	import { piece_src } from "$shared/utils"

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores"
 	import Modal from "./Modal.svelte"
-	import { send_toast } from "./Toast.svelte"
+	import { send_toast } from "../ui/Toast.svelte"
 
 	export let is_started: boolean = false
 
