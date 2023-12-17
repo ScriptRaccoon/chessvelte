@@ -1,4 +1,4 @@
-import { CHARACTERS, COLS, ROWS } from "./config"
+import { CHARACTERS, COLS, ROWS, SIZE } from "./config"
 import type { Color, Coord, Coord_Key, PIECE_TYPE } from "./types"
 
 export function generate_short_id(length: number): string {
@@ -28,7 +28,7 @@ export function has_coord(coords: Coord[], coord: Coord): boolean {
 
 export function is_valid(coord: Coord): boolean {
 	const [row, col] = coord
-	return row >= 0 && col >= 0 && row < ROWS.length && col < COLS.length
+	return row >= 0 && col >= 0 && row < SIZE && col < SIZE
 }
 
 export function piece_src(type: PIECE_TYPE, color: Color): string {

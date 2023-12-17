@@ -21,7 +21,9 @@
 - reduce god class "game" to simpler modules
 - move class maybe
 - player class maybe
+- write more Jest Tests
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify (DONE)
 - deploy socket server separately, for example on fly.io
+- run jest tests for every git push
