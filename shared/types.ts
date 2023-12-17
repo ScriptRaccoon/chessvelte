@@ -36,6 +36,7 @@ export type GAME_STATUS =
 	| "checkmate"
 	| "stalemate"
 	| "resigned"
+	| "promotion"
 
 export type Game_State = {
 	current_color: Color
@@ -61,4 +62,6 @@ export type client_to_server_event = {
 	select: (game_id: string, coord: Coord) => void
 	restart: (game_id: string) => void
 	resign: (game_id: string) => void
+	finish_promotion: (game_id: string, type: PIECE_TYPE) => void
+	cancel_promotion: (game_id: string) => void
 }

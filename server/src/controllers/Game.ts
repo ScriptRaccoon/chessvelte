@@ -119,9 +119,8 @@ export class Game {
 	}
 
 	public select_coord(coord: Coord): boolean {
-		let actionable = false
 		if (this.is_ended) {
-			return actionable
+			return false
 		}
 		const piece = this.board.get(coord)
 		if (this.selected_coord) {
@@ -130,13 +129,12 @@ export class Game {
 			} else if (piece?.color === this.current_color) {
 				this.start_move(coord)
 			} else {
-				this.generate_move(coord)
-				actionable = true
+				return this.generate_move(coord)
 			}
 		} else if (piece?.color === this.current_color) {
 			this.start_move(coord)
 		}
-		return actionable
+		return false
 	}
 
 	private cancel_move(): void {
@@ -149,16 +147,19 @@ export class Game {
 		this.possible_moves = this.all_moves[key(coord)]
 	}
 
-	private generate_move(coord: Coord): void {
-		if (!this.selected_coord) return
+	private generate_move(coord: Coord): boolean {
+		if (!this.selected_coord) return false
 		const move = this.possible_moves?.find(
 			(move) => key(move.end) == key(coord)
 		)
-		if (!move) return
+		if (!move) return false
 		if (move.type === "promotion") {
 			this.promotion_move = move
+			this.status = "promotion"
+			return false
 		} else {
 			this.finish_move(move)
+			return true
 		}
 	}
 
@@ -200,12 +201,14 @@ export class Game {
 		this.promotion_move.promotion_type = type
 		this.finish_move(this.promotion_move)
 		this.promotion_move = null
+		this.status = "playing"
 	}
 
 	public cancel_promotion(): void {
 		this.promotion_move = null
 		this.selected_coord = null
 		this.possible_moves = []
+		this.status = "playing"
 	}
 
 	public reset(): void {

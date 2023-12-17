@@ -73,6 +73,20 @@ io.on("connection", (socket) => {
 		}
 	})
 
+	socket.on("cancel_promotion", (game_id) => {
+		const game = Game.get_by_id(game_id)
+		if (!game) return
+		game.cancel_promotion()
+		emit_game_state(game)
+	})
+
+	socket.on("finish_promotion", (game_id, type) => {
+		const game = Game.get_by_id(game_id)
+		if (!game) return
+		game.finish_promotion(type)
+		emit_game_state(game)
+	})
+
 	socket.on("disconnect", () => {
 		const game = Game.find_by_player(socket.id)
 		if (!game) return

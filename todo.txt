@@ -1,8 +1,6 @@
 ### BUGS ###
-- 
 
 ### FEATURES ###
-- bring back promotion feature
 - offer draw feature
 - check turn-allowance also on server
 - save gamestates in redis to prevent data loss
@@ -17,7 +15,7 @@
 - reduce god class "game" to simpler modules
 - move class maybe
 - find_by_player is not good since it iterates through all games
-
+- the "show_ending_dialog = true" solution is dirty and error-prone
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify

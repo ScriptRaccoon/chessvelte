@@ -7,6 +7,7 @@
 		Game_State,
 		Coord,
 		Color,
+		PIECE_TYPE,
 	} from "$shared/types"
 	import Game from "$lib/components/Game.svelte"
 	import Toast, { send_toast } from "$lib/components/Toast.svelte"
@@ -72,6 +73,15 @@
 			show_ending_dialog = true
 		}, 1000)
 	}
+
+	function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
+		const type = e.detail
+		socket.emit("finish_promotion", game_id, type)
+	}
+
+	function cancel_promotion() {
+		socket.emit("cancel_promotion", game_id)
+	}
 </script>
 
 <Toast />
@@ -91,6 +101,8 @@
 		on:select={select}
 		on:resign={resign}
 		on:restart={restart}
+		on:finish_promotion={finish_promotion}
+		on:cancel_promotion={cancel_promotion}
 	/>
 {/if}
 

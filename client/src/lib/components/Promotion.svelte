@@ -11,10 +11,15 @@
 	const dispatch = createEventDispatcher()
 </script>
 
-<Dialog open={true} with_cancel_button={true} w="25rem" on:cancel>
+<Dialog
+	open={true}
+	with_cancel_button={true}
+	w="25rem"
+	on:cancel={() => dispatch("cancel_promotion")}
+>
 	<div class="choices">
 		{#each PROMOTION_PIECE_TYPES as type}
-			<button on:click={() => dispatch("type", type)}>
+			<button on:click={() => dispatch("finish_promotion", type)}>
 				<svg>
 					<use xlink:href={piece_src(type, color)} />
 				</svg>
