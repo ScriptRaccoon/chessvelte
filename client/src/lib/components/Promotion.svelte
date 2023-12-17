@@ -1,41 +1,33 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte"
-	import Modal from "./modals/Modal.svelte"
-
+	import { PROMOTION_PIECE_TYPES } from "$shared/config"
 	import type { Color } from "$shared/types"
 	import { piece_src } from "$shared/utils"
-	import { PROMOTION_PIECE_TYPES } from "$shared/config"
+	import { createEventDispatcher } from "svelte"
+	const dispatch = createEventDispatcher()
 
 	export let color: Color
-
-	const dispatch = createEventDispatcher()
 </script>
 
-<Modal
-	open={true}
-	with_cancel_button={true}
-	w="25rem"
-	on:cancel={() => dispatch("cancel_promotion")}
->
-	<div class="choices">
-		{#each PROMOTION_PIECE_TYPES as type}
-			<button on:click={() => dispatch("finish_promotion", type)}>
-				<svg>
-					<use xlink:href={piece_src(type, color)} />
-				</svg>
-			</button>
-		{/each}
-	</div>
-</Modal>
+<div class="choices">
+	{#each PROMOTION_PIECE_TYPES as type}
+		<button on:click={() => dispatch("finish_promotion", type)}>
+			<svg>
+				<use xlink:href={piece_src(type, color)} />
+			</svg>
+		</button>
+	{/each}
+</div>
 
 <style>
 	.choices {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
+		justify-items: center;
 	}
 
 	button {
-		aspect-ratio: 1;
+		width: 5rem;
+		height: 5rem;
 	}
 
 	svg {

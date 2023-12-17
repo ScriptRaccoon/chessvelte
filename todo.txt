@@ -10,6 +10,7 @@
 ### DESIGN ####
 - find good usage of player name, and if none exists just drop it
 - prevent layout shift when first piece is captured
+- "Wait for other player" ---> "It's your oppontent's turn" ~
 
 ### STRUCTURE ###
 - reduce god class "game" to simpler modules
@@ -17,9 +18,11 @@
 - player class maybe
 - style:--w={w}
 - move auth checks from server.ts to Game.ts
-- remove code dupli in server.ts
+- remove code dupli in App.svelte with
+   game_state?.is_started || game_state?.is_ended
 - create_modal function to remove all the modal components and just use one
 - attach game_id as socket data, simplify events and server logic with that
+
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify

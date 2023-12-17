@@ -11,21 +11,19 @@
 	import Game from "$lib/components/Game.svelte"
 	import Toast, { send_toast } from "$lib/components/ui/Toast.svelte"
 	import { PUBLIC_SERVER_URL } from "$env/static/public"
-	import Outcome from "$lib/components/modals/Outcome.svelte"
-	import Invitation from "$lib/components/modals/Invitation.svelte"
-	import Resign from "$lib/components/modals/Resign.svelte"
-	import Draw from "$lib/components/modals/Draw.svelte"
 	import { browser } from "$app/environment"
+	import Modal, {
+		close_modal,
+		open_modal,
+	} from "$lib/components/ui/Modal.svelte"
+	import { page } from "$app/stores"
+	import Promotion from "$lib/components/Promotion.svelte"
 
 	export let game_id: string
 	export let client_id: string
 
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
-	let show_outcome_modal: boolean = false
-	let show_resign_modal: boolean = false
-	let show_draw_modal: boolean = false
-	let show_invitation_modal: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -37,9 +35,14 @@
 
 		socket.on("game_state", (server_game_state) => {
 			game_state = server_game_state
-			show_outcome_modal = game_state.is_ended
 			my_color = game_state.colors[socket.id]
-			show_invitation_modal = !game_state.is_started
+			if (game_state.is_ended) {
+				open_outcome_modal()
+			} else if (!game_state.is_started) {
+				open_invitation_modal()
+			} else if (game_state.status === "promotion") {
+				open_promotion_modal()
+			}
 		})
 
 		socket.on("toast", (message, variant) => {
@@ -50,7 +53,7 @@
 		})
 
 		socket.on("offer_draw", () => {
-			show_draw_modal = true
+			open_draw_modal()
 		})
 	}
 
@@ -72,6 +75,7 @@
 
 	function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
 		if (!game_state?.is_started || game_state?.is_ended) return
+		close_modal()
 		const type = e.detail
 		socket.emit("finish_promotion", game_id, type)
 	}
@@ -95,11 +99,62 @@
 		if (!game_state?.is_started || game_state?.is_ended) return
 		socket.emit("reject_draw", game_id)
 	}
+
+	function open_invitation_modal() {
+		open_modal({
+			with_overlay: false,
+			text: "Invite others to join the game!",
+			confirm: { action: copy_url, text: "Copy URL" },
+		})
+	}
+
+	async function copy_url() {
+		await window.navigator.clipboard.writeText($page.url.href)
+		send_toast({
+			description: "Copied URL to clipboard!",
+			variant: "success",
+		})
+	}
+
+	function open_draw_modal() {
+		open_modal({
+			text: "A draw has been offered",
+			confirm: { text: "Accept", action: accept_draw },
+			cancel: { text: "Reject", action: reject_draw },
+		})
+	}
+
+	function open_resign_modal() {
+		open_modal({
+			text: "Are you sure that you want to resign?",
+			confirm: { text: "Yes", action: resign },
+			cancel: { text: "No", action: () => {} },
+		})
+	}
+
+	function open_outcome_modal() {
+		open_modal({
+			text: game_state?.outcome,
+			confirm: { text: "Ok", action: () => {} },
+			cancel: null,
+		})
+	}
+
+	function open_promotion_modal() {
+		open_modal({
+			confirm: null,
+			cancel: { text: "Cancel", action: cancel_promotion },
+		})
+	}
 </script>
 
 <Toast />
 
-<Invitation bind:show_invitation_modal />
+<Modal>
+	{#if game_state?.status === "promotion" && my_color}
+		<Promotion color={my_color} on:finish_promotion={finish_promotion} />
+	{/if}
+</Modal>
 
 {#if game_state && my_color}
 	<Game
@@ -107,16 +162,10 @@
 		{my_turn}
 		{my_color}
 		on:select={select}
-		on:resign={() => (show_resign_modal = true)}
+		on:resign={open_resign_modal}
 		on:restart={restart}
 		on:finish_promotion={finish_promotion}
 		on:cancel_promotion={cancel_promotion}
 		on:draw={offer_draw}
 	/>
 {/if}
-
-<Resign bind:show_resign_modal on:resign={resign} />
-
-<Draw bind:show_draw_modal on:accept={accept_draw} on:reject={reject_draw} />
-
-<Outcome bind:show_outcome_modal outcome={game_state?.outcome ?? ""} />

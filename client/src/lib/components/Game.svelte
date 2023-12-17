@@ -2,7 +2,6 @@
 	import type { Color, Coord, Game_State } from "$shared/types"
 
 	import Menu from "./Menu.svelte"
-	import Promotion from "./Promotion.svelte"
 	import Board from "./Board.svelte"
 	import Captures from "./Captures.svelte"
 	import { createEventDispatcher } from "svelte"
@@ -53,11 +52,3 @@
 {/if}
 
 <Captures captured_pieces={game_state.captured_pieces} />
-
-{#if game_state.status === "promotion"}
-	<Promotion
-		color={game_state.current_color}
-		on:finish_promotion
-		on:cancel_promotion
-	/>
-{/if}
