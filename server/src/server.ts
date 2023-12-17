@@ -36,13 +36,13 @@ io.on("connection", (socket) => {
 	/**
 	 * Player joins game
 	 */
-	socket.on("me", (game_id, client_id) => {
+	socket.on("me", (game_id, client_id, name) => {
 		log(socket.id, "wants to join", game_id)
 		const game = Game.get_by_id(game_id) ?? new Game(game_id)
-		const player_info = game.add_player(socket.id, client_id)
+		const player_info = game.add_player(socket.id, client_id, name)
 		if (!player_info) return
 		socket.join(game_id)
-		log(socket.id, "joined game", game_id)
+		log(socket.id, "alias", player_info.player.name, "joined game", game_id)
 		const action = player_info.is_new ? "connected" : "reconnected"
 		socket.broadcast
 			.to(game.id)

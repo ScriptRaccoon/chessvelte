@@ -109,7 +109,8 @@ export class Game {
 
 	public add_player(
 		socket_id: string,
-		client_id: string
+		client_id: string,
+		name: string
 	): { is_new: boolean; player: Player } | null {
 		const player_list = Object.values(this.players)
 
@@ -119,6 +120,7 @@ export class Game {
 
 		if (old_socket_id) {
 			const player = this.players[old_socket_id]
+			player.name = name
 			delete this.players[old_socket_id]
 			this.players[socket_id] = player
 			return { player, is_new: false }
@@ -134,7 +136,7 @@ export class Game {
 
 		const color: Color = turn === 0 ? "white" : "black"
 
-		const new_player: Player = { client_id, turn, color }
+		const new_player: Player = { client_id, turn, color, name }
 		this.players[socket_id] = new_player
 
 		if (Object.values(this.players).length === 2) {

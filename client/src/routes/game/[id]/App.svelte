@@ -21,6 +21,7 @@
 
 	export let game_id: string
 	export let client_id: string
+	export let name: string
 
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
@@ -31,7 +32,7 @@
 		io(PUBLIC_SERVER_URL)
 
 	if (browser) {
-		socket.emit("me", game_id, client_id)
+		socket.emit("me", game_id, client_id, name)
 
 		socket.on("game_state", (server_game_state) => {
 			game_state = server_game_state
