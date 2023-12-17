@@ -21,9 +21,9 @@ export class Game {
 	}
 
 	public static find_by_player(socket_id: string): Game | undefined {
-		return Object.values(Game.dictionary).find((game) =>
-			game.players.some((player) => player.socket_id === socket_id)
-		)
+		for (const game of Object.values(Game.dictionary)) {
+			if (socket_id in game.players) return game
+		}
 	}
 
 	private _id: string
@@ -38,7 +38,7 @@ export class Game {
 	private selected_coord: Coord | null = null
 	private promotion_move: Move | null = null
 	private captures: Capture[] = []
-	public players: Player[] = []
+	public players: Record<string, Player> = {}
 	private resigned_player: Player | null = null
 	public is_ended: boolean = false
 
@@ -65,6 +65,7 @@ export class Game {
 			is_started: this.is_started,
 			is_ended: this.is_ended,
 			outcome: this.outcome,
+			colors: this.colors,
 		}
 	}
 
@@ -89,29 +90,39 @@ export class Game {
 		return ""
 	}
 
+	private get colors(): Record<string, Color> {
+		const colors: Record<string, Color> = {}
+		for (const socket_id in this.players) {
+			colors[socket_id] = this.players[socket_id].color
+		}
+		return colors
+	}
+
 	public add_player(socket_id: string, client_id: string): Player | null {
-		const player: Player | undefined = this.players.find(
+		const player_list = Object.values(this.players)
+
+		const player: Player | undefined = player_list.find(
 			(player) => player.client_id === client_id
 		)
 
 		if (player) {
-			player.socket_id = socket_id
+			this.players[socket_id] = player
 			return player
 		}
 
 		if (this.is_started) return null
 
 		const turn =
-			this.players.length === 0
+			player_list.length === 0
 				? Number(Math.random() < 0.5)
-				: 1 - this.players[0].turn
+				: 1 - player_list[0].turn
 
 		const color: Color = turn === 0 ? "white" : "black"
 
-		const new_player: Player = { socket_id, client_id, turn, color }
-		this.players.push(new_player)
+		const new_player: Player = { client_id, turn, color }
+		this.players[socket_id] = new_player
 
-		if (this.players.length === 2) {
+		if (Object.values(this.players).length === 2) {
 			this.status = "playing"
 		}
 
@@ -228,7 +239,7 @@ export class Game {
 	}
 
 	public switch_player_colors() {
-		this.players.forEach((player) => {
+		Object.values(this.players).forEach((player) => {
 			player.color = player.color === "white" ? "black" : "white"
 			player.turn = 1 - player.turn
 		})
@@ -253,9 +264,7 @@ export class Game {
 	}
 
 	public resign(socket_id: string): void {
-		const player = this.players.find(
-			(player) => player.socket_id === socket_id
-		)
+		const player = this.players[socket_id]
 		if (!player) return
 		this.status = "resigned"
 		this.resigned_player = player

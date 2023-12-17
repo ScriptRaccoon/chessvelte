@@ -19,7 +19,6 @@
 - reduce god class "game" to simpler modules
 - move class maybe
 - player class maybe
-- find_by_player is not good since it iterates through all games
 - style:--w={w}
 
 ### DEPLOYMENT ###

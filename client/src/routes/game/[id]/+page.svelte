@@ -30,13 +30,10 @@
 
 	socket.emit("me", game_id, client_id)
 
-	socket.on("your_color", (color) => {
-		my_color = color
-	})
-
 	socket.on("game_state", (server_game_state) => {
 		game_state = server_game_state
 		show_outcome_dialog = game_state.is_ended
+		my_color = game_state.colors[socket.id]
 	})
 
 	socket.on("toast", (message, variant) => {

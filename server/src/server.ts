@@ -34,9 +34,8 @@ io.on("connection", (socket) => {
 		if (!player) return
 		socket.broadcast
 			.to(game.id)
-			.emit("toast", "Player  has connected", "success")
+			.emit("toast", "Player has connected", "success")
 		emit_game_state(game)
-		socket.emit("your_color", player.color)
 	})
 
 	socket.on("select", (game_id, coord) => {
@@ -62,12 +61,6 @@ io.on("connection", (socket) => {
 		if (!game || !game.is_started || !game.is_ended) return
 		game.reset()
 		emit_game_state(game)
-
-		for (const player of game.players) {
-			const _socket = io.sockets.sockets.get(player.socket_id)
-			if (!_socket) continue
-			_socket.emit("your_color", player.color)
-		}
 	})
 
 	socket.on("cancel_promotion", (game_id) => {
@@ -89,5 +82,6 @@ io.on("connection", (socket) => {
 		if (!game) return
 		io.to(game.id).emit("toast", "Player has disconnected", "error")
 		socket.leave(game.id)
+		delete game.players[socket.id]
 	})
 })

@@ -8,7 +8,6 @@ export type Color = "black" | "white"
 
 export type Player = {
 	client_id: string
-	socket_id: string
 	turn: number
 	color: Color
 }
@@ -48,13 +47,12 @@ export type Game_State = {
 	is_started: boolean
 	is_ended: boolean
 	outcome: string
-	// TODO: promotion
+	colors: Record<string, Color>
 }
 
 export type server_to_client_event = {
 	game_state: (state: Game_State) => void
 	toast: (msg: string, variant: toast_variant) => void
-	your_color: (_: Color) => void
 }
 
 export type client_to_server_event = {
