@@ -33,7 +33,6 @@ export type Board_Map = Record<Coord_Key, Piece_Display>
 export type GAME_STATUS =
 	| "waiting"
 	| "playing"
-	| "check"
 	| "checkmate"
 	| "stalemate"
 	| "resigned"

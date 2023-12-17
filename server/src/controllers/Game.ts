@@ -26,7 +26,7 @@ export class Game {
 		}
 	}
 
-	private _id: string
+	public id: string
 	public turn: number = 0
 	private move_history: MoveHistory = new MoveHistory()
 	private board: Board = new Board()
@@ -43,29 +43,23 @@ export class Game {
 	public is_ended: boolean = false
 
 	constructor(id: string) {
-		this._id = id
+		this.id = id
 		this.compute_all_moves()
 		Game.dictionary[id] = this
 	}
 
-	public get id(): string {
-		return this._id
-	}
-
 	public get state(): Game_State {
 		return {
-			current_color: this.current_color,
-			selected_coord: this.selected_coord,
-			possible_targets: this.possible_moves.map((move) => move.end),
-			board_map: this.board.reduced_map,
 			status: this.status,
-			captured_pieces: this.captures.map((capture) =>
-				capture.piece.to_display()
-			),
 			is_started: this.is_started,
 			is_ended: this.is_ended,
 			outcome: this.outcome,
+			current_color: this.current_color,
 			colors: this.colors,
+			board_map: this.board.reduced_map,
+			selected_coord: this.selected_coord,
+			possible_targets: this.possible_targets,
+			captured_pieces: this.captured_pieces,
 		}
 	}
 
@@ -75,6 +69,10 @@ export class Game {
 
 	public get is_started(): boolean {
 		return this.status !== "waiting"
+	}
+
+	public get is_playing(): boolean {
+		return this.is_started && !this.is_ended
 	}
 
 	public get outcome(): string {
@@ -100,24 +98,38 @@ export class Game {
 		return colors
 	}
 
-	public add_player(socket_id: string, client_id: string): Player | null {
+	private get possible_targets(): Coord[] {
+		return this.possible_moves.map((move) => move.end)
+	}
+
+	private get captured_pieces() {
+		return this.captures.map((capture) => capture.piece.to_display())
+	}
+
+	public add_player(
+		socket_id: string,
+		client_id: string
+	): { is_new: boolean; player: Player } | null {
 		const player_list = Object.values(this.players)
 
-		const player: Player | undefined = player_list.find(
-			(player) => player.client_id === client_id
+		const old_socket_id = Object.keys(this.players).find(
+			(id) => this.players[id].client_id === client_id
 		)
 
-		if (player) {
+		if (old_socket_id) {
+			const player = this.players[old_socket_id]
+			delete this.players[old_socket_id]
 			this.players[socket_id] = player
-			return player
+			return { player, is_new: false }
 		}
 
 		if (player_list.length >= 2) return null
 
-		const turn =
-			player_list.length === 0
-				? Number(Math.random() < 0.5)
-				: 1 - player_list[0].turn
+		const is_first = player_list.length === 0
+
+		const turn = is_first
+			? Number(Math.random() < 0.5)
+			: 1 - player_list[0].turn
 
 		const color: Color = turn === 0 ? "white" : "black"
 
@@ -128,7 +140,11 @@ export class Game {
 			this.status = "playing"
 		}
 
-		return new_player
+		return { player: new_player, is_new: true }
+	}
+
+	public is_allowed_to_move(socket_id: string): boolean {
+		return this.players[socket_id].turn === this.turn
 	}
 
 	public select_coord(coord: Coord): boolean {
@@ -192,13 +208,11 @@ export class Game {
 	}
 
 	private check_for_ending(): void {
-		const checked = this.board.is_check(this.current_color)
 		const no_moves_left = this.number_all_moves === 0
 		if (no_moves_left) {
+			const checked = this.board.is_check(this.current_color)
 			this.is_ended = true
 			this.status = checked ? "checkmate" : "stalemate"
-		} else {
-			this.status = checked ? "check" : "playing"
 		}
 	}
 

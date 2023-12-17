@@ -19,6 +19,7 @@
 - move auth checks from server.ts to Game.ts
 - remove code dupli in server.ts
 - create_modal function to remove all the modal components and just use one
+- attach game_id as socket data, simplify events and server logic with that
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify
