@@ -15,6 +15,7 @@
 - find good usage of player name, and if none exists just drop it
 - prevent layout shift when first piece is captured
 - show in navbar or somewhere "A vs. B" with A,B = names of the players
+- make smaller title, move maybe to nav, on /game/xyz
 
 ### STRUCTURE ###
 - reduce god class "game" to simpler modules
