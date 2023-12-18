@@ -2,7 +2,7 @@ import { get_other_color, get_random_color } from "$shared/utils"
 import { Player } from "./Player"
 
 export class PlayerGroup {
-	public dictionary: Record<string, Player> = {}
+	private dictionary: Record<string, Player> = {}
 
 	private get list(): Player[] {
 		return Object.values(this.dictionary)
