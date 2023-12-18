@@ -9,10 +9,8 @@
 - do not send other socket_id to clients since that is not secure
 - personalize outcome message
 - more defensive programming
-- navigating to a different page should disconnect
 
 ### DESIGN ####
-- find good usage of player name, and if none exists just drop it
 - prevent layout shift when first piece is captured
 - show in navbar or somewhere "A vs. B" with A,B = names of the players
 - make smaller title, move maybe to nav, on /game/xyz

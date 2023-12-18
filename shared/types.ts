@@ -51,6 +51,7 @@ export type Game_State = {
 	is_playing: boolean
 	outcome: string
 	colors: Record<string, Color>
+	player_names: [string, string] | null
 }
 
 export type server_to_client_event = {

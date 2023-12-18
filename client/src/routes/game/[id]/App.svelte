@@ -159,7 +159,7 @@
 	})
 </script>
 
-<GameHeader />
+<GameHeader player_names={game_state?.player_names ?? null} />
 
 <Toast />
 

@@ -40,6 +40,7 @@ export class Game {
 	private resigned_player: Player | null = null
 	public is_ended: boolean = false
 	private current_color: Color = "white"
+	private player_names: [string, string] | null = null
 
 	constructor(id: string) {
 		this.id = id
@@ -60,6 +61,7 @@ export class Game {
 			selected_coord: this.selected_coord,
 			possible_targets: this.possible_targets,
 			captured_pieces: this.captured_pieces,
+			player_names: this.player_names,
 		}
 	}
 
@@ -114,32 +116,45 @@ export class Game {
 		)
 
 		if (old_socket_id) {
-			const player = this.players[old_socket_id]
-			player.name = name
+			const old_player = this.players[old_socket_id]
+			old_player.name = name
 			delete this.players[old_socket_id]
-			this.players[socket_id] = player
-			return { player, is_new: false }
+			this.players[socket_id] = old_player
+			this.update_player_names()
+			return { player: old_player, is_new: false }
 		}
 
 		if (player_list.length >= 2) return null
 
-		const color =
-			player_list.length === 0
-				? get_random_color()
-				: get_other_color(player_list[0].color)
+		let new_player: Player
 
-		const new_player: Player = { client_id, color, name }
-		this.players[socket_id] = new_player
-
-		if (Object.values(this.players).length === 2) {
+		if (player_list.length === 0) {
+			const color = get_random_color()
+			new_player = { client_id, color, name }
+		} else {
+			const color = get_other_color(player_list[0].color)
+			new_player = { client_id, color, name }
 			this.status = "playing"
 		}
+
+		this.players[socket_id] = new_player
+		this.update_player_names()
 
 		return { player: new_player, is_new: true }
 	}
 
 	public is_allowed_to_move(socket_id: string): boolean {
 		return this.players[socket_id].color === this.current_color
+	}
+
+	private update_player_names(): void {
+		const player_list = Object.values(this.players)
+		const white_player = player_list.find((player) => player.color === "white")
+		const black_player = player_list.find((player) => player.color === "black")
+		this.player_names =
+			white_player && black_player
+				? [white_player.name, black_player.name]
+				: null
 	}
 
 	public select_coord(coord: Coord): boolean {
