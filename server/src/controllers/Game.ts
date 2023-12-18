@@ -8,14 +8,10 @@ import type {
 } from "$shared/types"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
-import {
-	capitalize,
-	get_other_color,
-	get_random_color,
-	key,
-} from "$shared/utils"
+import { capitalize, get_other_color, key } from "$shared/utils"
 import { Capture, Move } from "../types.server"
 import { Player } from "./Player"
+import { PlayerGroup } from "./PlayerGroup"
 
 export class Game {
 	private static dictionary: Record<string, Game> = {}
@@ -40,6 +36,7 @@ export class Game {
 	private resigned_player: Player | null = null
 	public is_ended: boolean = false
 	private current_color: Color = "white"
+	private player_group = new PlayerGroup()
 
 	constructor(id: string) {
 		this.id = id
@@ -59,11 +56,11 @@ export class Game {
 			selected_coord: this.selected_coord,
 			possible_targets: this.possible_targets,
 			captured_pieces: this.captured_pieces,
-			player_names: this.player_names,
+			player_names: this.player_group.player_names,
 		}
 	}
 
-	public get is_started(): boolean {
+	private get is_started(): boolean {
 		return this.status !== "waiting"
 	}
 
@@ -71,7 +68,7 @@ export class Game {
 		return this.is_started && !this.is_ended
 	}
 
-	public get outcome(): string {
+	private get outcome(): string {
 		if (this.status === "checkmate") {
 			return `Checkmate against ${this.current_color}!`
 		}
@@ -94,67 +91,28 @@ export class Game {
 		return this.captures.map((capture) => capture.piece.to_display())
 	}
 
-	public get_player_by_socket(socket_id: string): Player {
-		return this.players[socket_id]
-	}
-
-	public get socket_list(): string[] {
-		return Object.keys(this.players)
-	}
-
-	public get player_list(): Player[] {
-		return Object.values(this.players)
-	}
-
-	public get white_player(): Player | undefined {
-		return this.player_list.find((player) => player.color === "white")
-	}
-
-	public get black_player(): Player | undefined {
-		return this.player_list.find((player) => player.color === "black")
-	}
-
-	public get player_names(): [string, string] {
-		return [this.white_player?.name ?? "?", this.black_player?.name ?? "?"]
-	}
-
 	public add_player(
 		socket_id: string,
 		client_id: string,
 		name: string,
 	): { is_new: boolean; player: Player } | null {
-		const old_socket_id = this.socket_list.find(
-			(id) => this.get_player_by_socket(id).client_id === client_id,
-		)
-
-		if (old_socket_id) {
-			const old_player = this.players[old_socket_id]
-			old_player.name = name
-			delete this.players[old_socket_id]
-			this.players[socket_id] = old_player
-			return { player: old_player, is_new: false }
-		}
-
-		if (this.player_list.length >= 2) return null
-
-		let new_player: Player
-
-		if (this.player_list.length === 0) {
-			const color = get_random_color()
-			new_player = new Player(client_id, color, name)
-		} else {
-			const color = get_other_color(this.player_list[0].color)
-			new_player = new Player(client_id, color, name)
+		const player_info = this.player_group.add(socket_id, client_id, name)
+		if (this.status === "waiting" && this.player_group.is_full) {
 			this.status = "playing"
 		}
+		return player_info
+	}
 
-		this.players[socket_id] = new_player
+	public get_player(socket_id: string): Player {
+		return this.player_group.get_by_id(socket_id)
+	}
 
-		return { player: new_player, is_new: true }
+	public list_of_sockets(): string[] {
+		return this.player_group.keys
 	}
 
 	public is_allowed_to_move(socket_id: string): boolean {
-		return this.get_player_by_socket(socket_id).color === this.current_color
+		return this.get_player(socket_id).color === this.current_color
 	}
 
 	public select_coord(coord: Coord): boolean {
@@ -260,9 +218,7 @@ export class Game {
 	}
 
 	public switch_player_colors(): void {
-		Object.values(this.players).forEach((player) => {
-			player.switch_color()
-		})
+		this.player_group.switch_colors()
 	}
 
 	private compute_all_moves(): void {
@@ -280,7 +236,7 @@ export class Game {
 	}
 
 	public resign(socket_id: string): void {
-		const player = this.get_player_by_socket(socket_id)
+		const player = this.get_player(socket_id)
 		if (!player) return
 		this.status = "resigned"
 		this.resigned_player = player

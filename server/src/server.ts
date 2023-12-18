@@ -61,7 +61,8 @@ io.on("connection", (socket) => {
 		socket.join(game_id)
 		socket.data.game_id = game_id
 		const { is_new, player } = player_info
-		log(socket.id, "with name", player.name, "joined game", game_id)
+		log(socket.id, "joined game", game_id)
+		log(socket.id, "has name", player.name, "and color", player.color)
 		const action = is_new ? "connected" : "reconnected"
 		socket.broadcast
 			.to(game.id)
@@ -108,18 +109,17 @@ io.on("connection", (socket) => {
 		game.switch_player_colors()
 		emit_game_state(game)
 
-		const player = game.get_player_by_socket(socket.id)
+		const player = game.get_player(socket.id)
 		io.to(game.id).emit(
 			"toast",
 			`${player.name} has restarted the game`,
 			"info",
 		)
 
-		for (const socket_id in game.socket_list) {
-			io.to(socket_id).emit(
-				"your_color",
-				game.get_player_by_socket(socket_id).color,
-			)
+		for (const socket_id of game.list_of_sockets()) {
+			const new_color = game.get_player(socket_id).color
+			io.to(socket_id).emit("your_color", new_color)
+			log(socket_id, "gets new color", new_color)
 		}
 	})
 
@@ -130,7 +130,7 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game?.is_playing) return
 		log(socket.id, "offers draw in game", game.id)
-		const player = game.get_player_by_socket(socket.id)
+		const player = game.get_player(socket.id)
 		socket.emit("toast", "Draw has been offered", "info")
 		socket.broadcast.to(game.id).emit("offer_draw", player.name)
 	})
@@ -143,7 +143,7 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game?.is_playing) return
 		log(socket.id, "rejects draw in game", game.id)
-		const player = game.get_player_by_socket(socket.id)
+		const player = game.get_player(socket.id)
 		io.to(game.id).emit(
 			"toast",
 			`${player.name} has rejected the draw`,
@@ -191,7 +191,7 @@ io.on("connection", (socket) => {
 		log(socket.id, "has disconnected")
 		const game = get_game_of_socket(socket)
 		if (!game) return
-		const player = game.get_player_by_socket(socket.id)
+		const player = game.get_player(socket.id)
 		const name = player?.name ?? "Player"
 		io.to(game.id).emit("toast", `${name} has disconnected`, "error")
 		socket.leave(game.id)

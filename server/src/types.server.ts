@@ -16,12 +16,6 @@ export type Capture = {
 	piece: Piece
 }
 
-export type Player = {
-	client_id: string
-	color: Color
-	name: string
-}
-
 export type socket_data = {
 	game_id: string
 }
