@@ -4,7 +4,7 @@ import { Piece } from "../controllers/Piece"
 import { DIRECTION, ROWS } from "$shared/config"
 import { is_valid } from "$shared/utils"
 import type { Color, Coord } from "$shared/types"
-import type { Move } from "../types"
+import type { Move } from "../types.server"
 
 export class Pawn extends Piece {
 	constructor(color: Color) {

@@ -1,5 +1,5 @@
 import type { Color, Coord } from "$shared/types"
-import type { Move } from "../types"
+import type { Move } from "../types.server"
 import { Piece } from "../controllers/Piece"
 import type { Board } from "../controllers/Board"
 

@@ -4,7 +4,6 @@ import type {
 	Coord_Key,
 	GAME_STATUS,
 	Game_State,
-	Player,
 	PIECE_TYPE,
 } from "$shared/types"
 import { MoveHistory } from "./MoveHistory"
@@ -15,7 +14,7 @@ import {
 	get_random_color,
 	key,
 } from "$shared/utils"
-import { Capture, Move } from "../types"
+import { Capture, Move, Player } from "../types.server"
 
 export class Game {
 	private static dictionary: Record<string, Game> = {}

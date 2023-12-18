@@ -3,7 +3,7 @@ import { INITIAL_CONFIG } from "../pieces/pieces.config"
 import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
 import type { Piece } from "./Piece"
 import { create_piece } from "../pieces/create"
-import { Capture, Move } from "../types"
+import { Capture, Move } from "../types.server"
 
 type Map = Record<Coord_Key, Piece | undefined>
 

@@ -1,6 +1,6 @@
 import type { Coord, Color } from "$shared/types"
 import type { Board } from "../controllers/Board"
-import type { Move } from "../types"
+import type { Move } from "../types.server"
 import { is_valid } from "$shared/utils"
 import { Piece } from "../controllers/Piece"
 

@@ -3,7 +3,7 @@ import type { Board } from "./Board"
 import type { Color, Coord, PIECE_TYPE, Piece_Display } from "$shared/types"
 import { SIZE, PIECE_VALUES } from "$shared/config"
 import { generate_short_id, is_valid } from "$shared/utils"
-import { Move } from "../types"
+import { Move } from "../types.server"
 
 export abstract class Piece {
 	constructor(

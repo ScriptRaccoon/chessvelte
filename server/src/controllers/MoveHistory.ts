@@ -1,4 +1,4 @@
-import { Move } from "../types"
+import { Move } from "../types.server"
 import type { Piece } from "./Piece"
 
 export class MoveHistory {

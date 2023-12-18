@@ -8,12 +8,6 @@ export type Coord_Key = `${number}${number}`
 
 export type Color = "black" | "white"
 
-export type Player = {
-	client_id: string
-	color: Color
-	name: string
-}
-
 export type PIECE_TYPE =
 	| "pawn"
 	| "rook"
@@ -70,8 +64,4 @@ export type client_to_server_event = {
 	reject_draw: () => void
 	finish_promotion: (type: PIECE_TYPE) => void
 	cancel_promotion: () => void
-}
-
-export type socket_data = {
-	game_id: string
 }

@@ -1,7 +1,7 @@
 import type { Color, Coord } from "$shared/types"
 import type { Board } from "../controllers/Board"
 import type { MoveHistory } from "../controllers/MoveHistory"
-import type { Move } from "../types"
+import type { Move } from "../types.server"
 import { Piece } from "../controllers/Piece"
 import { COLS } from "$shared/config"
 import { inner_range, is_valid } from "$shared/utils"

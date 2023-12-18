@@ -3,12 +3,9 @@ import express from "express"
 import chalk from "chalk"
 import dotenv from "dotenv"
 
-import {
-	client_to_server_event,
-	server_to_client_event,
-	socket_data,
-} from "$shared/types"
+import { client_to_server_event, server_to_client_event } from "$shared/types"
 import { Game } from "./controllers/Game"
+import { socket_data } from "./types.server"
 
 dotenv.config()
 

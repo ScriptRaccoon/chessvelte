@@ -1,4 +1,4 @@
-import { Coord, PIECE_TYPE } from "$shared/types"
+import { Color, Coord, PIECE_TYPE } from "$shared/types"
 import { Piece } from "./controllers/Piece"
 
 export type Move = {
@@ -14,4 +14,14 @@ export type Move = {
 export type Capture = {
 	coord: Coord
 	piece: Piece
+}
+
+export type Player = {
+	client_id: string
+	color: Color
+	name: string
+}
+
+export type socket_data = {
+	game_id: string
 }
