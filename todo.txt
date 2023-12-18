@@ -7,7 +7,6 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
-- personalize outcome message with name of player
 - more defensive programming
 
 ### DESIGN ####
@@ -16,7 +15,6 @@
 ### STRUCTURE ###
 - reduce god class "game" to simpler modules
 - move class maybe
-- player class maybe
 - write more Jest Tests
 
 ### DEPLOYMENT ###

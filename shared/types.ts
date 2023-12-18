@@ -27,11 +27,11 @@ export type Board_Map = Record<Coord_Key, Piece_Display>
 export type GAME_STATUS =
 	| "waiting"
 	| "playing"
-	| "checkmate"
-	| "stalemate"
-	| "resigned"
 	| "promotion"
 	| "drawn"
+	| `checkmate-${Color}`
+	| `resigned-${Color}`
+	| "stalemate"
 
 export type Game_State = {
 	current_color: Color

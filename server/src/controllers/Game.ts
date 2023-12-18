@@ -8,7 +8,7 @@ import type {
 } from "$shared/types"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
-import { capitalize, get_other_color, key } from "$shared/utils"
+import { get_other_color, key } from "$shared/utils"
 import { Capture, Move } from "../types.server"
 import { Player } from "./Player"
 import { PlayerGroup } from "./PlayerGroup"
@@ -32,8 +32,6 @@ export class Game {
 	private selected_coord: Coord | null = null
 	private promotion_move: Move | null = null
 	private captures: Capture[] = []
-	private players: Record<string, Player> = {}
-	private resigned_player: Player | null = null
 	public is_ended: boolean = false
 	private current_color: Color = "white"
 	private player_group = new PlayerGroup()
@@ -69,15 +67,22 @@ export class Game {
 	}
 
 	private get outcome(): string {
-		if (this.status === "checkmate") {
-			return `Checkmate against ${this.current_color}!`
+		if (this.status === "checkmate-white") {
+			return "Checkmate against White"
+		}
+		if (this.status === "checkmate-black") {
+			return "Checkmate against Black"
 		}
 		if (this.status === "stalemate") {
-			return `Stalemate!`
+			return "Stalemate!"
 		}
-		if (this.status === "resigned" && this.resigned_player !== null) {
-			return `${capitalize(this.resigned_player.color)} has resigned`
-		} else if (this.status === "drawn") {
+		if (this.status === "resigned-white") {
+			return "White has resigned"
+		}
+		if (this.status === "resigned-black") {
+			return "Black has resigned"
+		}
+		if (this.status === "drawn") {
 			return "Drawn by agreement"
 		}
 		return ""
@@ -182,10 +187,11 @@ export class Game {
 	}
 
 	private check_for_ending(): void {
+		const color = this.current_color
 		if (this.number_all_moves > 0) return
-		const checked = this.board.is_check(this.current_color)
+		const checked = this.board.is_check(color)
 		this.is_ended = true
-		this.status = checked ? "checkmate" : "stalemate"
+		this.status = checked ? `checkmate-${color}` : "stalemate"
 	}
 
 	public finish_promotion(type: PIECE_TYPE): void {
@@ -210,7 +216,6 @@ export class Game {
 		this.possible_moves = []
 		this.promotion_move = null
 		this.captures = []
-		this.resigned_player = null
 		this.is_ended = false
 		this.move_history.clear()
 		this.board.reset()
@@ -238,8 +243,7 @@ export class Game {
 	public resign(socket_id: string): void {
 		const player = this.get_player(socket_id)
 		if (!player) return
-		this.status = "resigned"
-		this.resigned_player = player
+		this.status = `resigned-${player.color}`
 		this.is_ended = true
 	}
 
