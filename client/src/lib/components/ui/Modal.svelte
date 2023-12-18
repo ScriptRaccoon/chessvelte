@@ -83,8 +83,7 @@
 
 	dialog {
 		z-index: 20;
-		width: fit-content;
-		max-width: 95vw;
+		width: min(90vw, 24rem);
 		position: absolute;
 		left: 50%;
 		top: 50%;

@@ -26,8 +26,7 @@
 	}
 
 	button {
-		width: 5rem;
-		height: 5rem;
+		aspect-ratio: 1 / 1;
 	}
 
 	svg {

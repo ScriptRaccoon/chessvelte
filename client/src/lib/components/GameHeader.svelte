@@ -23,9 +23,9 @@
 		width: var(--width);
 		margin-inline: auto;
 		text-align: right;
-		padding-block: 0.75rem 0.5rem;
+		padding-block: 1.5rem 0.5rem;
 		display: flex;
-		align-items: center;
+		align-items: end;
 	}
 
 	header h1 {
@@ -34,8 +34,7 @@
 	}
 
 	.names {
-		font-size: small;
-		margin-right: 1rem;
+		margin-right: 0.5rem;
 		margin-left: auto;
 		color: var(--secondary-font-color);
 	}
@@ -47,5 +46,11 @@
 	a:hover,
 	a:focus-visible {
 		color: var(--font-color);
+	}
+
+	@media (min-width: 32rem) {
+		header h1 {
+			font-size: 2rem;
+		}
 	}
 </style>

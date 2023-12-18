@@ -13,13 +13,8 @@
 
 <div class="wrapper">
 	<span class="circle {current_color}"></span>
-	{#if !is_ended}
-		<span class="turn_message">{turn_message}</span>
-	{:else if outcome}
-		<span class="outcome">{outcome}</span>
-	{/if}
 
-	<menu>
+	<menu class="menu">
 		<button class="button" on:click={() => dispatch("flip")}>Flip</button>
 		{#if is_ended}
 			<button class="button" on:click={() => dispatch("restart")}>
@@ -30,16 +25,25 @@
 			<button class="button" on:click={() => dispatch("resign")}>Resign</button>
 		{/if}
 	</menu>
+
+	<div class="message">
+		{#if !is_ended}
+			<span class="turn_message">{turn_message}</span>
+		{:else if outcome}
+			<span class="outcome">{outcome}</span>
+		{/if}
+	</div>
 </div>
 
 <style>
 	.wrapper {
 		width: var(--width);
 		margin-inline: auto;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 		margin-top: 0.75rem;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		row-gap: 0.5rem;
+		justify-content: space-between;
 	}
 
 	.circle {
@@ -62,12 +66,27 @@
 	.turn_message,
 	.outcome {
 		color: var(--secondary-font-color);
-		margin-right: auto;
-		margin-left: 0.5rem;
 	}
 
-	menu {
+	.message {
+		grid-column: 1 / span 2;
+	}
+
+	.menu {
 		display: flex;
+		justify-self: flex-end;
 		gap: 0.5rem;
+	}
+
+	@media (min-width: 32rem) {
+		.wrapper {
+			grid-template-columns: auto 1fr auto;
+			column-gap: 1rem;
+		}
+
+		.message {
+			grid-row: 1;
+			grid-column: 2 / span 1;
+		}
 	}
 </style>
