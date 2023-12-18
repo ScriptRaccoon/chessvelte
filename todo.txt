@@ -1,6 +1,7 @@
 ### BUGS ###
 - when player comes back to the game and the game is ended,
   the outcome is cleared
+- fix jest test in player.spec.ts to understand path alias
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss

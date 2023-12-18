@@ -56,7 +56,7 @@ export class PlayerGroup {
 		if (old_socket_id) {
 			const old_player = this.get_by_id(old_socket_id)
 			this.remove_by_id(old_socket_id)
-			old_player.name = name
+			old_player.set_name(name)
 			this.set(socket_id, old_player)
 			return { player: old_player, is_new: false }
 		}
