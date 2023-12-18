@@ -9,14 +9,15 @@
 		"build:client": "cd client && pnpm run build",
 		"build:server": "cd server && pnpm run build",
 		"build": "pnpm run build:client && pnpm run build:server",
-		"test:shared": "jest --roots=shared --passWithNoTests",
-		"test:server": "cd server && pnpm test"
+		"test": "jest --passWithNoTests",
+		"prepare": "husky install"
 	},
 	"license": "ISC",
 	"devDependencies": {
 		"@types/jest": "^29.5.11",
 		"concurrently": "^8.2.2",
 		"jest": "^29.7.0",
-		"ts-jest": "^29.1.1"
+		"ts-jest": "^29.1.1",
+		"husky": "^8.0.0"
 	}
 }

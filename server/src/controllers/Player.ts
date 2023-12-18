@@ -1,5 +1,5 @@
-import { Color } from "$shared/types" // jest currently only works with ../../../shared
-import { get_other_color } from "$shared/utils" // same here
+import { Color } from "$shared/types"
+import { get_other_color } from "$shared/utils"
 
 export class Player {
 	constructor(
