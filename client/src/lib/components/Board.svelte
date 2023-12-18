@@ -5,15 +5,12 @@
 	import type { Board_Map, Coord } from "$shared/types"
 	import { COLS, ROWS, SIZE, COORDINATES } from "$shared/config"
 	import { has_coord, gen_coord, key } from "$shared/utils"
-	import { PUBLIC_SHOW_COORDS } from "$env/static/public"
 
 	export let move_counter = 0
 	export let board_map: Board_Map
 	export let possible_targets: Coord[] = []
 	export let selected_coord: Coord | null = null
 	export let flipped: boolean = false
-
-	const SHOW_COORDS = Boolean(PUBLIC_SHOW_COORDS)
 </script>
 
 <div class="board" class:flipped style:--size={SIZE}>
@@ -25,7 +22,6 @@
 					{coord}
 					light={(row + col) % 2 == 0}
 					highlighted={has_coord(possible_targets, coord)}
-					{SHOW_COORDS}
 					selected={selected_coord != null && key(coord) == key(selected_coord)}
 					on:select
 				/>
