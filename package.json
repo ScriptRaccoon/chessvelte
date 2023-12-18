@@ -9,8 +9,8 @@
 		"build:client": "cd client && pnpm run build",
 		"build:server": "cd server && pnpm run build",
 		"build": "pnpm run build:client && pnpm run build:server",
-		"test": "jest",
-		"dev:test": "jest --watch"
+		"test:shared": "jest --roots=shared --passWithNoTests",
+		"test:server": "cd server && pnpm test"
 	},
 	"license": "ISC",
 	"devDependencies": {
