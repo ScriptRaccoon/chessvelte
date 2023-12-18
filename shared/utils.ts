@@ -1,5 +1,5 @@
 import { CHARACTERS, COLS, ROWS, SIZE } from "./config"
-import type { Color, Coord, Coord_Key, PIECE_TYPE } from "./types"
+import type { Color, Coord, Coord_Key, Piece_Type } from "./types"
 
 export function generate_short_id(length: number): string {
 	let result = ""
@@ -31,7 +31,7 @@ export function is_valid(coord: Coord): boolean {
 	return row >= 0 && col >= 0 && row < SIZE && col < SIZE
 }
 
-export function piece_src(type: PIECE_TYPE, color: Color): string {
+export function piece_src(type: Piece_Type, color: Color): string {
 	return `../sprite.svg#${type}_${color}`
 }
 

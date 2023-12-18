@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { enhance } from "$app/forms"
 	import { page } from "$app/stores"
-	import type { login_error } from "$shared/types"
+	import type { Login_Error } from "$shared/types"
 	import Card from "./ui/Card.svelte"
 
 	export let name: string = ""
-	export let error: login_error
+	export let error: Login_Error
 
-	const ERROR_MESSAGES: Record<login_error, string> = {
+	const ERROR_MESSAGES: Record<Login_Error, string> = {
 		"name": "Name has to be provided",
 		"gameid": "Game ID has to be provided",
 		"": "",

@@ -1,4 +1,4 @@
-import type { Color, Coord, PIECE_TYPE } from "./types"
+import type { Color, Coord, Piece_Type } from "./types"
 
 export const TITLE = "Chessvelte"
 
@@ -16,7 +16,7 @@ export const COORDINATES: Coord[] = (() => {
 	return result
 })()
 
-export const PROMOTION_PIECE_TYPES: PIECE_TYPE[] = [
+export const PROMOTION_PIECE_TYPES: Piece_Type[] = [
 	"queen",
 	"rook",
 	"bishop",
@@ -36,7 +36,7 @@ export const DIRECTION: Record<Color, number> = {
 	white: -1,
 }
 
-export const PIECE_VALUES: Record<PIECE_TYPE, number> = {
+export const PIECE_VALUES: Record<Piece_Type, number> = {
 	rook: 5,
 	bishop: 3,
 	knight: 3,

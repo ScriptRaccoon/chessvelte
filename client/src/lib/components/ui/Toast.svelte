@@ -1,8 +1,8 @@
 <script lang="ts" context="module">
-	import type { toast_variant } from "$shared/types"
+	import type { Toast_Variant } from "$shared/types"
 	import { writable } from "svelte/store"
 
-	export type toast_position =
+	export type Toast_Position =
 		| "top-left"
 		| "top-center"
 		| "top-right"
@@ -10,27 +10,27 @@
 		| "bottom-center"
 		| "bottom-right"
 
-	export type toast = {
+	export type Toast = {
 		id: string
 		title: string
 		description: string
-		variant: toast_variant
+		variant: Toast_Variant
 		duration: number
 	}
 
-	export const default_toast = {
+	export const DEFAULT_TOAST = {
 		title: "",
 		description: "",
 		variant: "info",
 		duration: 3000,
 	} as const
 
-	let toast_items = writable<toast[]>([])
+	let toast_items = writable<Toast[]>([])
 
-	export function send_toast(toast: Partial<toast>): void {
+	export function send_toast(toast: Partial<Toast>): void {
 		const id = Math.random().toString(36).slice(2)
-		const _toast: toast = {
-			...default_toast,
+		const _toast: Toast = {
+			...DEFAULT_TOAST,
 			...toast,
 			id,
 		}
@@ -42,13 +42,13 @@
 		}, _toast.duration)
 	}
 
-	function delete_toast(toast: toast) {
+	function delete_toast(toast: Toast) {
 		toast_items.update((items) => items.filter((t) => t.id != toast.id))
 	}
 </script>
 
 <script lang="ts">
-	export let position: toast_position = "top-center"
+	export let position: Toast_Position = "top-center"
 
 	import { fly } from "svelte/transition"
 

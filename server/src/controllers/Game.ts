@@ -2,9 +2,9 @@ import type {
 	Color,
 	Coord,
 	Coord_Key,
-	GAME_STATUS,
+	Game_Status,
 	Game_State,
-	PIECE_TYPE,
+	Piece_Type,
 } from "$shared/types"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
@@ -25,7 +25,7 @@ export class Game {
 	public id: string
 	private move_history: MoveHistory = new MoveHistory()
 	private board: Board = new Board()
-	private status: GAME_STATUS = "waiting"
+	private status: Game_Status = "waiting"
 	private all_moves: Record<Coord_Key, Move[]> = {}
 	private number_all_moves: number = 0
 	private possible_moves: Move[] = []
@@ -194,7 +194,7 @@ export class Game {
 		this.status = checked ? `checkmate-${color}` : "stalemate"
 	}
 
-	public finish_promotion(type: PIECE_TYPE): void {
+	public finish_promotion(type: Piece_Type): void {
 		if (!this.promotion_move) return
 		this.promotion_move.promotion_type = type
 		this.finish_move(this.promotion_move)

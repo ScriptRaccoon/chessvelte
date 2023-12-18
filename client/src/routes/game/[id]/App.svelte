@@ -6,12 +6,12 @@
 
 	import { io, type Socket } from "socket.io-client"
 	import type {
-		server_to_client_event,
-		client_to_server_event,
+		Server_Event,
+		Client_Event,
 		Game_State,
 		Coord,
 		Color,
-		PIECE_TYPE,
+		Piece_Type,
 	} from "$shared/types"
 
 	import Game from "$lib/components/Game.svelte"
@@ -32,8 +32,7 @@
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
-	const socket: Socket<server_to_client_event, client_to_server_event> =
-		io(PUBLIC_SERVER_URL)
+	const socket: Socket<Server_Event, Client_Event> = io(PUBLIC_SERVER_URL)
 
 	if (browser) {
 		socket.emit("me", game_id, client_id, name)
@@ -81,7 +80,7 @@
 		socket.emit("restart")
 	}
 
-	function finish_promotion(e: CustomEvent<PIECE_TYPE>) {
+	function finish_promotion(e: CustomEvent<Piece_Type>) {
 		if (!game_state?.is_playing) return
 		close_modal()
 		const type = e.detail

@@ -1,23 +1,23 @@
 <script lang="ts" context="module">
 	import { writable } from "svelte/store"
 
-	const modal_state = writable<modal_options | null>(null)
+	const modal_state = writable<Modal_Options | null>(null)
 
-	type modal_options = {
+	type Modal_Options = {
 		confirm: { action: () => void; text: string } | null
 		cancel: { action: () => void; text: string } | null
 		with_overlay: boolean
 		text: string
 	}
 
-	const DEFAULT_OPTIONS: modal_options = {
+	const DEFAULT_OPTIONS: Modal_Options = {
 		confirm: { action: () => {}, text: "Ok" },
 		cancel: { action: () => {}, text: "Cancel" },
 		with_overlay: true,
 		text: "",
 	}
 
-	export function open_modal(options: Partial<modal_options>) {
+	export function open_modal(options: Partial<Modal_Options>) {
 		modal_state.set({ ...DEFAULT_OPTIONS, ...options })
 	}
 

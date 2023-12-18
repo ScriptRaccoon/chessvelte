@@ -1,6 +1,6 @@
-export type toast_variant = "info" | "success" | "error"
+export type Toast_Variant = "info" | "success" | "error"
 
-export type login_error = "name" | "gameid" | ""
+export type Login_Error = "name" | "gameid" | ""
 
 export type Coord = [number, number]
 
@@ -8,7 +8,7 @@ export type Coord_Key = `${number}${number}`
 
 export type Color = "black" | "white"
 
-export type PIECE_TYPE =
+export type Piece_Type =
 	| "pawn"
 	| "rook"
 	| "knight"
@@ -17,14 +17,14 @@ export type PIECE_TYPE =
 	| "king"
 
 export type Piece_Display = {
-	type: PIECE_TYPE
+	type: Piece_Type
 	color: Color
 	value: number
 }
 
 export type Board_Map = Record<Coord_Key, Piece_Display>
 
-export type GAME_STATUS =
+export type Game_Status =
 	| "waiting"
 	| "playing"
 	| "promotion"
@@ -38,7 +38,7 @@ export type Game_State = {
 	selected_coord: Coord | null
 	possible_targets: Coord[]
 	board_map: Board_Map
-	status: GAME_STATUS
+	status: Game_Status
 	captured_pieces: Piece_Display[]
 	is_started: boolean
 	is_ended: boolean
@@ -47,14 +47,14 @@ export type Game_State = {
 	player_names: [string, string] | null
 }
 
-export type server_to_client_event = {
+export type Server_Event = {
 	game_state: (state: Game_State) => void
-	toast: (msg: string, variant: toast_variant) => void
+	toast: (msg: string, variant: Toast_Variant) => void
 	offer_draw: (name: string) => void
 	your_color: (color: Color) => void
 }
 
-export type client_to_server_event = {
+export type Client_Event = {
 	me: (game_id: string, client_id: string, name: string) => void
 	select: (coord: Coord) => void
 	restart: () => void
@@ -62,6 +62,6 @@ export type client_to_server_event = {
 	offer_draw: () => void
 	accept_draw: () => void
 	reject_draw: () => void
-	finish_promotion: (type: PIECE_TYPE) => void
+	finish_promotion: (type: Piece_Type) => void
 	cancel_promotion: () => void
 }

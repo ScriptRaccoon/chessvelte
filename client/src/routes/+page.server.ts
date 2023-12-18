@@ -3,12 +3,12 @@ import { COOKIE_OPTIONS } from "$shared/config"
 import { generate_short_id } from "$shared/utils"
 import { error, redirect } from "@sveltejs/kit"
 import type { RequestEvent } from "./$types"
-import type { login_error } from "$shared/types"
+import type { Login_Error } from "$shared/types"
 import { dev } from "$app/environment"
 
 export const load = (event) => {
 	const name = event.cookies.get("name") ?? ""
-	const error = (event.url.searchParams.get("error") ?? "") as login_error
+	const error = (event.url.searchParams.get("error") ?? "") as Login_Error
 	return { name, error }
 }
 
@@ -27,7 +27,7 @@ export const actions = {
 		const name = form_data.get("name")
 		const valid_name = typeof name === "string" && name.length > 0
 		if (!valid_name) {
-			const error: login_error = "name"
+			const error: Login_Error = "name"
 			redirect(302, `/?error=${error}`)
 		}
 		set_cookies(event, name)
@@ -35,7 +35,7 @@ export const actions = {
 		const game_id = form_data.get("game_id")
 		const valid_game_id = typeof game_id === "string" && game_id.length > 0
 		if (!valid_game_id) {
-			const error: login_error = "gameid"
+			const error: Login_Error = "gameid"
 			redirect(302, `/?error=${error}`)
 		}
 
@@ -50,7 +50,7 @@ export const actions = {
 		const name = form_data.get("name")
 		const valid_name = typeof name === "string" && name.length > 0
 		if (!valid_name) {
-			const error: login_error = "name"
+			const error: Login_Error = "name"
 			redirect(302, `/?error=${error}`)
 		}
 		set_cookies(event, name)

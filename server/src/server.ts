@@ -3,9 +3,9 @@ import express from "express"
 import chalk from "chalk"
 import dotenv from "dotenv"
 
-import { client_to_server_event, server_to_client_event } from "$shared/types"
+import { Client_Event, Server_Event } from "$shared/types"
 import { Game } from "./controllers/Game"
-import { socket_data } from "./types.server"
+import { Player_Socket, Socket_Data } from "./types.server"
 
 dotenv.config()
 
@@ -20,12 +20,7 @@ const server = app.listen(PORT, () => {
 	console.info(chalk.cyan(`Server listening on port ${PORT}`))
 })
 
-const io = new Server<
-	client_to_server_event,
-	server_to_client_event,
-	{},
-	socket_data
->(server, {
+const io = new Server<Client_Event, Server_Event, {}, Socket_Data>(server, {
 	cors: {
 		origin: process.env.CLIENT_URL,
 		methods: ["GET", "POST"],
@@ -36,14 +31,11 @@ function emit_game_state(game: Game) {
 	io.to(game.id).emit("game_state", game.state)
 }
 
-function get_game_of_socket(
-	socket: Socket<
-		client_to_server_event,
-		server_to_client_event,
-		{},
-		socket_data
-	>,
-): Game | undefined {
+function emit_404(socket: Player_Socket): void {
+	socket.emit("toast", "Game cannot be found", "error")
+}
+
+function get_game_of_socket(socket: Player_Socket): Game | undefined {
 	return Game.get_by_id(socket.data.game_id ?? "")
 }
 
@@ -76,7 +68,8 @@ io.on("connection", (socket) => {
 	 */
 	socket.on("select", (coord) => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_playing) return
+		if (!game) return emit_404(socket)
+		if (!game.is_playing) return
 		if (!game.is_allowed_to_move(socket.id)) return
 		log(socket.id, "selects", coord, "in game", game.id)
 		const actionable = game.select_coord(coord)
@@ -92,7 +85,8 @@ io.on("connection", (socket) => {
 	 */
 	socket.on("resign", () => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_playing) return
+		if (!game) return emit_404(socket)
+		if (!game.is_playing) return
 		log(socket.id, "resigns in game", game.id)
 		game.resign(socket.id)
 		emit_game_state(game)
@@ -103,7 +97,8 @@ io.on("connection", (socket) => {
 	 */
 	socket.on("restart", () => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_ended) return
+		if (!game) return emit_404(socket)
+		if (!game.is_ended) return
 		log(socket.id, "restarts", "in game", game.id)
 		game.reset()
 		game.switch_player_colors()
@@ -128,7 +123,8 @@ io.on("connection", (socket) => {
 	 */
 	socket.on("offer_draw", () => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_playing) return
+		if (!game) return emit_404(socket)
+		if (!game.is_playing) return
 		log(socket.id, "offers draw in game", game.id)
 		const player = game.get_player(socket.id)
 		socket.emit("toast", "Draw has been offered", "info")
@@ -141,7 +137,8 @@ io.on("connection", (socket) => {
 
 	socket.on("reject_draw", () => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_playing) return
+		if (!game) return emit_404(socket)
+		if (!game.is_playing) return
 		log(socket.id, "rejects draw in game", game.id)
 		const player = game.get_player(socket.id)
 		io.to(game.id).emit(
@@ -156,7 +153,8 @@ io.on("connection", (socket) => {
 	 */
 	socket.on("accept_draw", () => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_playing) return
+		if (!game) return emit_404(socket)
+		if (!game.is_playing) return
 		log(socket.id, "accepts draw in game", game.id)
 		game.draw()
 		emit_game_state(game)
@@ -167,7 +165,8 @@ io.on("connection", (socket) => {
 	 */
 	socket.on("cancel_promotion", () => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_playing) return
+		if (!game) return emit_404(socket)
+		if (!game.is_playing) return
 		log(socket.id, "cancels promotion in game", game.id)
 		game.cancel_promotion()
 		emit_game_state(game)
@@ -178,7 +177,8 @@ io.on("connection", (socket) => {
 	 */
 	socket.on("finish_promotion", (type) => {
 		const game = get_game_of_socket(socket)
-		if (!game?.is_playing) return
+		if (!game) return emit_404(socket)
+		if (!game.is_playing) return
 		log(socket.id, "promotes with", type, "in game", game.id)
 		game.finish_promotion(type)
 		emit_game_state(game)

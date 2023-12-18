@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Fa from "svelte-fa"
 	import { faHome } from "@fortawesome/free-solid-svg-icons"
-	import { page } from "$app/stores"
 	import { TITLE } from "$shared/config"
 
 	export let player_names: [string, string] | null = null

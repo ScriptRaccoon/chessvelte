@@ -1,21 +1,19 @@
 ### BUGS ###
-- when player comes back to the game and the game is ended,
-  the outcome is cleared
 - fix jest test in player.spec.ts to understand path alias
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss
   e.g. during deployment
-- error messages for clients when game does not exist
-- more defensive programming
+- to prepare for this, write Game.to_json and Game.from_json methods
 
 ### DESIGN ####
 -
 
 ### STRUCTURE ###
-- reduce god class "game" to simpler modules
-- move class maybe
+- reduce god class "Game" to simpler modules
+- "Move" class maybe
 - write more Jest Tests
+- more defensive programming
 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify (DONE)
