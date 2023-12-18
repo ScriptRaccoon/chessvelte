@@ -7,15 +7,17 @@
 - to prepare for this, write Game.to_json and Game.from_json methods
 
 ### DESIGN ####
--
+- favicons
+- screenshot for readme and image meta tag
+- meta tags
 
 ### STRUCTURE ###
 - reduce god class "Game" to simpler modules
 - "Move" class maybe
 - write more Jest Tests
 - more defensive programming
-
+ 
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify (DONE)
-- deploy socket server separately, for example on fly.io
+- deploy socket server separately (DONE)
 - run jest tests for every git push
