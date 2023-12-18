@@ -70,6 +70,7 @@ io.on("connection", (socket) => {
 			.to(game.id)
 			.emit("toast", `${player.name} has ${action}`, "success")
 		emit_game_state(game)
+		socket.emit("your_color", player.color)
 	})
 
 	/**
@@ -107,13 +108,22 @@ io.on("connection", (socket) => {
 		if (!game?.is_ended) return
 		log(socket.id, "restarts", "in game", game.id)
 		game.reset()
+		game.switch_player_colors()
 		emit_game_state(game)
+
 		const player = game.get_player_by_socket(socket.id)
 		io.to(game.id).emit(
 			"toast",
 			`${player.name} has restarted the game`,
 			"info",
 		)
+
+		for (const socket_id in game.socket_list) {
+			io.to(socket_id).emit(
+				"your_color",
+				game.get_player_by_socket(socket_id).color,
+			)
+		}
 	})
 
 	/**

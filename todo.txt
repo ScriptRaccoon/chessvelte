@@ -6,7 +6,6 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - error messages for clients when game does not exist
-- do not send other socket_id to clients since that is not secure
 - personalize outcome message with name of player
 - more defensive programming
 

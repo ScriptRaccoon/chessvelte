@@ -56,7 +56,6 @@ export class Game {
 			is_playing: this.is_playing,
 			outcome: this.outcome,
 			current_color: this.current_color,
-			colors: this.colors,
 			board_map: this.board.reduced_map,
 			selected_coord: this.selected_coord,
 			possible_targets: this.possible_targets,
@@ -86,14 +85,6 @@ export class Game {
 			return "Drawn by agreement"
 		}
 		return ""
-	}
-
-	private get colors(): Record<string, Color> {
-		const colors: Record<string, Color> = {}
-		for (const socket_id in this.players) {
-			colors[socket_id] = this.players[socket_id].color
-		}
-		return colors
 	}
 
 	private get possible_targets(): Coord[] {
@@ -257,7 +248,6 @@ export class Game {
 		this.move_history.clear()
 		this.board.reset()
 		this.compute_all_moves()
-		this.switch_player_colors()
 	}
 
 	public switch_player_colors(): void {
@@ -295,5 +285,9 @@ export class Game {
 
 	public get_player_by_socket(socket_id: string): Player {
 		return this.players[socket_id]
+	}
+
+	public get socket_list(): string[] {
+		return Object.keys(this.players)
 	}
 }

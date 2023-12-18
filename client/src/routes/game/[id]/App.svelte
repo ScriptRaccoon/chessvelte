@@ -40,7 +40,6 @@
 
 		socket.on("game_state", (server_game_state) => {
 			game_state = server_game_state
-			my_color = game_state.colors[socket.id]
 			if (game_state.is_ended) {
 				open_outcome_modal()
 			} else if (!game_state.is_started) {
@@ -48,6 +47,10 @@
 			} else if (game_state.status === "promotion") {
 				open_promotion_modal()
 			}
+		})
+
+		socket.on("your_color", (color) => {
+			my_color = color
 		})
 
 		socket.on("toast", (message, variant) => {
