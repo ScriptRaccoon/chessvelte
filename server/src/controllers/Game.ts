@@ -14,7 +14,8 @@ import {
 	get_random_color,
 	key,
 } from "$shared/utils"
-import { Capture, Move, Player } from "../types.server"
+import { Capture, Move } from "../types.server"
+import { Player } from "./Player"
 
 export class Game {
 	private static dictionary: Record<string, Game> = {}
@@ -39,7 +40,6 @@ export class Game {
 	private resigned_player: Player | null = null
 	public is_ended: boolean = false
 	private current_color: Color = "white"
-	private player_names: [string, string] | null = null
 
 	constructor(id: string) {
 		this.id = id
@@ -94,15 +94,37 @@ export class Game {
 		return this.captures.map((capture) => capture.piece.to_display())
 	}
 
+	public get_player_by_socket(socket_id: string): Player {
+		return this.players[socket_id]
+	}
+
+	public get socket_list(): string[] {
+		return Object.keys(this.players)
+	}
+
+	public get player_list(): Player[] {
+		return Object.values(this.players)
+	}
+
+	public get white_player(): Player | undefined {
+		return this.player_list.find((player) => player.color === "white")
+	}
+
+	public get black_player(): Player | undefined {
+		return this.player_list.find((player) => player.color === "black")
+	}
+
+	public get player_names(): [string, string] {
+		return [this.white_player?.name ?? "?", this.black_player?.name ?? "?"]
+	}
+
 	public add_player(
 		socket_id: string,
 		client_id: string,
 		name: string,
 	): { is_new: boolean; player: Player } | null {
-		const player_list = Object.values(this.players)
-
-		const old_socket_id = Object.keys(this.players).find(
-			(id) => this.players[id].client_id === client_id,
+		const old_socket_id = this.socket_list.find(
+			(id) => this.get_player_by_socket(id).client_id === client_id,
 		)
 
 		if (old_socket_id) {
@@ -110,41 +132,29 @@ export class Game {
 			old_player.name = name
 			delete this.players[old_socket_id]
 			this.players[socket_id] = old_player
-			this.update_player_names()
 			return { player: old_player, is_new: false }
 		}
 
-		if (player_list.length >= 2) return null
+		if (this.player_list.length >= 2) return null
 
 		let new_player: Player
 
-		if (player_list.length === 0) {
+		if (this.player_list.length === 0) {
 			const color = get_random_color()
-			new_player = { client_id, color, name }
+			new_player = new Player(client_id, color, name)
 		} else {
-			const color = get_other_color(player_list[0].color)
-			new_player = { client_id, color, name }
+			const color = get_other_color(this.player_list[0].color)
+			new_player = new Player(client_id, color, name)
 			this.status = "playing"
 		}
 
 		this.players[socket_id] = new_player
-		this.update_player_names()
 
 		return { player: new_player, is_new: true }
 	}
 
 	public is_allowed_to_move(socket_id: string): boolean {
-		return this.players[socket_id].color === this.current_color
-	}
-
-	private update_player_names(): void {
-		const player_list = Object.values(this.players)
-		const white_player = player_list.find((player) => player.color === "white")
-		const black_player = player_list.find((player) => player.color === "black")
-		this.player_names =
-			white_player && black_player
-				? [white_player.name, black_player.name]
-				: null
+		return this.get_player_by_socket(socket_id).color === this.current_color
 	}
 
 	public select_coord(coord: Coord): boolean {
@@ -251,7 +261,7 @@ export class Game {
 
 	public switch_player_colors(): void {
 		Object.values(this.players).forEach((player) => {
-			player.color = get_other_color(player.color)
+			player.switch_color()
 		})
 	}
 
@@ -270,7 +280,7 @@ export class Game {
 	}
 
 	public resign(socket_id: string): void {
-		const player = this.players[socket_id]
+		const player = this.get_player_by_socket(socket_id)
 		if (!player) return
 		this.status = "resigned"
 		this.resigned_player = player
@@ -280,13 +290,5 @@ export class Game {
 	public draw(): void {
 		this.status = "drawn"
 		this.is_ended = true
-	}
-
-	public get_player_by_socket(socket_id: string): Player {
-		return this.players[socket_id]
-	}
-
-	public get socket_list(): string[] {
-		return Object.keys(this.players)
 	}
 }
