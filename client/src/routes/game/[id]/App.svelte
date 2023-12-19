@@ -22,6 +22,7 @@
 	} from "$lib/components/ui/Modal.svelte"
 	import Promotion from "$lib/components/Promotion.svelte"
 	import GameHeader from "$lib/components/GameHeader.svelte"
+	import Loader from "$lib/components/ui/Loader.svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -183,4 +184,6 @@
 		on:cancel_promotion={cancel_promotion}
 		on:draw={offer_draw}
 	/>
+{:else}
+	<Loader message="Game is being loaded" />
 {/if}
