@@ -9,10 +9,6 @@ import { Player_Socket, Socket_Data } from "./types.server"
 
 dotenv.config()
 
-function log(...msg: any) {
-	if (process.env.LOGGING) console.info(...msg)
-}
-
 const app = express()
 const PORT = process.env.PORT ?? 5000
 
@@ -40,21 +36,16 @@ function get_game_of_socket(socket: Player_Socket): Game | undefined {
 }
 
 io.on("connection", (socket) => {
-	log(socket.id, "has connected")
-
 	/**
 	 * Player joins game
 	 */
 	socket.on("me", (game_id, client_id, name) => {
-		log(socket.id, "wants to join", game_id)
 		const game = Game.get_by_id(game_id) ?? new Game(game_id)
 		const player_info = game.add_player(socket.id, client_id, name)
 		if (!player_info) return
 		socket.join(game_id)
 		socket.data.game_id = game_id
 		const { is_new, player } = player_info
-		log(socket.id, "joined game", game_id)
-		log(socket.id, "has name", player.name, "and color", player.color)
 		const action = is_new ? "connected" : "reconnected"
 		socket.broadcast
 			.to(game.id)
@@ -71,7 +62,6 @@ io.on("connection", (socket) => {
 		if (!game) return emit_404(socket)
 		if (!game.is_playing) return
 		if (!game.is_allowed_to_move(socket.id)) return
-		log(socket.id, "selects", coord, "in game", game.id)
 		const actionable = game.select_coord(coord)
 		if (actionable) {
 			emit_game_state(game)
@@ -87,7 +77,6 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
 		if (!game.is_playing) return
-		log(socket.id, "resigns in game", game.id)
 		game.resign(socket.id)
 		emit_game_state(game)
 	})
@@ -99,7 +88,6 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
 		if (!game.is_ended) return
-		log(socket.id, "restarts", "in game", game.id)
 		game.reset()
 		game.switch_player_colors()
 		emit_game_state(game)
@@ -114,7 +102,6 @@ io.on("connection", (socket) => {
 		for (const socket_id of game.list_of_sockets()) {
 			const new_color = game.get_player(socket_id).color
 			io.to(socket_id).emit("your_color", new_color)
-			log(socket_id, "gets new color", new_color)
 		}
 	})
 
@@ -125,7 +112,6 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
 		if (!game.is_playing) return
-		log(socket.id, "offers draw in game", game.id)
 		const player = game.get_player(socket.id)
 		socket.emit("toast", "Draw has been offered", "info")
 		socket.broadcast.to(game.id).emit("offer_draw", player.name)
@@ -139,7 +125,6 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
 		if (!game.is_playing) return
-		log(socket.id, "rejects draw in game", game.id)
 		const player = game.get_player(socket.id)
 		io.to(game.id).emit(
 			"toast",
@@ -155,7 +140,6 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
 		if (!game.is_playing) return
-		log(socket.id, "accepts draw in game", game.id)
 		game.draw()
 		emit_game_state(game)
 	})
@@ -167,7 +151,6 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
 		if (!game.is_playing) return
-		log(socket.id, "cancels promotion in game", game.id)
 		game.cancel_promotion()
 		emit_game_state(game)
 	})
@@ -179,7 +162,6 @@ io.on("connection", (socket) => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
 		if (!game.is_playing) return
-		log(socket.id, "promotes with", type, "in game", game.id)
 		game.finish_promotion(type)
 		emit_game_state(game)
 	})
@@ -188,7 +170,6 @@ io.on("connection", (socket) => {
 	 * Handle disconnection
 	 */
 	socket.on("disconnect", () => {
-		log(socket.id, "has disconnected")
 		const game = get_game_of_socket(socket)
 		if (!game) return
 		const player = game.get_player(socket.id)

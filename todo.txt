@@ -1,5 +1,5 @@
 ### BUGS ###
-- fix jest test in player.spec.ts to understand path alias
+
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss
@@ -7,6 +7,8 @@
 - to prepare for this, write Game.to_json and Game.from_json methods
 - when being redirected to ?/id=xyz because name or client id was missing,
   an appropriate message should be shown that it has to be filled
+- chat window where status messages are posted and the players can talk
+- different board designs to select
 
 ### DESIGN ####
 - send request to server when client starts,
@@ -26,4 +28,3 @@
 ### DEPLOYMENT ###
 - deploy sveltekit app on netlify (DONE)
 - deploy socket server separately (DONE)
-- run jest tests for every git push
