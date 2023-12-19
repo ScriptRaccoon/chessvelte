@@ -57,12 +57,12 @@
 	{#if $modal_state?.confirm || $modal_state?.cancel}
 		<menu>
 			{#if $modal_state?.confirm}
-				<button class="button" on:click={confirm}>
+				<button class="button unresponsive" on:click={confirm}>
 					{$modal_state?.confirm.text}
 				</button>
 			{/if}
 			{#if $modal_state?.cancel}
-				<button class="button" on:click={cancel}>
+				<button class="button unresponsive" on:click={cancel}>
 					{$modal_state?.cancel.text}
 				</button>
 			{/if}

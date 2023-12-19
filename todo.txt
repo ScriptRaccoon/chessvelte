@@ -11,9 +11,6 @@
 - different board designs to select
 
 ### DESIGN ####
-- send request to server when client starts,
-  and if it does not succeed, send a toast
-- make menu buttons a bit smaller on mobile
 - animation of pieces
 - animation of modal
 - animation of game start: move cards out of the way, fade out rest

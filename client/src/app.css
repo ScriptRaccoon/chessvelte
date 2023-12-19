@@ -65,10 +65,22 @@ button {
 .button {
 	background-color: var(--button-color);
 	color: white;
-	padding: 0.3rem 0.6rem;
 	border-radius: 0.25rem;
 	outline-offset: 0.1rem;
+	font-size: 1rem;
+	padding: 0.2rem 0.5rem;
+}
+
+@media (min-width: 32rem) {
+	.button {
+		font-size: 1.125rem;
+		padding: 0.3rem 0.6rem;
+	}
+}
+
+.button.unresponsive {
 	font-size: 1.125rem;
+	padding: 0.3rem 0.6rem;
 }
 
 .button:focus-visible {
