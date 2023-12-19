@@ -6,21 +6,21 @@ export class MoveHistory {
 	constructor() {
 		this.moves = []
 	}
-	push(move: Move) {
+	public push(move: Move) {
 		this.moves.push(move)
 	}
 
-	get_last(): Move | undefined {
+	public get_last(): Move | undefined {
 		if (this.moves.length > 0) {
 			return this.moves.at(-1)
 		}
 	}
 
-	clear() {
+	public clear() {
 		this.moves = []
 	}
 
-	contains_piece(piece: Piece) {
+	public contains_piece(piece: Piece) {
 		return this.moves.some((move) => move.piece.id === piece.id)
 	}
 }
