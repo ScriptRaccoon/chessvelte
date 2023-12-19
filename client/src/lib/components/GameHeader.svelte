@@ -39,15 +39,6 @@
 		color: var(--secondary-font-color);
 	}
 
-	a {
-		color: var(--secondary-font-color);
-	}
-
-	a:hover,
-	a:focus-visible {
-		color: var(--font-color);
-	}
-
 	@media (min-width: 32rem) {
 		header h1 {
 			font-size: 2rem;
