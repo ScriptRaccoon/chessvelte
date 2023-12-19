@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Piece_Display } from "$shared/types"
+	import type { Piece_State } from "$shared/types"
 	import { piece_src } from "$shared/utils"
 
-	export let captured_pieces: Piece_Display[] = []
+	export let captured_pieces: Piece_State[] = []
 
 	$: white_group = captured_pieces
 		.filter((piece) => piece.color === "white")

@@ -5,6 +5,7 @@ import type {
 	Game_Status,
 	Game_State,
 	Piece_Type,
+	Piece_State,
 } from "$shared/types"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
@@ -50,7 +51,7 @@ export class Game {
 			is_playing: this.is_playing,
 			outcome: this.outcome,
 			current_color: this.current_color,
-			board_map: this.board.reduced_map,
+			board_state: this.board.state,
 			selected_coord: this.selected_coord,
 			possible_targets: this.possible_targets,
 			captured_pieces: this.captured_pieces,
@@ -92,8 +93,8 @@ export class Game {
 		return this.possible_moves.map((move) => move.end)
 	}
 
-	private get captured_pieces() {
-		return this.captures.map((capture) => capture.piece.to_display())
+	private get captured_pieces(): Piece_State[] {
+		return this.captures.map((capture) => capture.piece.state)
 	}
 
 	public add_player(

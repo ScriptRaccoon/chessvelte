@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { piece_src } from "$shared/utils"
-	import type { Coord, Piece_Display } from "$shared/types"
+	import type { Coord, Piece_State } from "$shared/types"
 
 	export let coord: Coord
-	export let piece: Piece_Display
+	export let piece: Piece_State
 	export let flipped: boolean
 </script>
 

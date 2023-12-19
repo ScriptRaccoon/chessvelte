@@ -1,25 +1,20 @@
-import type { Coord, Coord_Key, Color, Board_Map } from "$shared/types"
-import { INITIAL_CONFIG } from "../pieces/pieces.config"
-import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
+import type { Coord, Color, Board_State } from "$shared/types"
+import type { Capture, Move, Piece_Map } from "../types.server"
 import type { Piece } from "./Piece"
+import { INITIAL_CONFIG } from "../pieces/pieces.config"
 import { create_piece } from "../pieces/create"
-import { Capture, Move } from "../types.server"
-
-type Map = Record<Coord_Key, Piece | undefined>
+import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
 
 export class Board {
-	private map: Map
+	private map: Piece_Map
 
-	constructor(map: Map | null = null) {
+	constructor(map: Piece_Map | null = null) {
 		this.map = map ?? deep_copy(INITIAL_CONFIG)
 	}
 
-	get reduced_map(): Board_Map {
+	get state(): Board_State {
 		return Object.fromEntries(
-			Object.entries(this.map).map(([coord, piece]) => [
-				coord,
-				piece!.to_display(),
-			]),
+			Object.entries(this.map).map(([coord, piece]) => [coord, piece!.state]),
 		)
 	}
 

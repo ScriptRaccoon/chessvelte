@@ -2,12 +2,12 @@
 	import Piece from "./Piece.svelte"
 	import Square from "./Square.svelte"
 
-	import type { Board_Map, Coord } from "$shared/types"
+	import type { Board_State, Coord } from "$shared/types"
 	import { COLS, ROWS, SIZE, COORDINATES } from "$shared/config"
 	import { has_coord, gen_coord, key } from "$shared/utils"
 
 	export let move_counter = 0
-	export let board_map: Board_Map
+	export let board_state: Board_State
 	export let possible_targets: Coord[] = []
 	export let selected_coord: Coord | null = null
 	export let flipped: boolean = false
@@ -30,7 +30,7 @@
 	</div>
 	{#key move_counter}
 		{#each COORDINATES as coord}
-			{@const piece = board_map[key(coord)]}
+			{@const piece = board_state[key(coord)]}
 			{#if piece}
 				<Piece {coord} {piece} {flipped} />
 			{/if}

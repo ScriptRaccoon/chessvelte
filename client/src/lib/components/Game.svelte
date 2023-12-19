@@ -31,7 +31,7 @@
 </script>
 
 <Board
-	board_map={game_state.board_map}
+	board_state={game_state.board_state}
 	on:select={select_coord}
 	possible_targets={game_state.possible_targets}
 	selected_coord={game_state.selected_coord}

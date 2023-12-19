@@ -1,6 +1,6 @@
 import type { MoveHistory } from "./MoveHistory"
 import type { Board } from "./Board"
-import type { Color, Coord, Piece_Type, Piece_Display } from "$shared/types"
+import type { Color, Coord, Piece_Type, Piece_State } from "$shared/types"
 import type { Move } from "../types.server"
 import { SIZE, PIECE_VALUES } from "$shared/config"
 import { generate_short_id, is_valid } from "$shared/utils"
@@ -13,7 +13,7 @@ export abstract class Piece {
 		public id: string = generate_short_id(4),
 	) {}
 
-	to_display(): Piece_Display {
+	get state(): Piece_State {
 		return {
 			type: this.type,
 			color: this.color,

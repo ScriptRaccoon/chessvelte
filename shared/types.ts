@@ -16,13 +16,13 @@ export type Piece_Type =
 	| "queen"
 	| "king"
 
-export type Piece_Display = {
+export type Piece_State = {
 	type: Piece_Type
 	color: Color
 	value: number
 }
 
-export type Board_Map = Record<Coord_Key, Piece_Display>
+export type Board_State = Record<Coord_Key, Piece_State>
 
 export type Game_Status =
 	| "waiting"
@@ -37,9 +37,9 @@ export type Game_State = {
 	current_color: Color
 	selected_coord: Coord | null
 	possible_targets: Coord[]
-	board_map: Board_Map
+	board_state: Board_State
 	status: Game_Status
-	captured_pieces: Piece_Display[]
+	captured_pieces: Piece_State[]
 	is_started: boolean
 	is_ended: boolean
 	is_playing: boolean

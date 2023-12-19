@@ -1,6 +1,14 @@
-import { Coord, Piece_Type, Client_Event, Server_Event } from "$shared/types"
+import {
+	Coord,
+	Piece_Type,
+	Client_Event,
+	Server_Event,
+	Coord_Key,
+} from "$shared/types"
 import { type Socket } from "socket.io"
 import { Piece } from "./controllers/Piece"
+
+export type Piece_Map = Record<Coord_Key, Piece | undefined>
 
 export type Move = {
 	type: "regular" | "en passant" | "promotion" | "castle"
