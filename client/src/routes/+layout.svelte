@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { TITLE } from "$shared/config"
+	import { onMount } from "svelte"
 	import "../app.css"
+	import { PUBLIC_SERVER_URL } from "$env/static/public"
+
+	onMount(async () => {
+		await fetch(`${PUBLIC_SERVER_URL}/ping`)
+	})
 </script>
 
 <svelte:head>
