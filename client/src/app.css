@@ -87,11 +87,6 @@ button {
 	outline: 0.1rem solid var(--font-color);
 }
 
-.button[disabled] {
-	opacity: 0.8;
-	cursor: not-allowed;
-}
-
 img {
 	display: block;
 }
