@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores"
 	import { onDestroy } from "svelte"
+	import { fade } from "svelte/transition"
 	import { PUBLIC_SERVER_URL } from "$env/static/public"
 	import { browser } from "$app/environment"
 
@@ -175,17 +176,19 @@
 </Modal>
 
 {#if game_state && my_color}
-	<Game
-		{game_state}
-		{my_turn}
-		{my_color}
-		on:select={select}
-		on:resign={open_resign_modal}
-		on:restart={restart}
-		on:finish_promotion={finish_promotion}
-		on:cancel_promotion={cancel_promotion}
-		on:draw={offer_draw}
-	/>
+	<div in:fade={{ duration: 200 }}>
+		<Game
+			{game_state}
+			{my_turn}
+			{my_color}
+			on:select={select}
+			on:resign={open_resign_modal}
+			on:restart={restart}
+			on:finish_promotion={finish_promotion}
+			on:cancel_promotion={cancel_promotion}
+			on:draw={offer_draw}
+		/>
+	</div>
 {:else}
 	<Loader message="Game is being loaded" />
 {/if}
