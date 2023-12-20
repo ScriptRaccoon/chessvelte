@@ -1,5 +1,4 @@
-import type { Coord_Key } from "$shared/types"
-import type { Piece } from "../controllers/Piece"
+import { Piece_Map } from "../types.server"
 import { Bishop } from "./Bishop"
 import { King } from "./King"
 import { Knight } from "./Knight"
@@ -7,9 +6,7 @@ import { Pawn } from "./Pawn"
 import { Queen } from "./Queen"
 import { Rook } from "./Rook"
 
-type Config = Record<Coord_Key, Piece>
-
-const BLACK_PIECES: Config = {
+const BLACK_PIECES: Piece_Map = {
 	"00": new Rook("black"),
 	"07": new Rook("black"),
 	"01": new Knight("black"),
@@ -28,7 +25,7 @@ const BLACK_PIECES: Config = {
 	"17": new Pawn("black"),
 }
 
-const WHITE_PICES: Config = {
+const WHITE_PICES: Piece_Map = {
 	"70": new Rook("white"),
 	"77": new Rook("white"),
 	"71": new Knight("white"),
@@ -49,21 +46,21 @@ const WHITE_PICES: Config = {
 
 // STANDARD CONFIG
 
-const STANDARD_CONFIG: Config = {
+const STANDARD_CONFIG: Piece_Map = {
 	...BLACK_PIECES,
 	...WHITE_PICES,
 }
 
 // TESTING CONFIGURATIONS
 
-const CHECK: Config = {
+const CHECK: Piece_Map = {
 	"55": new King("white"),
 	"22": new King("black"),
 	"27": new Rook("white"),
 	"24": new Rook("black"),
 }
 
-const END_GAME: Config = {
+const END_GAME: Piece_Map = {
 	"22": new King("black"),
 	"56": new Bishop("black"),
 	"43": new King("white"),
@@ -71,14 +68,14 @@ const END_GAME: Config = {
 	"57": new Pawn("white"),
 }
 
-const CHECK_MATE: Config = {
+const CHECK_MATE: Piece_Map = {
 	"00": new King("black"),
 	"34": new Knight("white"),
 	"21": new King("white"),
 	"45": new Rook("white"),
 }
 
-const CASTLING: Config = {
+const CASTLING: Piece_Map = {
 	"44": new King("black"),
 	"74": new King("white"),
 	"70": new Rook("white"),
@@ -87,25 +84,25 @@ const CASTLING: Config = {
 	"07": new Rook("black"),
 }
 
-const PROMOTION: Config = {
+const PROMOTION: Piece_Map = {
 	"44": new King("black"),
 	"77": new King("white"),
 	"12": new Pawn("white"),
 	"64": new Pawn("black"),
 }
 
-const EN_PASSANT: Config = {
+const EN_PASSANT: Piece_Map = {
 	"00": new King("black"),
 	"02": new King("white"),
 	"45": new Pawn("black"),
 	"66": new Pawn("white"),
 }
 
-const LONELY_KINGS: Config = {
+const LONELY_KINGS: Piece_Map = {
 	"22": new King("white"),
 	"55": new King("black"),
 }
 
 // INITIAL CONFIG
 
-export const INITIAL_CONFIG: Config = STANDARD_CONFIG
+export const INITIAL_CONFIG: Piece_Map = STANDARD_CONFIG
