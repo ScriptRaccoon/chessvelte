@@ -16,10 +16,6 @@ const server = app.listen(PORT, () => {
 	console.info(chalk.cyan(`Server listening on port ${PORT}`))
 })
 
-app.get("/ping", (_, res) => {
-	res.send("ok")
-})
-
 const io = new Server<Client_Event, Server_Event, {}, Socket_Data>(server, {
 	cors: {
 		origin: process.env.CLIENT_URL,
