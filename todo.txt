@@ -12,7 +12,6 @@
 
 ### DESIGN ####
 - animation of pieces
-- animation of modal
 - animation of game start: move cards out of the way, fade out rest
 
 ### STRUCTURE ###

@@ -109,11 +109,13 @@
 	}
 
 	function open_invitation_modal() {
-		open_modal({
-			with_overlay: false,
-			text: "Invite others to join the game!",
-			confirm: { action: copy_url, text: "Copy URL" },
-		})
+		setTimeout(() => {
+			open_modal({
+				with_overlay: false,
+				text: "Invite others to join the game!",
+				confirm: { action: copy_url, text: "Copy URL" },
+			})
+		}, 500)
 	}
 
 	async function copy_url() {
