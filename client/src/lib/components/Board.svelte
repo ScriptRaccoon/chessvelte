@@ -6,7 +6,6 @@
 	import { COLS, ROWS, SIZE, COORDINATES } from "$shared/config"
 	import { has_coord, gen_coord, key } from "$shared/utils"
 
-	export let move_counter = 0
 	export let board_state: Board_State
 	export let possible_targets: Coord[] = []
 	export let selected_coord: Coord | null = null
@@ -28,14 +27,12 @@
 			{/each}
 		{/each}
 	</div>
-	{#key move_counter}
-		{#each COORDINATES as coord}
-			{@const piece = board_state[key(coord)]}
-			{#if piece}
-				<Piece {coord} {piece} {flipped} />
-			{/if}
-		{/each}
-	{/key}
+	{#each COORDINATES as coord}
+		{@const piece = board_state[key(coord)]}
+		{#if piece}
+			<Piece {coord} {piece} {flipped} />
+		{/if}
+	{/each}
 </div>
 
 <style>
