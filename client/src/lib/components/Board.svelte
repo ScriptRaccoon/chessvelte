@@ -3,7 +3,7 @@
 	import Square from "./Square.svelte"
 
 	import type { Board_State, Coord } from "$shared/types"
-	import { COLS, ROWS, SIZE, COORDINATES } from "$shared/config"
+	import { COLS, ROWS, SIZE } from "$shared/config"
 	import { has_coord, gen_coord, key } from "$shared/utils"
 
 	export let board_state: Board_State
@@ -27,11 +27,8 @@
 			{/each}
 		{/each}
 	</div>
-	{#each COORDINATES as coord}
-		{@const piece = board_state[key(coord)]}
-		{#if piece}
-			<Piece {coord} {piece} {flipped} />
-		{/if}
+	{#each board_state as piece}
+		<Piece {piece} {flipped} />
 	{/each}
 </div>
 

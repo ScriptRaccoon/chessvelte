@@ -13,9 +13,7 @@ export class Board {
 	}
 
 	get state(): Board_State {
-		return Object.fromEntries(
-			Object.entries(this.map).map(([coord, piece]) => [coord, piece!.state]),
-		)
+		return this.coords.map((coord) => ({ ...this.get(coord)!, coord }))
 	}
 
 	public copy(): Board {

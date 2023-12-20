@@ -1,20 +1,10 @@
-import type { Color, Coord, Piece_Type } from "./types"
+import type { Color, Piece_Type } from "./types"
 
 export const TITLE = "Chessvelte"
 
 export const ROWS = [0, 1, 2, 3, 4, 5, 6, 7]
 export const COLS = [0, 1, 2, 3, 4, 5, 6, 7]
 export const SIZE = 8
-
-export const COORDINATES: Coord[] = (() => {
-	const result: Coord[] = []
-	for (let row = 0; row < SIZE; row++) {
-		for (let col = 0; col < SIZE; col++) {
-			result.push([row, col])
-		}
-	}
-	return result
-})()
 
 export const PROMOTION_PIECE_TYPES: Piece_Type[] = [
 	"queen",

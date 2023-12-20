@@ -22,7 +22,9 @@ export type Piece_State = {
 	value: number
 }
 
-export type Board_State = Record<Coord_Key, Piece_State>
+export type Located_Piece_State = Piece_State & { coord: Coord }
+
+export type Board_State = Located_Piece_State[]
 
 export type Game_Status =
 	| "waiting"
