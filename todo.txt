@@ -16,9 +16,12 @@
 - animation of game start: move cards out of the way, fade out rest
 
 ### STRUCTURE ###
+- remove nesting in directional_moves. write direction_moves for one direction maybe
 - reduce god class "Game" to simpler modules
 - "Move" class maybe
 - write more Jest Tests
+      - also for config.ts
+	    - get_save_moves in Piece class
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
  
