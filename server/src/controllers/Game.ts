@@ -75,7 +75,7 @@ export class Game {
 			return "Checkmate against Black"
 		}
 		if (this.status === "stalemate") {
-			return "Stalemate!"
+			return "Stalemate"
 		}
 		if (this.status === "resigned-white") {
 			return "White has resigned"

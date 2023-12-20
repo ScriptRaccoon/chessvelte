@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	import { writable } from "svelte/store"
+	import { fade, fly } from "svelte/transition"
 
 	const modal_state = writable<Modal_Options | null>(null)
 
@@ -27,6 +28,8 @@
 </script>
 
 <script lang="ts">
+	const DURATION = 120
+
 	function confirm() {
 		if ($modal_state?.confirm) {
 			$modal_state.confirm.action()
@@ -43,32 +46,34 @@
 </script>
 
 {#if $modal_state?.with_overlay}
-	<div class="overlay"></div>
+	<div class="overlay" transition:fade={{ duration: DURATION }}></div>
 {/if}
 
-<dialog open={$modal_state !== null}>
-	{#if $modal_state?.text}
-		<p>
-			{$modal_state?.text}
-		</p>
-	{:else}
-		<slot />
-	{/if}
-	{#if $modal_state?.confirm || $modal_state?.cancel}
-		<menu>
-			{#if $modal_state?.confirm}
-				<button class="button unresponsive" on:click={confirm}>
-					{$modal_state?.confirm.text}
-				</button>
-			{/if}
-			{#if $modal_state?.cancel}
-				<button class="button unresponsive" on:click={cancel}>
-					{$modal_state?.cancel.text}
-				</button>
-			{/if}
-		</menu>
-	{/if}
-</dialog>
+{#if $modal_state}
+	<dialog open transition:fly={{ duration: DURATION, y: -20 }}>
+		{#if $modal_state?.text}
+			<p>
+				{$modal_state?.text}
+			</p>
+		{:else}
+			<slot />
+		{/if}
+		{#if $modal_state?.confirm || $modal_state?.cancel}
+			<menu>
+				{#if $modal_state?.confirm}
+					<button class="button unresponsive" on:click={confirm}>
+						{$modal_state?.confirm.text}
+					</button>
+				{/if}
+				{#if $modal_state?.cancel}
+					<button class="button unresponsive" on:click={cancel}>
+						{$modal_state?.cancel.text}
+					</button>
+				{/if}
+			</menu>
+		{/if}
+	</dialog>
+{/if}
 
 <style>
 	.overlay {
@@ -89,8 +94,8 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 		padding: 1rem;
-		background-color: white;
-		color: #222;
+		background-color: var(--bg-color-light);
+		color: var(--font-color-dark);
 		text-align: center;
 		border: none;
 		border-radius: 0.25rem;
