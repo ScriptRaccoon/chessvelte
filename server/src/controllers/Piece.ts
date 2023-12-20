@@ -21,16 +21,16 @@ export abstract class Piece {
 		}
 	}
 
-	abstract copy(): any
+	public abstract copy(): any
 
-	abstract get_moves(
+	public abstract get_moves(
 		coord: Coord,
 		board: Board,
 		move_history: MoveHistory | null,
 		include_special_moves: boolean,
 	): Move[]
 
-	get_save_moves(
+	public get_save_moves(
 		coord: Coord,
 		board: Board,
 		move_history: MoveHistory | null = null,
@@ -43,44 +43,51 @@ export abstract class Piece {
 		})
 	}
 
-	directional_moves(
+	private *moves_in_direction(
+		direction: [number, number],
+		coord: Coord,
+		board: Board,
+	): Generator<Move, void, void> {
+		const [row, col] = coord
+		const [x, y] = direction
+
+		for (let i = 1; i < SIZE; i++) {
+			const target: Coord = [row + x * i, col + y * i]
+			if (!is_valid(target)) break
+
+			const other_piece = board.get(target)
+
+			if (!other_piece)
+				yield {
+					start: coord,
+					end: target,
+					piece: this,
+					type: "regular",
+				}
+
+			if (other_piece && other_piece.color != this.color)
+				yield {
+					start: coord,
+					end: target,
+					piece: this,
+					type: "regular",
+					capture: {
+						coord: target,
+						piece: other_piece,
+					},
+				}
+
+			if (other_piece) break
+		}
+	}
+
+	public directional_moves(
 		directions: [number, number][],
 		coord: Coord,
 		board: Board,
 	): Move[] {
-		const [row, col] = coord
-		const moves: Move[] = []
-
-		for (const direction of directions) {
-			const [x, y] = direction
-			for (let i = 1; i < SIZE; i++) {
-				const end: Coord = [row + x * i, col + y * i]
-				if (!is_valid(end)) break
-				const other_piece = board.get(end)
-				if (other_piece) {
-					if (other_piece.color != this.color) {
-						moves.push({
-							start: coord,
-							end,
-							piece: this,
-							type: "regular",
-							capture: {
-								coord: end,
-								piece: other_piece,
-							},
-						})
-					}
-					break
-				} else {
-					moves.push({
-						start: coord,
-						end,
-						piece: this,
-						type: "regular",
-					})
-				}
-			}
-		}
-		return moves
+		return directions.flatMap((direction) =>
+			Array.from(this.moves_in_direction(direction, coord, board)),
+		)
 	}
 }
