@@ -16,7 +16,6 @@
 - animation of game start: move cards out of the way, fade out rest
 
 ### STRUCTURE ###
-- remove nesting in directional_moves. write direction_moves for one direction maybe
 - reduce god class "Game" to simpler modules
 - "Move" class maybe
 - write more Jest Tests
