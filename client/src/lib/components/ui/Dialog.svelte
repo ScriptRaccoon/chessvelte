@@ -60,12 +60,9 @@
 	}
 
 	function handle_keydown(e: KeyboardEvent) {
-		if (e.key === "Escape") {
-			if ($dialog_state?.cancel) {
-				$dialog_state.cancel.action()
-			}
-			$dialog_state = null
-			$visible = false
+		if (e.key === "Escape" && $dialog_state?.modal) {
+			e.preventDefault()
+			cancel()
 		}
 	}
 </script>
