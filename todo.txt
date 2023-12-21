@@ -1,5 +1,5 @@
 ### BUGS ###
-
+- fix keyboard nav
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss
@@ -12,11 +12,9 @@
 
 ### DESIGN ####
 - animation of pieces
-- animation of game start: move cards out of the way, fade out rest
 
 ### STRUCTURE ###
 - reduce god class "Game" to simpler modules
-- "Move" class maybe
 - write more Jest Tests
       - also for config.ts
 	    - get_save_moves in Piece class

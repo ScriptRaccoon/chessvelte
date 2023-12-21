@@ -17,10 +17,10 @@
 
 	import Game from "$lib/components/Game.svelte"
 	import Toast, { send_toast } from "$lib/components/ui/Toast.svelte"
-	import Modal, {
-		close_modal,
-		open_modal,
-	} from "$lib/components/ui/Modal.svelte"
+	import Dialog, {
+		close_dialog,
+		open_dialog,
+	} from "$lib/components/ui/Dialog.svelte"
 	import Promotion from "$lib/components/Promotion.svelte"
 	import GameHeader from "$lib/components/GameHeader.svelte"
 	import Loader from "$lib/components/ui/Loader.svelte"
@@ -44,7 +44,7 @@
 			if (game_state.is_ended) {
 				open_outcome_modal()
 			} else if (!game_state.is_started) {
-				open_invitation_modal()
+				open_invitation_dialog()
 			} else if (game_state.status === "promotion") {
 				open_promotion_modal()
 			}
@@ -84,7 +84,7 @@
 
 	function finish_promotion(e: CustomEvent<Piece_Type>) {
 		if (!game_state?.is_playing) return
-		close_modal()
+		close_dialog()
 		const type = e.detail
 		socket.emit("finish_promotion", type)
 	}
@@ -109,10 +109,9 @@
 		socket.emit("reject_draw")
 	}
 
-	function open_invitation_modal() {
+	function open_invitation_dialog() {
 		setTimeout(() => {
-			open_modal({
-				with_overlay: false,
+			open_dialog({
 				text: "Invite others to join the game!",
 				confirm: { action: copy_url, text: "Copy URL" },
 			})
@@ -128,35 +127,39 @@
 	}
 
 	function open_draw_modal(name: string) {
-		open_modal({
+		open_dialog({
 			text: `${name} has offered a draw`,
 			confirm: { text: "Accept", action: accept_draw },
 			cancel: { text: "Reject", action: reject_draw },
+			modal: true,
 		})
 	}
 
 	function open_resign_modal() {
-		open_modal({
+		open_dialog({
 			text: "Are you sure that you want to resign?",
 			confirm: { text: "Yes", action: resign },
 			cancel: { text: "No", action: () => {} },
+			modal: true,
 		})
 	}
 
 	function open_outcome_modal() {
 		if (game_state?.outcome) {
-			open_modal({
+			open_dialog({
 				text: game_state.outcome,
 				confirm: { text: "Ok", action: () => {} },
 				cancel: null,
+				modal: true,
 			})
 		}
 	}
 
 	function open_promotion_modal() {
-		open_modal({
+		open_dialog({
 			confirm: null,
 			cancel: { text: "Cancel", action: cancel_promotion },
+			modal: true,
 		})
 	}
 
@@ -166,14 +169,6 @@
 </script>
 
 <GameHeader player_names={game_state?.player_names ?? null} />
-
-<Toast />
-
-<Modal>
-	{#if game_state?.status === "promotion" && my_color}
-		<Promotion color={my_color} on:finish_promotion={finish_promotion} />
-	{/if}
-</Modal>
 
 {#if game_state && my_color}
 	<div in:fade={{ duration: 200 }}>
@@ -192,3 +187,11 @@
 {:else}
 	<Loader message="Game is being loaded" />
 {/if}
+
+<Toast />
+
+<Dialog>
+	{#if game_state?.status === "promotion" && my_color}
+		<Promotion color={my_color} on:finish_promotion={finish_promotion} />
+	{/if}
+</Dialog>

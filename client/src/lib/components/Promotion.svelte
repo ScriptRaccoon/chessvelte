@@ -20,12 +20,13 @@
 
 <style>
 	.choices {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		justify-items: center;
+		width: 100%;
+		overflow: hidden;
+		display: flex;
 	}
 
 	button {
+		flex-grow: 1;
 		aspect-ratio: 1 / 1;
 	}
 
