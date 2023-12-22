@@ -5,6 +5,8 @@
 
 	export let name: string = ""
 	export let error: string = ""
+
+	$: game_id_from_url = $page.url.searchParams.get("id") ?? ""
 </script>
 
 <form action="/" method="POST" use:enhance>
@@ -14,15 +16,17 @@
 	</div>
 
 	<div class="cards">
-		<Card>
-			<svelte:fragment slot="heading">Start a new game</svelte:fragment>
-			<svelte:fragment slot="content"
-				>Afterwards you can share the game URL.</svelte:fragment
-			>
-			<svelte:fragment slot="cta">
-				<button class="button" formaction="?/start">Start</button>
-			</svelte:fragment>
-		</Card>
+		{#if !game_id_from_url}
+			<Card>
+				<svelte:fragment slot="heading">Start a new game</svelte:fragment>
+				<svelte:fragment slot="content"
+					>Afterwards you can share the game URL.</svelte:fragment
+				>
+				<svelte:fragment slot="cta">
+					<button class="button" formaction="?/start">Start</button>
+				</svelte:fragment>
+			</Card>
+		{/if}
 
 		<Card>
 			<svelte:fragment slot="heading">Join an existing game</svelte:fragment>
@@ -33,7 +37,7 @@
 					type="text"
 					name="game_id"
 					id="game_id"
-					value={$page.url.searchParams.get("id") ?? ""}
+					value={game_id_from_url}
 					autocomplete="off"
 				/>
 			</svelte:fragment>
