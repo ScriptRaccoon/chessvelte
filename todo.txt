@@ -1,26 +1,29 @@
 ### BUGS ###
 - fix keyboard nav
+- check if app works on safari
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods
 - when being redirected to ?/id=xyz because name or client id was missing,
-  an appropriate message should be shown that it has to be filled
+  an appropriate message should be shown that it has to be filled,
+  and only the join-option should be visible, so that users don't join a random game
 - chat window where status messages are posted and the players can talk
 - different board designs to select
+- (maybe) profile page, avatar, auth
+- prevent delay of movement (caused by client-server communication)
+  -> maybe make the move also on the client-side and only double check
+     on the server-side
 
 ### DESIGN ####
-- animation of pieces
+- animation of pieces (WIP)
+- show previously made move (to both players)
 
 ### STRUCTURE ###
 - reduce god class "Game" to simpler modules
 - write more Jest Tests
-      - also for config.ts
-	    - get_save_moves in Piece class
+	- also for config.ts
+	- get_save_moves in Piece class
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
- 
-### DEPLOYMENT ###
-- deploy sveltekit app on netlify (DONE)
-- deploy socket server separately (DONE)
