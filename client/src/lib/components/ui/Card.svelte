@@ -27,5 +27,6 @@
 
 	.content {
 		margin-bottom: 1rem;
+		color: var(--secondary-font-color);
 	}
 </style>

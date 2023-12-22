@@ -1,7 +1,5 @@
 export type Toast_Variant = "info" | "success" | "error"
 
-export type Login_Error = "name" | "gameid" | ""
-
 export type Coord = [number, number]
 
 export type Coord_Key = `${number}${number}`

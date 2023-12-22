@@ -3,12 +3,13 @@
 	import Title from "$lib/components/Title.svelte"
 	import Footer from "$lib/components/Footer.svelte"
 	export let data
+	export let form
 </script>
 
 <div class="page">
 	<Title />
 
-	<LoginForm name={data.name} error={data.error} />
+	<LoginForm name={data.name} error={form?.error ?? ""} />
 
 	<Footer />
 </div>

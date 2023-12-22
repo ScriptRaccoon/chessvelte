@@ -1,6 +1,7 @@
 ### BUGS ###
 - fix keyboard nav
 - check if app works on safari
+- when user tries to join non-existing game, their name is cleared from the form
 
 ### FEATURES ###
 - save gamestates in redis to prevent data loss
