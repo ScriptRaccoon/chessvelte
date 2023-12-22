@@ -1,7 +1,7 @@
 import { Pairing } from "./Pairing"
 
 beforeEach(() => {
-	Pairing.dictionary = {}
+	Pairing.clear()
 })
 
 describe("Pairing class", () => {
@@ -12,12 +12,13 @@ describe("Pairing class", () => {
 			expect(Pairing.exists("567")).toBe(false)
 		})
 	})
+
 	describe("get_by_id", () => {
 		it("returns the pairing of the given ID if it exists", () => {
 			const pairing = new Pairing("123")
 			expect(Pairing.get_by_id("123")).toBe(pairing)
 		})
-		it("returns undefined for a pairing that does not exist", () => {
+		it("returns 'undefined' for a pairing that does not exist", () => {
 			expect(Pairing.get_by_id("123")).toBeUndefined()
 		})
 	})
@@ -27,15 +28,15 @@ describe("Pairing class", () => {
 			const pairing = new Pairing("123")
 			pairing.add_player("abc")
 			pairing.add_player("def")
-			expect(pairing.players).toEqual(["abc", "def"])
+			expect(pairing.get_players()).toEqual(["abc", "def"])
 		})
 
-		it("does not do anything when 2 players are already in", () => {
+		it("does not do anything when 2 players are already paired", () => {
 			const pairing = new Pairing("123")
 			pairing.add_player("abc")
 			pairing.add_player("def")
 			pairing.add_player("uvw")
-			expect(pairing.players).toEqual(["abc", "def"])
+			expect(pairing.get_players()).toEqual(["abc", "def"])
 		})
 	})
 
@@ -43,18 +44,30 @@ describe("Pairing class", () => {
 		it("checks if a player belongs to the list of players", () => {
 			const pairing = new Pairing("123")
 			pairing.add_player("abc")
-			expect(pairing.players.includes("abc")).toBe(true)
-			expect(pairing.players.includes("def")).toBe(false)
+			expect(pairing.get_players().includes("abc")).toBe(true)
+			expect(pairing.get_players().includes("def")).toBe(false)
 		})
 	})
+
 	describe("is_full", () => {
-		it("is true when the game has at least 2 players", () => {
+		it("is true when the game has 2 players", () => {
 			const pairing = new Pairing("123")
 			expect(pairing.is_full).toBe(false)
 			pairing.add_player("abc")
 			expect(pairing.is_full).toBe(false)
 			pairing.add_player("def")
 			expect(pairing.is_full).toBe(true)
+		})
+	})
+
+	describe("clear", () => {
+		it("removes all existing Pairings", () => {
+			new Pairing("123")
+			new Pairing("456")
+			Pairing.clear()
+			expect(Pairing.exists("123")).toBe(false)
+			expect(Pairing.exists("456")).toBe(false)
+			expect(Pairing.exists("789")).toBe(false)
 		})
 	})
 })
