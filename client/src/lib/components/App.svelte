@@ -43,7 +43,7 @@
 	const socket: Socket<Server_Event, Client_Event> = io(PUBLIC_SERVER_URL)
 
 	if (browser) {
-		socket.emit("me", game_id, client_id, name)
+		socket.emit("join", game_id, client_id, name)
 
 		socket.on("game_state", (server_game_state) => {
 			game_state = server_game_state

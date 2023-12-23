@@ -61,7 +61,7 @@ export type Server_Event = {
 }
 
 export type Client_Event = {
-	me: (game_id: string, client_id: string, name: string) => void
+	join: (game_id: string, client_id: string, name: string) => void
 	select: (coord: Coord) => void
 	restart: () => void
 	resign: () => void
