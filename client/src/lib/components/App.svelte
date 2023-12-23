@@ -16,7 +16,6 @@
 		Chat_Message,
 	} from "$shared/types"
 
-	import Game from "./Game.svelte"
 	import Toast, { send_toast } from "./ui/Toast.svelte"
 	import Dialog, { close_dialog, open_dialog } from "./ui/Dialog.svelte"
 	import Promotion from "./Promotion.svelte"
@@ -25,6 +24,8 @@
 	import AppLayout from "./AppLayout.svelte"
 	import Chat from "./Chat.svelte"
 	import Captures from "./Captures.svelte"
+	import Menu from "./Menu.svelte"
+	import Board from "./Board.svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -34,6 +35,7 @@
 	let game_state: Game_State | null = null
 	let chat_messages: Chat_Message[] = []
 	let show_chat: boolean = false
+	let board_flipped: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -55,6 +57,12 @@
 
 		socket.on("your_color", (color) => {
 			my_color = color
+
+			if (my_color === "black") {
+				board_flipped = true
+			} else {
+				board_flipped = false
+			}
 		})
 
 		socket.on("toast", (message, variant) => {
@@ -182,38 +190,54 @@
 		show_chat = !show_chat
 	}
 
+	function flip_board() {
+		board_flipped = !board_flipped
+	}
+
 	onDestroy(() => {
 		socket.disconnect()
 	})
 </script>
 
-<AppLayout two_sided={true}>
+<AppLayout two_sided={game_state?.is_started}>
 	<svelte:fragment slot="header">
 		<GameHeader player_names={game_state?.player_names ?? null} />
 	</svelte:fragment>
+
 	<svelte:fragment slot="main">
 		{#if game_state && my_color}
 			<div in:fade={{ duration: 200 }}>
-				<Game
-					{game_state}
-					{my_turn}
-					{my_color}
+				<Board
+					board_state={game_state.board_state}
+					possible_targets={game_state.possible_targets}
+					selected_coord={game_state.selected_coord}
+					flipped={game_state.is_started && board_flipped}
 					on:select={select}
-					on:resign={open_resign_modal}
-					on:restart={restart}
-					on:finish_promotion={finish_promotion}
-					on:cancel_promotion={cancel_promotion}
-					on:draw={offer_draw}
-					on:toggle_chat={toggle_chat}
 				/>
+				{#if game_state.is_started}
+					<Menu
+						is_ended={game_state.is_ended}
+						outcome={game_state.outcome}
+						current_color={game_state.current_color}
+						{my_turn}
+						on:flip={flip_board}
+						on:resign={open_resign_modal}
+						on:restart={restart}
+						on:draw={offer_draw}
+						on:toggle_chat={toggle_chat}
+					/>
+				{/if}
 			</div>
 		{:else}
 			<Loader message="Game is being loaded" />
 		{/if}
 	</svelte:fragment>
+
 	<svelte:fragment slot="aside">
-		<Chat messages={chat_messages} {show_chat} on:chat={chat} />
-		<Captures captured_pieces={game_state?.captured_pieces ?? []} />
+		{#if game_state?.is_started}
+			<Chat messages={chat_messages} {show_chat} on:chat={chat} />
+			<Captures captured_pieces={game_state?.captured_pieces ?? []} />
+		{/if}
 	</svelte:fragment>
 </AppLayout>
 

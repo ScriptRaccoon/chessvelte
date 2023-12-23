@@ -7,32 +7,30 @@
 
 
 ### FEATURES ###
-- send game winner to chat
+- send bot message when player wins
+- send bot message when game starts
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods
-- status messages are posted to the chat window
 - different board designs to select
 - (maybe) profile page, avatar, auth
 - prevent delay of movement (caused by client-server communication)
   -> maybe make the move also on the client-side and only double check
      on the server-side
 - notify about new messages when chat is closed (change button icon?)
-- send bot message when game starts
+
 
 ### DESIGN ####
 - shorten turn/outcome message, move to same line as the rest
 - rotation of board moves it slightly, need to find coord solution
 - animation of pieces (WIP)
 - show previously made move (to both players)
-- move captures to the aside on desktop view
-- improve design of captures section, maybe card with heading
 
 ### STRUCTURE ###
-- we don't need Game.svelte, the remaining can go to App.svelte
 - reduce god class "Game" to simpler modules
 - write more Jest Tests
 	- also for config.ts
 	- get_save_moves in Piece class
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
+- change dev script of server: concurrently esbuild watch and nodemon dist/index, no ts-node
