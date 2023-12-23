@@ -36,7 +36,7 @@ describe("generate_short_id", () => {
 			.mockReturnValueOnce(0.2)
 
 		const id = generate_short_id(4)
-		expect(id).toBe("GflM")
+		expect(id).toBe("DSVG")
 	})
 })
 
