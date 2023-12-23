@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "esbuild src/server.ts --minify --bundle --outfile=dist/server.js --platform=node --target=node16",
 		"watch": "esbuild src/server.ts --watch --bundle --outfile=dist/server.js --platform=node --target=node16",
-		"dev": "concurrently \"pnpm watch\" \"pnpm nodemon",
+		"dev": "concurrently \"pnpm watch\" \"pnpm nodemon\"",
 		"start": "node dist/server.js",
 		"nodemon": "nodemon dist/server.js"
 	},
