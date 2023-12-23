@@ -22,7 +22,6 @@
 
 ### DESIGN ####
 - shorten turn/outcome message, move to same line as the rest
-- rotation of board moves it slightly, need to find coord solution
 - animation of pieces (WIP)
 - show previously made move (to both players)
 

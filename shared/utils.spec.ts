@@ -12,6 +12,7 @@ import {
 	key,
 	unkey,
 	scroll_to_bottom,
+	rotate,
 } from "./utils"
 
 const mocked_random = jest.spyOn(global.Math, "random")
@@ -166,5 +167,25 @@ describe("scroll_to_bottom", () => {
 		}
 		scroll_to_bottom(element_mock as HTMLElement)
 		expect(element_mock.scrollTop).toBe(100)
+	})
+})
+
+describe("rotate", () => {
+	// prettier-ignore
+	const samples: [Coord, Coord][] = [
+		[[0, 0], [7, 7]],
+		[[1, 0], [6, 7]],
+		[[0, 7], [7, 0]],
+		[[2, 6], [5, 1]],
+		[[7, 7], [0, 0]],
+	]
+
+	it.each(samples)("maps %p to %p", (coord, expected) => {
+		expect(rotate(coord as Coord)).toEqual(expected)
+	})
+
+	it("leaves coordinates untouched when specified", () => {
+		expect(rotate([5, 6], false)).toEqual([5, 6])
+		expect(rotate([0, 0], false)).toEqual([0, 0])
 	})
 })

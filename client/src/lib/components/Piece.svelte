@@ -3,15 +3,9 @@
 	import type { Located_Piece_State } from "$shared/types"
 
 	export let piece: Located_Piece_State
-	export let flipped: boolean
 </script>
 
-<svg
-	class="piece"
-	class:flipped
-	style:--x={piece.coord[1]}
-	style:--y={piece.coord[0]}
->
+<svg class="piece" style:--x={piece.coord[1]} style:--y={piece.coord[0]}>
 	<use xlink:href={piece_src(piece.type, piece.color)} />
 </svg>
 
@@ -26,14 +20,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		--angle: 0deg;
 		transform: translate(
-				calc(var(--x) * var(--unit)),
-				calc(var(--y) * var(--unit))
-			)
-			rotate(var(--angle));
-	}
-	.piece.flipped {
-		--angle: 180deg;
+			calc(var(--x) * var(--unit)),
+			calc(var(--y) * var(--unit))
+		);
 	}
 </style>

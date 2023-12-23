@@ -4,7 +4,7 @@
 
 	import type { Board_State, Coord } from "$shared/types"
 	import { COLS, ROWS, SIZE } from "$shared/config"
-	import { has_coord, gen_coord, key } from "$shared/utils"
+	import { has_coord, gen_coord, key, rotate } from "$shared/utils"
 
 	export let board_state: Board_State
 	export let possible_targets: Coord[] = []
@@ -12,11 +12,11 @@
 	export let flipped: boolean = false
 </script>
 
-<div class="board" class:flipped style:--size={SIZE}>
+<div class="board" style:--size={SIZE}>
 	<div class="squares">
 		{#each ROWS as row}
 			{#each COLS as col}
-				{@const coord = gen_coord(row, col)}
+				{@const coord = rotate(gen_coord(row, col), flipped)}
 				<Square
 					{coord}
 					light={(row + col) % 2 == 0}
@@ -28,7 +28,8 @@
 		{/each}
 	</div>
 	{#each board_state as piece}
-		<Piece {piece} {flipped} />
+		{@const coord = rotate(piece.coord, flipped)}
+		<Piece piece={{ ...piece, coord }} />
 	{/each}
 </div>
 
@@ -41,10 +42,6 @@
 		border: 0.4rem solid var(--border-color);
 		box-sizing: content-box;
 		position: relative;
-	}
-
-	.board.flipped {
-		transform: rotate(180deg);
 	}
 
 	.squares {

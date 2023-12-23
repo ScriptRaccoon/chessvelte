@@ -80,3 +80,9 @@ export function get_random_color(): Color {
 export function scroll_to_bottom(element: HTMLElement): void {
 	element.scrollTop = element.scrollHeight
 }
+
+export function rotate(coord: Coord, flipped: boolean = true): Coord {
+	if (!flipped) return coord
+	const [row, col] = coord
+	return [SIZE - 1 - row, SIZE - 1 - col]
+}
