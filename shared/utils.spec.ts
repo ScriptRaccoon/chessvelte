@@ -11,6 +11,7 @@ import {
 	is_valid,
 	key,
 	unkey,
+	scroll_to_bottom,
 } from "./utils"
 
 const mocked_random = jest.spyOn(global.Math, "random")
@@ -154,5 +155,16 @@ describe("get_random_color", () => {
 		expect(get_random_color()).toBe("white")
 		expect(get_random_color()).toBe("black")
 		expect(get_random_color()).toBe("black")
+	})
+})
+
+describe("scroll_to_bottom", () => {
+	it("scrolls to the bottom of the HTML element", () => {
+		const element_mock: Partial<HTMLElement> = {
+			scrollTop: 0,
+			scrollHeight: 100,
+		}
+		scroll_to_bottom(element_mock as HTMLElement)
+		expect(element_mock.scrollTop).toBe(100)
 	})
 })

@@ -76,3 +76,7 @@ export function get_other_color(color: Color): Color {
 export function get_random_color(): Color {
 	return Math.random() < 0.5 ? "white" : "black"
 }
+
+export function scroll_to_bottom(element: HTMLElement): void {
+	element.scrollTop = element.scrollHeight
+}

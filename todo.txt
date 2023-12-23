@@ -6,10 +6,11 @@
   the game ID is cleared from the form
 
 ### FEATURES ###
+- send game winner to chat
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods
-- chat window where status messages are posted and the players can talk
+- status messages are posted to the chat window
 - different board designs to select
 - (maybe) profile page, avatar, auth
 - prevent delay of movement (caused by client-server communication)
@@ -17,6 +18,7 @@
      on the server-side
 
 ### DESIGN ####
+- chat window on desktop should be next to the board
 - animation of pieces (WIP)
 - show previously made move (to both players)
 

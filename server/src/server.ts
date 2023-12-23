@@ -52,6 +52,12 @@ io.on("connection", (socket) => {
 			.emit("toast", `${player.name} has ${action}`, "success")
 		emit_game_state(game)
 		socket.emit("your_color", player.color)
+
+		socket.broadcast.to(game.id).emit("chat", {
+			name: "",
+			content: `${player.name} has ${action}`,
+			bot: true,
+		})
 	})
 
 	/**
@@ -79,6 +85,13 @@ io.on("connection", (socket) => {
 		if (!game.is_playing) return
 		game.resign(socket.id)
 		emit_game_state(game)
+
+		const player = game.get_player(socket.id)
+		io.to(game.id).emit("chat", {
+			name: "",
+			content: `${player.name} has resigned`,
+			bot: true,
+		})
 	})
 
 	/**
@@ -98,6 +111,12 @@ io.on("connection", (socket) => {
 			`${player.name} has restarted the game`,
 			"info",
 		)
+
+		io.to(game.id).emit("chat", {
+			name: "",
+			content: `${player.name} has restarted the game`,
+			bot: true,
+		})
 
 		for (const socket_id of game.list_of_sockets()) {
 			const new_color = game.get_player(socket_id).color
@@ -142,6 +161,12 @@ io.on("connection", (socket) => {
 		if (!game.is_playing) return
 		game.draw()
 		emit_game_state(game)
+
+		io.to(game.id).emit("chat", {
+			name: "",
+			content: `Game is drawn by agreement`,
+			bot: true,
+		})
 	})
 
 	/**
@@ -176,5 +201,19 @@ io.on("connection", (socket) => {
 		const name = player?.name ?? "Player"
 		io.to(game.id).emit("toast", `${name} has disconnected`, "error")
 		socket.leave(game.id)
+
+		socket.broadcast.to(game.id).emit("chat", {
+			name: "",
+			content: `${name} has disconnected`,
+			bot: true,
+		})
+	})
+
+	/**
+	 * chat feature
+	 */
+	socket.on("chat", (msg) => {
+		const game_id = socket.data.game_id
+		io.to(game_id).emit("chat", { ...msg, bot: false })
 	})
 })

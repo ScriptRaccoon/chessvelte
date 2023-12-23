@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Color } from "$shared/types"
+	import Fa from "svelte-fa"
+	import { faComments } from "@fortawesome/free-solid-svg-icons"
 	import { createEventDispatcher } from "svelte"
 	const dispatch = createEventDispatcher()
 
@@ -15,6 +17,13 @@
 	<span class="circle {current_color}"></span>
 
 	<menu class="menu">
+		<button
+			class="button"
+			aria-label="toggle chat"
+			on:click={() => dispatch("toggle_chat")}
+		>
+			<Fa icon={faComments} />
+		</button>
 		<button class="button" on:click={() => dispatch("flip")}>Flip</button>
 		{#if is_ended}
 			<button class="button" on:click={() => dispatch("restart")}>

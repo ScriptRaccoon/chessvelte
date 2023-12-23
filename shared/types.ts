@@ -47,11 +47,18 @@ export type Game_State = {
 	player_names: [string, string] | null
 }
 
+export type Chat_Message = {
+	name: string
+	content: string
+	bot: boolean
+}
+
 export type Server_Event = {
 	game_state: (state: Game_State) => void
 	toast: (msg: string, variant: Toast_Variant) => void
 	offer_draw: (name: string) => void
 	your_color: (color: Color) => void
+	chat: (msg: Chat_Message) => void
 }
 
 export type Client_Event = {
@@ -64,4 +71,5 @@ export type Client_Event = {
 	reject_draw: () => void
 	finish_promotion: (type: Piece_Type) => void
 	cancel_promotion: () => void
+	chat: (msg: Chat_Message & { bot: false }) => void
 }

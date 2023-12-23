@@ -13,17 +13,15 @@
 		Coord,
 		Color,
 		Piece_Type,
+		Chat_Message,
 	} from "$shared/types"
 
-	import Game from "$lib/components/Game.svelte"
-	import Toast, { send_toast } from "$lib/components/ui/Toast.svelte"
-	import Dialog, {
-		close_dialog,
-		open_dialog,
-	} from "$lib/components/ui/Dialog.svelte"
-	import Promotion from "$lib/components/Promotion.svelte"
-	import GameHeader from "$lib/components/GameHeader.svelte"
-	import Loader from "$lib/components/ui/Loader.svelte"
+	import Game from "./Game.svelte"
+	import Toast, { send_toast } from "./ui/Toast.svelte"
+	import Dialog, { close_dialog, open_dialog } from "./ui/Dialog.svelte"
+	import Promotion from "./Promotion.svelte"
+	import GameHeader from "./GameHeader.svelte"
+	import Loader from "./ui/Loader.svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -31,6 +29,7 @@
 
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
+	let chat_messages: Chat_Message[] = []
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -63,6 +62,10 @@
 
 		socket.on("offer_draw", (name: string) => {
 			open_draw_modal(name)
+		})
+
+		socket.on("chat", (msg) => {
+			chat_messages = [...chat_messages, msg]
 		})
 	}
 
@@ -163,6 +166,14 @@
 		})
 	}
 
+	function chat(e: CustomEvent<string>) {
+		socket.emit("chat", {
+			name,
+			content: e.detail,
+			bot: false,
+		})
+	}
+
 	onDestroy(() => {
 		socket.disconnect()
 	})
@@ -176,12 +187,14 @@
 			{game_state}
 			{my_turn}
 			{my_color}
+			{chat_messages}
 			on:select={select}
 			on:resign={open_resign_modal}
 			on:restart={restart}
 			on:finish_promotion={finish_promotion}
 			on:cancel_promotion={cancel_promotion}
 			on:draw={offer_draw}
+			on:chat={chat}
 		/>
 	</div>
 {:else}
