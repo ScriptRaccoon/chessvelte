@@ -41,6 +41,7 @@ input[type="text"] {
 	--border-color: hsl(20, 82%, 20%);
 	--selected-color: rgba(129, 205, 213, 0.9);
 	--highlight-color: rgba(129, 205, 213, 0.5);
+	--lastmove-color: rgba(59, 221, 23, 0.5);
 	--button-color: rgb(42, 126, 159);
 	--error-color: rgb(241, 126, 100);
 	--font-color: white;

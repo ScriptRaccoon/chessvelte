@@ -6,6 +6,7 @@
 	export let light: boolean
 	export let highlighted: boolean
 	export let selected: boolean = false
+	export let last_move: boolean = false
 
 	const dispatch = createEventDispatcher<{ select: Coord }>()
 </script>
@@ -15,6 +16,7 @@
 	class:light
 	class:dark={!light}
 	on:click={() => dispatch("select", coord)}
+	class:last_move
 	class:selected
 	class:highlighted
 >
@@ -34,17 +36,22 @@
 		background-color: var(--dark-square-color);
 	}
 
-	.square.selected::before {
+	.square:before {
 		content: "";
 		position: absolute;
 		inset: 0;
-		background-color: var(--selected-color);
+		background-color: var(--overlay, transparent);
 	}
 
-	.square.highlighted::before {
-		content: "";
-		position: absolute;
-		inset: 0;
-		background-color: var(--highlight-color);
+	.square.selected {
+		--overlay: var(--selected-color);
+	}
+
+	.square.highlighted {
+		--overlay: var(--highlight-color);
+	}
+
+	.square.last_move:not(.selected, .highlighted) {
+		--overlay: var(--lastmove-color);
 	}
 </style>

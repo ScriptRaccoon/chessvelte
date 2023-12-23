@@ -219,6 +219,7 @@
 					possible_targets={game_state.possible_targets}
 					selected_coord={game_state.selected_coord}
 					flipped={game_state.is_started && board_flipped}
+					last_move={game_state.last_move}
 					on:select={select}
 				/>
 				{#if game_state.is_started}

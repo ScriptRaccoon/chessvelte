@@ -6,6 +6,11 @@ export type Coord_Key = `${number}${number}`
 
 export type Color = "black" | "white"
 
+export type Move_State = {
+	start: Coord
+	end: Coord
+}
+
 export type Piece_Type =
 	| "pawn"
 	| "rook"
@@ -44,6 +49,7 @@ export type Game_State = {
 	is_ended: boolean
 	is_playing: boolean
 	player_names: [string, string] | null
+	last_move: Move_State | null
 }
 
 export type Chat_Message = {

@@ -19,7 +19,6 @@
 
 ### DESIGN ####
 - animation of pieces (WIP)
-- show previously made move (to both players) <- that is important
 
 ### STRUCTURE ###
 - refactor SocketController class

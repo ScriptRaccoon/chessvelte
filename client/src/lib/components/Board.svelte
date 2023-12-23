@@ -2,7 +2,7 @@
 	import Piece from "./Piece.svelte"
 	import Square from "./Square.svelte"
 
-	import type { Board_State, Coord } from "$shared/types"
+	import type { Board_State, Coord, Move_State } from "$shared/types"
 	import { COLS, ROWS, SIZE } from "$shared/config"
 	import { has_coord, gen_coord, key, rotate } from "$shared/utils"
 
@@ -10,6 +10,7 @@
 	export let possible_targets: Coord[] = []
 	export let selected_coord: Coord | null = null
 	export let flipped: boolean = false
+	export let last_move: Move_State | null = null
 </script>
 
 <div class="board" style:--size={SIZE}>
@@ -21,6 +22,8 @@
 					{coord}
 					light={(row + col) % 2 == 0}
 					highlighted={has_coord(possible_targets, coord)}
+					last_move={last_move !== null &&
+						has_coord(Object.values(last_move), coord)}
 					selected={selected_coord != null && key(coord) == key(selected_coord)}
 					on:select
 				/>

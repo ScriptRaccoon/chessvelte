@@ -6,6 +6,7 @@ import type {
 	Game_State,
 	Piece_Type,
 	Piece_State,
+	Move_State,
 } from "$shared/types"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
@@ -55,6 +56,7 @@ export class Game {
 			possible_targets: this.possible_targets,
 			captured_pieces: this.captured_pieces,
 			player_names: this.player_group.player_names,
+			last_move: this.last_move,
 		}
 	}
 
@@ -98,6 +100,13 @@ export class Game {
 
 	private get captured_pieces(): Piece_State[] {
 		return this.captures.map((capture) => capture.piece.state)
+	}
+
+	private get last_move(): Move_State | null {
+		const last = this.move_history.get_last()
+		if (!last) return null
+		const { start, end } = last
+		return { start, end }
 	}
 
 	public add_player(
