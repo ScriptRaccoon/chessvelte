@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Fa from "svelte-fa"
-	import { faHome } from "@fortawesome/free-solid-svg-icons"
+	import { faCog, faHome } from "@fortawesome/free-solid-svg-icons"
 	import { TITLE } from "$shared/config"
 
 	export let player_names: [string, string] | null = null
+	export let toggle_settings: () => void = () => {}
 </script>
 
 <header>
@@ -13,9 +14,18 @@
 			{player_names[0]} vs. {player_names[1]}
 		{/if}
 	</div>
-	<a href="/" aria-label="homepage">
-		<Fa icon={faHome} />
-	</a>
+	<menu>
+		<button
+			class="secondary"
+			aria-label="toggle settings"
+			on:click={toggle_settings}
+		>
+			<Fa icon={faCog} />
+		</button>
+		<a href="/" aria-label="homepage">
+			<Fa icon={faHome} />
+		</a>
+	</menu>
 </header>
 
 <style>
@@ -35,6 +45,11 @@
 		margin-right: 0.5rem;
 		margin-left: auto;
 		color: var(--secondary-font-color);
+	}
+
+	menu {
+		display: flex;
+		gap: 0.5rem;
 	}
 
 	@media (min-width: 32rem) {

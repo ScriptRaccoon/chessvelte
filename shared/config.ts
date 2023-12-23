@@ -36,3 +36,7 @@ export const PIECE_VALUES: Record<Piece_Type, number> = {
 }
 
 export const CHARACTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+
+export const STORAGE_KEYS = {
+	NO_HIGHLIGHTS: "no_highlights",
+}

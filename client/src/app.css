@@ -118,6 +118,15 @@ button:focus-visible {
 	outline: 0.15rem solid var(--font-color);
 }
 
+button.secondary {
+	color: var(--secondary-font-color);
+}
+
+button.secondary:hover,
+button.secondary:focus-visible {
+	color: var(--font-color);
+}
+
 /* INPUTS */
 
 .input {
@@ -133,6 +142,10 @@ button:focus-visible {
 
 label {
 	color: var(--secondary-font-color);
+}
+
+input[type="checkbox"] {
+	accent-color: var(--button-color);
 }
 
 /* UTILS */

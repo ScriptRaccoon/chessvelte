@@ -15,6 +15,7 @@
 		Piece_Type,
 		Chat_Message,
 	} from "$shared/types"
+	import { STORAGE_KEYS } from "$shared/config"
 
 	import Toast, { send_toast } from "./ui/Toast.svelte"
 	import Dialog, { close_dialog, open_dialog } from "./ui/Dialog.svelte"
@@ -26,6 +27,7 @@
 	import Captures from "./Captures.svelte"
 	import Menu from "./Menu.svelte"
 	import Board from "./Board.svelte"
+	import Settings from "./Settings.svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -37,6 +39,8 @@
 	let show_chat: boolean = false
 	let board_flipped: boolean = false
 	let pending_messages: boolean = false
+	let show_settings: boolean = false
+	let show_highlights: boolean = true
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -78,7 +82,6 @@
 		socket.on("chat", (msg) => {
 			chat_messages = [...chat_messages, msg]
 			if (!show_chat && msg.name) {
-				console.log("new pending messages!")
 				pending_messages = true
 			}
 		})
@@ -86,6 +89,10 @@
 		socket.on("outcome", (msg) => {
 			open_outcome_modal(msg)
 		})
+
+		if (window.localStorage.getItem(STORAGE_KEYS.NO_HIGHLIGHTS)) {
+			show_highlights = false
+		}
 	}
 
 	function select(event: CustomEvent<Coord>) {
@@ -201,48 +208,60 @@
 		board_flipped = !board_flipped
 	}
 
+	function toggle_settings() {
+		show_settings = !show_settings
+	}
+
 	onDestroy(() => {
 		socket.disconnect()
 	})
 </script>
 
-<AppLayout two_sided={game_state?.is_started}>
+<AppLayout two_sided={game_state?.is_started && !show_settings}>
 	<svelte:fragment slot="header">
-		<GameHeader player_names={game_state?.player_names ?? null} />
+		<GameHeader
+			player_names={game_state?.player_names ?? null}
+			{toggle_settings}
+		/>
 	</svelte:fragment>
 
 	<svelte:fragment slot="main">
 		{#if game_state && my_color}
-			<div in:fade={{ duration: 200 }}>
-				<Board
-					board_state={game_state.board_state}
-					possible_targets={game_state.possible_targets}
-					selected_coord={game_state.selected_coord}
-					flipped={game_state.is_started && board_flipped}
-					last_move={game_state.last_move}
-					on:select={select}
-				/>
-				{#if game_state.is_started}
-					<Menu
-						is_ended={game_state.is_ended}
-						current_color={game_state.current_color}
-						{pending_messages}
-						{my_turn}
-						on:flip={flip_board}
-						on:resign={open_resign_modal}
-						on:restart={restart}
-						on:draw={offer_draw}
-						on:toggle_chat={toggle_chat}
+			{#if show_settings}
+				<Settings bind:show_highlights bind:show_settings />
+			{:else}
+				<div in:fade={{ duration: 200 }}>
+					<Board
+						board_state={game_state.board_state}
+						possible_targets={game_state.possible_targets}
+						selected_coord={game_state.selected_coord}
+						flipped={game_state.is_started && board_flipped}
+						last_move={game_state.last_move}
+						{show_highlights}
+						on:select={select}
 					/>
-				{/if}
-			</div>
+					{#if game_state.is_started}
+						<Menu
+							is_ended={game_state.is_ended}
+							current_color={game_state.current_color}
+							{pending_messages}
+							{my_turn}
+							on:flip={flip_board}
+							on:resign={open_resign_modal}
+							on:restart={restart}
+							on:draw={offer_draw}
+							on:toggle_chat={toggle_chat}
+						/>
+					{/if}
+				</div>
+			{/if}
 		{:else}
 			<Loader message="Game is being loaded" />
 		{/if}
 	</svelte:fragment>
 
 	<svelte:fragment slot="aside">
-		{#if game_state?.is_started}
+		{#if game_state?.is_started && !show_settings}
 			<Chat messages={chat_messages} {show_chat} on:chat={chat} />
 			<Captures captured_pieces={game_state?.captured_pieces ?? []} />
 		{/if}

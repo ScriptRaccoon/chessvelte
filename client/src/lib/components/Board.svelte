@@ -11,6 +11,7 @@
 	export let selected_coord: Coord | null = null
 	export let flipped: boolean = false
 	export let last_move: Move_State | null = null
+	export let show_highlights: boolean = false
 </script>
 
 <div class="board" style:--size={SIZE}>
@@ -21,8 +22,9 @@
 				<Square
 					{coord}
 					light={(row + col) % 2 == 0}
-					highlighted={has_coord(possible_targets, coord)}
-					last_move={last_move !== null &&
+					highlighted={show_highlights && has_coord(possible_targets, coord)}
+					last_move={show_highlights &&
+						last_move !== null &&
 						has_coord(Object.values(last_move), coord)}
 					selected={selected_coord != null && key(coord) == key(selected_coord)}
 					on:select
