@@ -47,9 +47,8 @@ export type Game_State = {
 }
 
 export type Chat_Message = {
-	name: string
+	name?: string
 	content: string
-	bot: boolean
 }
 
 export type Server_Event = {
@@ -71,5 +70,5 @@ export type Client_Event = {
 	reject_draw: () => void
 	finish_promotion: (type: Piece_Type) => void
 	cancel_promotion: () => void
-	chat: (msg: Chat_Message & { bot: false }) => void
+	chat: (msg: Chat_Message) => void
 }

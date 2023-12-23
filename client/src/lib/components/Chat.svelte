@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher, tick } from "svelte"
 	import type { Chat_Message } from "$shared/types"
+	import { createEventDispatcher, tick } from "svelte"
 	import { scroll_to_bottom } from "$shared/utils"
 	import GameCard from "./GameCard.svelte"
 
@@ -33,11 +33,11 @@
 		<div class="messages" bind:this={messages_element}>
 			{#each messages as message}
 				<div>
-					{#if message.bot}
-						<span class="bot">{message.content}</span>
-					{:else}
+					{#if message.name}
 						<span class="name">{message.name}:</span>
 						{message.content}
+					{:else}
+						<span class="bot">{message.content}</span>
 					{/if}
 				</div>
 			{/each}

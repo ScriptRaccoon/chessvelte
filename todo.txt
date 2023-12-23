@@ -23,9 +23,11 @@
 
 ### STRUCTURE ###
 - server.ts is too crowded
+- restructure server.ts so that unit tests can be written
 - reduce god class "Game" to simpler modules
 - write more Jest Tests
 	- also for config.ts
 	- get_save_moves in Piece class
+  - white_player and black_player in PlayerGroup class
 - more defensive programming
 - technical documentation about project structure and dependencies in readme

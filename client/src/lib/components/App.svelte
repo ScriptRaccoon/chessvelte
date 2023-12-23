@@ -77,7 +77,7 @@
 
 		socket.on("chat", (msg) => {
 			chat_messages = [...chat_messages, msg]
-			if (!show_chat && !msg.bot) {
+			if (!show_chat && msg.name) {
 				pending_messages = true
 			}
 		})
@@ -186,7 +186,6 @@
 		socket.emit("chat", {
 			name,
 			content: e.detail,
-			bot: false,
 		})
 	}
 

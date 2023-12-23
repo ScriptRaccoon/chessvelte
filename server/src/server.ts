@@ -1,4 +1,4 @@
-import { Server, type Socket } from "socket.io"
+import { Server } from "socket.io"
 import express from "express"
 import chalk from "chalk"
 import dotenv from "dotenv"
@@ -37,11 +37,8 @@ function get_game_of_socket(socket: Player_Socket): Game | undefined {
 
 function send_game_outcome(game: Game): void {
 	io.to(game.id).emit("outcome", game.outcome)
-
 	io.to(game.id).emit("chat", {
-		name: "",
 		content: game.outcome,
-		bot: true,
 	})
 }
 
@@ -49,9 +46,7 @@ function send_start_messages(game: Game): void {
 	if (!game.start_messages) return
 	for (const msg of game.start_messages) {
 		io.to(game.id).emit("chat", {
-			name: "",
 			content: msg,
-			bot: true,
 		})
 	}
 }
@@ -75,9 +70,7 @@ io.on("connection", (socket) => {
 		socket.emit("your_color", player.color)
 
 		socket.broadcast.to(game.id).emit("chat", {
-			name: "",
 			content: `${player.name} has ${action}`,
-			bot: true,
 		})
 
 		if (is_new && game.is_playing && game.start_messages) {
@@ -157,7 +150,6 @@ io.on("connection", (socket) => {
 	/**
 	 * Reject draw
 	 */
-
 	socket.on("reject_draw", () => {
 		const game = get_game_of_socket(socket)
 		if (!game) return emit_404(socket)
@@ -216,17 +208,16 @@ io.on("connection", (socket) => {
 		socket.leave(game.id)
 
 		socket.broadcast.to(game.id).emit("chat", {
-			name: "",
 			content: `${name} has disconnected`,
-			bot: true,
 		})
 	})
 
 	/**
-	 * chat feature
+	 * Chat feature
 	 */
 	socket.on("chat", (msg) => {
 		const game_id = socket.data.game_id
-		io.to(game_id).emit("chat", { ...msg, bot: false })
+		if (!game_id || !msg.content) return
+		io.to(game_id).emit("chat", { content: msg.content })
 	})
 })
