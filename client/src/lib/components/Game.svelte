@@ -1,9 +1,8 @@
 <script lang="ts">
-	import type { Color, Coord, Game_State, Chat_Message } from "$shared/types"
+	import type { Color, Coord, Game_State } from "$shared/types"
 
 	import Menu from "./Menu.svelte"
 	import Board from "./Board.svelte"
-	import Captures from "./Captures.svelte"
 
 	import { createEventDispatcher } from "svelte"
 
@@ -52,5 +51,3 @@
 		on:toggle_chat
 	/>
 {/if}
-
-<Captures captured_pieces={game_state.captured_pieces} />

@@ -24,6 +24,7 @@
 	import Loader from "./ui/Loader.svelte"
 	import AppLayout from "./AppLayout.svelte"
 	import Chat from "./Chat.svelte"
+	import Captures from "./Captures.svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -186,7 +187,7 @@
 	})
 </script>
 
-<AppLayout two_sided={show_chat}>
+<AppLayout two_sided={true}>
 	<svelte:fragment slot="header">
 		<GameHeader player_names={game_state?.player_names ?? null} />
 	</svelte:fragment>
@@ -211,7 +212,8 @@
 		{/if}
 	</svelte:fragment>
 	<svelte:fragment slot="aside">
-		<Chat messages={chat_messages} bind:show_chat on:chat={chat} />
+		<Chat messages={chat_messages} {show_chat} on:chat={chat} />
+		<Captures captured_pieces={game_state?.captured_pieces ?? []} />
 	</svelte:fragment>
 </AppLayout>
 

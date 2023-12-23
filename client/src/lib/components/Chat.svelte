@@ -1,10 +1,8 @@
 <script lang="ts">
-	import Fa from "svelte-fa"
-	import { faClose } from "@fortawesome/free-solid-svg-icons"
-	import { slide } from "svelte/transition"
 	import { createEventDispatcher, tick } from "svelte"
 	import type { Chat_Message } from "$shared/types"
 	import { scroll_to_bottom } from "$shared/utils"
+	import GameCard from "./GameCard.svelte"
 
 	export let messages: Chat_Message[] = []
 	export let show_chat: boolean = false
@@ -20,10 +18,6 @@
 		text = ""
 	}
 
-	function close() {
-		show_chat = false
-	}
-
 	$: if (messages.length && messages_element) {
 		scroll_down()
 	}
@@ -35,14 +29,7 @@
 </script>
 
 {#if show_chat}
-	<section class="chat" in:slide={{ duration: 200 }}>
-		<header>
-			<h2>Chat</h2>
-			<button class="button small" on:click={close} aria-label="close chat">
-				<Fa icon={faClose} />
-			</button>
-		</header>
-
+	<GameCard title="Chat">
 		<div class="messages" bind:this={messages_element}>
 			{#each messages as message}
 				<div>
@@ -60,31 +47,10 @@
 			<input type="text" class="input" bind:value={text} />
 			<button class="button">Send</button>
 		</form>
-	</section>
+	</GameCard>
 {/if}
 
 <style>
-	section {
-		padding: 1rem;
-		border-radius: 0.25rem;
-		background-color: var(--chat-color);
-	}
-
-	header {
-		padding-bottom: 1rem;
-		display: flex;
-		justify-content: space-between;
-	}
-
-	h2 {
-		font-weight: 400;
-		font-size: 1.25rem;
-	}
-
-	.small {
-		scale: 0.75;
-	}
-
 	.messages {
 		max-height: 6rem;
 		overflow: auto;

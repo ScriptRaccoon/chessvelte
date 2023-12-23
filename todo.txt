@@ -17,8 +17,11 @@
 - prevent delay of movement (caused by client-server communication)
   -> maybe make the move also on the client-side and only double check
      on the server-side
+- notify about new messages when chat is closed (change button icon?)
+- send bot message when game starts
 
 ### DESIGN ####
+- shorten turn/outcome message, move to same line as the rest
 - rotation of board moves it slightly, need to find coord solution
 - animation of pieces (WIP)
 - show previously made move (to both players)
@@ -26,6 +29,7 @@
 - improve design of captures section, maybe card with heading
 
 ### STRUCTURE ###
+- we don't need Game.svelte, the remaining can go to App.svelte
 - reduce god class "Game" to simpler modules
 - write more Jest Tests
 	- also for config.ts

@@ -46,7 +46,7 @@
 
 <style>
 	.wrapper {
-		margin-top: 0.75rem;
+		margin-block: 1rem 2rem;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		row-gap: 0.5rem;
