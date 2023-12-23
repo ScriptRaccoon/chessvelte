@@ -33,4 +33,3 @@
 	- get_save_moves in Piece class
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
-- change dev script of server: concurrently esbuild watch and nodemon dist/index, no ts-node
