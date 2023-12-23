@@ -17,7 +17,6 @@
 - prevent delay of movement (caused by client-server communication)
   -> maybe make the move also on the client-side and only double check
      on the server-side
-- notify about new messages when chat is closed (change button icon?)
 
 
 ### DESIGN ####

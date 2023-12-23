@@ -36,6 +36,7 @@
 	let chat_messages: Chat_Message[] = []
 	let show_chat: boolean = false
 	let board_flipped: boolean = false
+	let pending_messages: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -78,6 +79,9 @@
 
 		socket.on("chat", (msg) => {
 			chat_messages = [...chat_messages, msg]
+			if (!show_chat && !msg.bot) {
+				pending_messages = true
+			}
 		})
 	}
 
@@ -188,6 +192,9 @@
 
 	function toggle_chat() {
 		show_chat = !show_chat
+		if (show_chat && pending_messages) {
+			pending_messages = false
+		}
 	}
 
 	function flip_board() {
@@ -219,6 +226,7 @@
 						is_ended={game_state.is_ended}
 						outcome={game_state.outcome}
 						current_color={game_state.current_color}
+						{pending_messages}
 						{my_turn}
 						on:flip={flip_board}
 						on:resign={open_resign_modal}

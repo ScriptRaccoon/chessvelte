@@ -9,6 +9,7 @@
 	export let current_color: Color
 	export let is_ended: boolean
 	export let outcome: string
+	export let pending_messages: boolean
 
 	$: turn_message = my_turn ? "It's your turn" : "It is your opponent's turn"
 </script>
@@ -19,6 +20,7 @@
 	<menu class="menu">
 		<button
 			class="button"
+			class:pulse={pending_messages}
 			aria-label="toggle chat"
 			on:click={() => dispatch("toggle_chat")}
 		>
@@ -83,6 +85,19 @@
 		display: flex;
 		justify-self: flex-end;
 		gap: 0.5rem;
+	}
+
+	.pulse :global(svg) {
+		animation: pulse 1s infinite ease-in alternate;
+	}
+
+	@keyframes pulse {
+		0% {
+			scale: 0.8;
+		}
+		100% {
+			scale: 1;
+		}
 	}
 
 	@media (min-width: 32rem) {
