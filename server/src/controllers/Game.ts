@@ -67,13 +67,7 @@ export class Game {
 	}
 
 	public get start_messages(): string[] | null {
-		const msg1 = "Game has started"
-		const white_player = this.player_group.white_player
-		const black_player = this.player_group.black_player
-		if (!white_player || !black_player) return null
-		const msg2 = `${white_player.name} plays White`
-		const msg3 = `${black_player.name} plays Black`
-		return [msg1, msg2, msg3]
+		return this.player_group.start_messages
 	}
 
 	public get outcome(): string {

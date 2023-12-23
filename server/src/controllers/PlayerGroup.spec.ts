@@ -78,4 +78,17 @@ describe("PlayerGroup class", () => {
 		expect(john.color).toBe("white")
 		expect(marie.color).toBe("black")
 	})
+
+	it("produces start messages for the game", () => {
+		const player_group = new PlayerGroup()
+		mocked_random.mockReturnValueOnce(0.1)
+		player_group.add("123", "xyz", "John")
+		expect(player_group.start_messages).toBeFalsy()
+		player_group.add("456", "uvw", "Marie")
+		expect(player_group.start_messages).toEqual([
+			"Game has started",
+			"John plays White",
+			"Marie plays Black",
+		])
+	})
 })

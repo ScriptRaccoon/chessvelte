@@ -20,11 +20,11 @@ export class PlayerGroup {
 		return Object.keys(this.dictionary)
 	}
 
-	public get white_player(): Player | null {
+	private get white_player(): Player | null {
 		return this.list.find((player) => player.color === "white") ?? null
 	}
 
-	public get black_player(): Player | null {
+	private get black_player(): Player | null {
 		return this.list.find((player) => player.color === "black") ?? null
 	}
 
@@ -82,5 +82,15 @@ export class PlayerGroup {
 		for (const player of this.list) {
 			player.switch_color()
 		}
+	}
+
+	public get start_messages(): string[] | null {
+		const msg1 = "Game has started"
+		const white_player = this.white_player
+		const black_player = this.black_player
+		if (!white_player || !black_player) return null
+		const msg2 = `${white_player.name} plays White`
+		const msg3 = `${black_player.name} plays Black`
+		return [msg1, msg2, msg3]
 	}
 }
