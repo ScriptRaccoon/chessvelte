@@ -54,4 +54,8 @@
 	.square.last_move:not(.selected, .highlighted) {
 		--overlay: var(--lastmove-color);
 	}
+
+	.square:focus-visible {
+		z-index: 1;
+	}
 </style>

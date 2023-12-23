@@ -24,5 +24,6 @@
 			calc(var(--x) * var(--unit)),
 			calc(var(--y) * var(--unit))
 		);
+		z-index: 2;
 	}
 </style>
