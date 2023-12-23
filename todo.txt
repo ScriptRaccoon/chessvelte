@@ -14,12 +14,13 @@
 - prevent delay of movement (caused by client-server communication)
   -> maybe make the move also on the client-side and only double check
      on the server-side
+- drag and drop on desktop to move pieces
 
 
 ### DESIGN ####
 - animation of pieces (WIP)
 - check mobile design again
-- vertical center of turn message
+
 
 ### STRUCTURE ###
 - refactor SocketController class

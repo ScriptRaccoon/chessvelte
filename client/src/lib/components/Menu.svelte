@@ -51,7 +51,9 @@
 	.wrapper {
 		margin-block: 1rem 2rem;
 		display: flex;
+		flex-wrap: wrap;
 		gap: 0.5rem;
+		align-items: center;
 	}
 
 	.circle {
