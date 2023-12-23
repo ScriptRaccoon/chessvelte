@@ -46,8 +46,6 @@
 
 <style>
 	.wrapper {
-		width: var(--width);
-		margin-inline: auto;
 		margin-top: 0.75rem;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);

@@ -22,6 +22,8 @@
 	import Promotion from "./Promotion.svelte"
 	import GameHeader from "./GameHeader.svelte"
 	import Loader from "./ui/Loader.svelte"
+	import AppLayout from "./AppLayout.svelte"
+	import Chat from "./Chat.svelte"
 
 	export let game_id: string
 	export let client_id: string
@@ -30,6 +32,7 @@
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
 	let chat_messages: Chat_Message[] = []
+	let show_chat: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -174,32 +177,43 @@
 		})
 	}
 
+	function toggle_chat() {
+		show_chat = !show_chat
+	}
+
 	onDestroy(() => {
 		socket.disconnect()
 	})
 </script>
 
-<GameHeader player_names={game_state?.player_names ?? null} />
-
-{#if game_state && my_color}
-	<div in:fade={{ duration: 200 }}>
-		<Game
-			{game_state}
-			{my_turn}
-			{my_color}
-			{chat_messages}
-			on:select={select}
-			on:resign={open_resign_modal}
-			on:restart={restart}
-			on:finish_promotion={finish_promotion}
-			on:cancel_promotion={cancel_promotion}
-			on:draw={offer_draw}
-			on:chat={chat}
-		/>
-	</div>
-{:else}
-	<Loader message="Game is being loaded" />
-{/if}
+<AppLayout two_sided={show_chat}>
+	<svelte:fragment slot="header">
+		<GameHeader player_names={game_state?.player_names ?? null} />
+	</svelte:fragment>
+	<svelte:fragment slot="main">
+		{#if game_state && my_color}
+			<div in:fade={{ duration: 200 }}>
+				<Game
+					{game_state}
+					{my_turn}
+					{my_color}
+					on:select={select}
+					on:resign={open_resign_modal}
+					on:restart={restart}
+					on:finish_promotion={finish_promotion}
+					on:cancel_promotion={cancel_promotion}
+					on:draw={offer_draw}
+					on:toggle_chat={toggle_chat}
+				/>
+			</div>
+		{:else}
+			<Loader message="Game is being loaded" />
+		{/if}
+	</svelte:fragment>
+	<svelte:fragment slot="aside">
+		<Chat messages={chat_messages} bind:show_chat on:chat={chat} />
+	</svelte:fragment>
+</AppLayout>
 
 <Toast />
 

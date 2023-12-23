@@ -35,7 +35,7 @@
 </script>
 
 {#if show_chat}
-	<section class="chat" transition:slide={{ duration: 100 }}>
+	<section class="chat" in:slide={{ duration: 200 }}>
 		<header>
 			<h2>Chat</h2>
 			<button class="button small" on:click={close} aria-label="close chat">
@@ -65,8 +65,6 @@
 
 <style>
 	section {
-		width: var(--width);
-		margin-inline: auto;
 		padding: 1rem;
 		border-radius: 0.25rem;
 		background-color: var(--chat-color);

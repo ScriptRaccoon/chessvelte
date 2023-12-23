@@ -34,12 +34,12 @@
 
 <style>
 	.board {
-		--unit: calc(var(--width) / var(--size));
-		box-sizing: content-box;
-		width: var(--width);
-		height: var(--width);
-		margin-inline: auto;
+		--dim: calc(var(--width) - 0.8rem);
+		width: var(--dim);
+		height: var(--dim);
+		--unit: calc(var(--dim) / var(--size));
 		border: 0.4rem solid var(--border-color);
+		box-sizing: content-box;
 		position: relative;
 	}
 

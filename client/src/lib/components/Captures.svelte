@@ -29,8 +29,6 @@
 
 <style>
 	.captures {
-		width: var(--width);
-		margin-inline: auto;
 		margin-top: 1rem;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);

@@ -5,6 +5,7 @@
 - similarly, when non-authenticated user joins game by id and doesn't fill the name,
   the game ID is cleared from the form
 
+
 ### FEATURES ###
 - send game winner to chat
 - save gamestates in redis to prevent data loss
@@ -18,9 +19,11 @@
      on the server-side
 
 ### DESIGN ####
-- chat window on desktop should be next to the board
+- rotation of board moves it slightly, need to find coord solution
 - animation of pieces (WIP)
 - show previously made move (to both players)
+- move captures to the aside on desktop view
+- improve design of captures section, maybe card with heading
 
 ### STRUCTURE ###
 - reduce god class "Game" to simpler modules

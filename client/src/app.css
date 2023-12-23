@@ -1,8 +1,39 @@
+/* RESETS */
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
+
+ul {
+	list-style: none;
+}
+
+button {
+	font-family: inherit;
+	color: inherit;
+	font-size: inherit;
+	background: none;
+	border: none;
+	cursor: pointer;
+	outline: none;
+}
+
+img {
+	display: block;
+}
+
+input[type="text"] {
+	font-family: inherit;
+	color: inherit;
+	font-size: inherit;
+	border: none;
+	cursor: pointer;
+	max-width: 100%;
+}
+
+/* VARIABLES */
 
 :root {
 	--light-square-color: hsl(40, 70%, 60%);
@@ -12,7 +43,6 @@
 	--highlight-color: rgba(129, 205, 213, 0.5);
 	--button-color: rgb(42, 126, 159);
 	--error-color: rgb(241, 126, 100);
-	--width: min(95vmin, 45rem);
 	--font-color: white;
 	--secondary-font-color: #aaa;
 	--bg-color: #222;
@@ -21,6 +51,8 @@
 	--font-color-dark: #222;
 	--bg-color-light: white;
 }
+
+/* GLOBAL STUFF */
 
 body {
 	font-family:
@@ -40,6 +72,8 @@ body {
 	min-height: 100vh;
 }
 
+/* LINKS */
+
 a {
 	color: var(--secondary-font-color);
 	border-radius: 0.125rem;
@@ -55,15 +89,7 @@ a:focus-visible {
 	outline: 0.1rem solid var(--font-color);
 }
 
-button {
-	font-family: inherit;
-	color: inherit;
-	font-size: inherit;
-	background: none;
-	border: none;
-	cursor: pointer;
-	outline: none;
-}
+/* BUTTONS */
 
 .button {
 	background-color: var(--button-color);
@@ -91,18 +117,7 @@ button:focus-visible {
 	outline: 0.15rem solid var(--font-color);
 }
 
-img {
-	display: block;
-}
-
-input[type="text"] {
-	font-family: inherit;
-	color: inherit;
-	font-size: inherit;
-	border: none;
-	cursor: pointer;
-	max-width: 100%;
-}
+/* INPUTS */
 
 .input {
 	background-color: var(--card-color);
@@ -117,8 +132,4 @@ input[type="text"] {
 
 label {
 	color: var(--secondary-font-color);
-}
-
-ul {
-	list-style: none;
 }

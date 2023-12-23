@@ -20,12 +20,10 @@
 
 <style>
 	header {
-		width: var(--width);
-		margin-inline: auto;
-		text-align: right;
-		padding-block: 1.5rem 0.5rem;
 		display: flex;
 		align-items: end;
+		padding-block: 1.5rem 0.75rem;
+		text-align: right;
 	}
 
 	header h1 {

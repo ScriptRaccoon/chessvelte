@@ -4,7 +4,6 @@
 	import Menu from "./Menu.svelte"
 	import Board from "./Board.svelte"
 	import Captures from "./Captures.svelte"
-	import Chat from "./Chat.svelte"
 
 	import { createEventDispatcher } from "svelte"
 
@@ -13,10 +12,8 @@
 	export let game_state: Game_State
 	export let my_turn: boolean = false
 	export let my_color: Color
-	export let chat_messages: Chat_Message[] = []
 
 	let flipped = false
-	let show_chat = false
 
 	$: if (my_color === "black") {
 		flipped = true
@@ -31,10 +28,6 @@
 
 	function flip_board() {
 		flipped = !flipped
-	}
-
-	function toggle_chat() {
-		show_chat = !show_chat
 	}
 </script>
 
@@ -56,10 +49,8 @@
 		on:resign
 		on:restart
 		on:draw
-		on:toggle_chat={toggle_chat}
+		on:toggle_chat
 	/>
 {/if}
 
 <Captures captured_pieces={game_state.captured_pieces} />
-
-<Chat messages={chat_messages} bind:show_chat on:chat />
