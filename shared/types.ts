@@ -43,7 +43,6 @@ export type Game_State = {
 	is_started: boolean
 	is_ended: boolean
 	is_playing: boolean
-	outcome: string
 	player_names: [string, string] | null
 }
 
@@ -59,6 +58,7 @@ export type Server_Event = {
 	offer_draw: (name: string) => void
 	your_color: (color: Color) => void
 	chat: (msg: Chat_Message) => void
+	outcome: (msg: string) => void
 }
 
 export type Client_Event = {

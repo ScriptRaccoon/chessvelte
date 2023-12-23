@@ -20,11 +20,11 @@ export class PlayerGroup {
 		return Object.keys(this.dictionary)
 	}
 
-	private get white_player(): Player | null {
+	public get white_player(): Player | null {
 		return this.list.find((player) => player.color === "white") ?? null
 	}
 
-	private get black_player(): Player | null {
+	public get black_player(): Player | null {
 		return this.list.find((player) => player.color === "black") ?? null
 	}
 

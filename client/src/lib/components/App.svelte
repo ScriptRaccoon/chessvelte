@@ -47,9 +47,7 @@
 
 		socket.on("game_state", (server_game_state) => {
 			game_state = server_game_state
-			if (game_state.is_ended) {
-				open_outcome_modal()
-			} else if (!game_state.is_started) {
+			if (!game_state.is_started) {
 				open_invitation_dialog()
 			} else if (game_state.status === "promotion") {
 				open_promotion_modal()
@@ -82,6 +80,10 @@
 			if (!show_chat && !msg.bot) {
 				pending_messages = true
 			}
+		})
+
+		socket.on("outcome", (msg) => {
+			open_outcome_modal(msg)
 		})
 	}
 
@@ -163,15 +165,13 @@
 		})
 	}
 
-	function open_outcome_modal() {
-		if (game_state?.outcome) {
-			open_dialog({
-				text: game_state.outcome,
-				confirm: { text: "Ok", action: () => {} },
-				cancel: null,
-				modal: true,
-			})
-		}
+	function open_outcome_modal(msg: string) {
+		open_dialog({
+			text: msg,
+			confirm: { text: "Ok", action: () => {} },
+			cancel: null,
+			modal: true,
+		})
 	}
 
 	function open_promotion_modal() {
@@ -224,7 +224,6 @@
 				{#if game_state.is_started}
 					<Menu
 						is_ended={game_state.is_ended}
-						outcome={game_state.outcome}
 						current_color={game_state.current_color}
 						{pending_messages}
 						{my_turn}

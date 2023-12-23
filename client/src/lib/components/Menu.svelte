@@ -8,16 +8,24 @@
 	export let my_turn: boolean
 	export let current_color: Color
 	export let is_ended: boolean
-	export let outcome: string
 	export let pending_messages: boolean
 
-	$: turn_message = my_turn ? "It's your turn" : "It is your opponent's turn"
+	$: turn_message = my_turn ? "It's your turn" : "Wait"
 </script>
 
 <div class="wrapper">
-	<span class="circle {current_color}"></span>
+	<span
+		class="circle {current_color}"
+		aria-label="current turn is {current_color}"
+	></span>
 
-	<menu class="menu">
+	<div class="message">
+		{#if !is_ended}
+			<span class="turn_message">{turn_message}</span>
+		{/if}
+	</div>
+
+	<menu>
 		<button
 			class="button"
 			class:pulse={pending_messages}
@@ -36,29 +44,18 @@
 			<button class="button" on:click={() => dispatch("resign")}>Resign</button>
 		{/if}
 	</menu>
-
-	<div class="message">
-		{#if !is_ended}
-			<span class="turn_message">{turn_message}</span>
-		{:else if outcome}
-			<span class="outcome">{outcome}</span>
-		{/if}
-	</div>
 </div>
 
 <style>
 	.wrapper {
 		margin-block: 1rem 2rem;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		row-gap: 0.5rem;
-		justify-content: space-between;
+		display: flex;
+		gap: 0.5rem;
 	}
 
 	.circle {
-		display: inline-block;
 		width: 1.5rem;
-		aspect-ratio: 1;
+		height: 1.5rem;
 		border-radius: 50%;
 	}
 
@@ -72,19 +69,14 @@
 		outline: 0.1rem solid white;
 	}
 
-	.turn_message,
-	.outcome {
+	.turn_message {
 		color: var(--secondary-font-color);
 	}
 
-	.message {
-		grid-column: 1 / span 2;
-	}
-
-	.menu {
+	menu {
 		display: flex;
-		justify-self: flex-end;
 		gap: 0.5rem;
+		margin-left: auto;
 	}
 
 	.pulse :global(svg) {
@@ -97,18 +89,6 @@
 		}
 		100% {
 			scale: 1;
-		}
-	}
-
-	@media (min-width: 32rem) {
-		.wrapper {
-			grid-template-columns: auto 1fr auto;
-			column-gap: 1rem;
-		}
-
-		.message {
-			grid-row: 1;
-			grid-column: 2 / span 1;
 		}
 	}
 </style>

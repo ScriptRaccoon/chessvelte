@@ -49,7 +49,6 @@ export class Game {
 			is_started: this.is_started,
 			is_ended: this.is_ended,
 			is_playing: this.is_playing,
-			outcome: this.outcome,
 			current_color: this.current_color,
 			board_state: this.board.state,
 			selected_coord: this.selected_coord,
@@ -67,7 +66,17 @@ export class Game {
 		return this.is_started && !this.is_ended
 	}
 
-	private get outcome(): string {
+	public get start_messages(): string[] | null {
+		const msg1 = "Game has started"
+		const white_player = this.player_group.white_player
+		const black_player = this.player_group.black_player
+		if (!white_player || !black_player) return null
+		const msg2 = `${white_player.name} plays White`
+		const msg3 = `${black_player.name} plays Black`
+		return [msg1, msg2, msg3]
+	}
+
+	public get outcome(): string {
 		if (this.status === "checkmate-white") {
 			return "Checkmate against White"
 		}

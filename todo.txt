@@ -7,8 +7,6 @@
 
 
 ### FEATURES ###
-- send bot message when player wins
-- send bot message when game starts
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods
@@ -20,11 +18,11 @@
 
 
 ### DESIGN ####
-- shorten turn/outcome message, move to same line as the rest
 - animation of pieces (WIP)
 - show previously made move (to both players)
 
 ### STRUCTURE ###
+- server.ts is too crowded
 - reduce god class "Game" to simpler modules
 - write more Jest Tests
 	- also for config.ts

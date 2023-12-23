@@ -23,7 +23,7 @@ const io = new Server<Client_Event, Server_Event, {}, Socket_Data>(server, {
 	},
 })
 
-function emit_game_state(game: Game) {
+function emit_game_state(game: Game): void {
 	io.to(game.id).emit("game_state", game.state)
 }
 
@@ -33,6 +33,27 @@ function emit_404(socket: Player_Socket): void {
 
 function get_game_of_socket(socket: Player_Socket): Game | undefined {
 	return Game.get_by_id(socket.data.game_id ?? "")
+}
+
+function send_game_outcome(game: Game): void {
+	io.to(game.id).emit("outcome", game.outcome)
+
+	io.to(game.id).emit("chat", {
+		name: "",
+		content: game.outcome,
+		bot: true,
+	})
+}
+
+function send_start_messages(game: Game): void {
+	if (!game.start_messages) return
+	for (const msg of game.start_messages) {
+		io.to(game.id).emit("chat", {
+			name: "",
+			content: msg,
+			bot: true,
+		})
+	}
 }
 
 io.on("connection", (socket) => {
@@ -58,6 +79,10 @@ io.on("connection", (socket) => {
 			content: `${player.name} has ${action}`,
 			bot: true,
 		})
+
+		if (is_new && game.is_playing && game.start_messages) {
+			send_start_messages(game)
+		}
 	})
 
 	/**
@@ -71,6 +96,9 @@ io.on("connection", (socket) => {
 		const actionable = game.select_coord(coord)
 		if (actionable) {
 			emit_game_state(game)
+			if (game.outcome) {
+				send_game_outcome(game)
+			}
 		} else {
 			socket.emit("game_state", game.state)
 		}
@@ -85,13 +113,7 @@ io.on("connection", (socket) => {
 		if (!game.is_playing) return
 		game.resign(socket.id)
 		emit_game_state(game)
-
-		const player = game.get_player(socket.id)
-		io.to(game.id).emit("chat", {
-			name: "",
-			content: `${player.name} has resigned`,
-			bot: true,
-		})
+		send_game_outcome(game)
 	})
 
 	/**
@@ -112,11 +134,7 @@ io.on("connection", (socket) => {
 			"info",
 		)
 
-		io.to(game.id).emit("chat", {
-			name: "",
-			content: `${player.name} has restarted the game`,
-			bot: true,
-		})
+		send_start_messages(game)
 
 		for (const socket_id of game.list_of_sockets()) {
 			const new_color = game.get_player(socket_id).color
@@ -161,12 +179,7 @@ io.on("connection", (socket) => {
 		if (!game.is_playing) return
 		game.draw()
 		emit_game_state(game)
-
-		io.to(game.id).emit("chat", {
-			name: "",
-			content: `Game is drawn by agreement`,
-			bot: true,
-		})
+		send_game_outcome(game)
 	})
 
 	/**
