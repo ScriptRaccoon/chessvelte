@@ -14,12 +14,13 @@
 </script>
 
 <div class="wrapper">
-	<span
-		class="circle {current_color}"
-		aria-label="current turn is {current_color}"
-	></span>
+	<span class="circle {current_color}">
+		<div class="vh">
+			current turn is {current_color}
+		</div>
+	</span>
 
-	<div class="message">
+	<div class="message" aria-live="polite">
 		{#if !is_ended}
 			<span class="turn_message">{turn_message}</span>
 		{/if}

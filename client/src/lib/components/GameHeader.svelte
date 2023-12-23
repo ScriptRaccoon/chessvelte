@@ -13,7 +13,7 @@
 			{player_names[0]} vs. {player_names[1]}
 		{/if}
 	</div>
-	<a href="/">
+	<a href="/" aria-label="homepage">
 		<Fa icon={faHome} />
 	</a>
 </header>

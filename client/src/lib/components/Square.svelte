@@ -12,6 +12,7 @@
 </script>
 
 <button
+	aria-label="row {coord[0] + 1}, column {coord[1] + 1}"
 	class="square"
 	class:light
 	class:dark={!light}

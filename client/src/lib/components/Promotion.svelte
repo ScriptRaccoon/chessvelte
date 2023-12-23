@@ -11,7 +11,7 @@
 <div class="choices">
 	{#each PROMOTION_PIECE_TYPES as type}
 		<button on:click={() => dispatch("finish_promotion", type)}>
-			<svg>
+			<svg role="img">
 				<use xlink:href={piece_src(type, color)} />
 			</svg>
 		</button>

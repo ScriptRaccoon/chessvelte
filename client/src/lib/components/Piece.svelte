@@ -5,7 +5,12 @@
 	export let piece: Located_Piece_State
 </script>
 
-<svg class="piece" style:--x={piece.coord[1]} style:--y={piece.coord[0]}>
+<svg
+	class="piece"
+	style:--x={piece.coord[1]}
+	style:--y={piece.coord[0]}
+	role="img"
+>
 	<use xlink:href={piece_src(piece.type, piece.color)} />
 </svg>
 

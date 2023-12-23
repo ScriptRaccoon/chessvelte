@@ -134,3 +134,13 @@ button:focus-visible {
 label {
 	color: var(--secondary-font-color);
 }
+
+/* UTILS */
+
+.vh {
+	position: absolute;
+	left: -100vw;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
