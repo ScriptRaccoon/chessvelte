@@ -86,3 +86,8 @@ export function rotate(coord: Coord, flipped: boolean = true): Coord {
 	const [row, col] = coord
 	return [SIZE - 1 - row, SIZE - 1 - col]
 }
+
+export function abridge(text: string, length: number): string {
+	if (text.length <= length) return text
+	return `${text.slice(0, length - 2)}...`
+}

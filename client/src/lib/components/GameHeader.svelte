@@ -2,16 +2,19 @@
 	import Fa from "svelte-fa"
 	import { faCog, faHome } from "@fortawesome/free-solid-svg-icons"
 	import { TITLE } from "$shared/config"
+	import { abridge } from "$shared/utils"
 
 	export let player_names: [string, string] | null = null
 	export let toggle_settings: () => void = () => {}
+
+	$: shortened_names = player_names?.map((name) => abridge(name, 9)) ?? null
 </script>
 
 <header>
 	<h1>{TITLE}</h1>
 	<div class="names">
-		{#if player_names}
-			{player_names[0]} vs. {player_names[1]}
+		{#if shortened_names}
+			{shortened_names[0]} vs. {shortened_names[1]}
 		{/if}
 	</div>
 	<menu>

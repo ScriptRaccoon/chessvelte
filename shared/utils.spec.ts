@@ -13,6 +13,7 @@ import {
 	unkey,
 	scroll_to_bottom,
 	rotate,
+	abridge,
 } from "./utils"
 
 const mocked_random = jest.spyOn(global.Math, "random")
@@ -187,5 +188,27 @@ describe("rotate", () => {
 	it("leaves coordinates untouched when specified", () => {
 		expect(rotate([5, 6], false)).toEqual([5, 6])
 		expect(rotate([0, 0], false)).toEqual([0, 0])
+	})
+})
+
+describe("abridge", () => {
+	it("does not change strings which are short enough (1)", () => {
+		const sample = "sample"
+		expect(abridge(sample, 6)).toBe(sample)
+	})
+
+	it("does not change strings which are short enough (2)", () => {
+		const sample = "lalalala"
+		expect(abridge(sample, 10)).toBe(sample)
+	})
+
+	it("abridges a long string and adds '...' onto the end (1)", () => {
+		const sample = "toolongname"
+		expect(abridge(sample, 6)).toBe("tool...")
+	})
+
+	it("abridges a long string and adds '...' onto the end (2)", () => {
+		const sample = "miraculix"
+		expect(abridge(sample, 8)).toBe("miracu...")
 	})
 })
