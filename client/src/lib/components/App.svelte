@@ -78,6 +78,7 @@
 		socket.on("chat", (msg) => {
 			chat_messages = [...chat_messages, msg]
 			if (!show_chat && msg.name) {
+				console.log("new pending messages!")
 				pending_messages = true
 			}
 		})

@@ -4,7 +4,6 @@
 - when user tries to join non-existing game, their name is cleared from the form
 - similarly, when non-authenticated user joins game by id and doesn't fill the name,
   the game ID is cleared from the form
-- info about new chat message is not working anymore
 
 
 ### FEATURES ###

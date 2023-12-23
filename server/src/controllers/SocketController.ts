@@ -185,8 +185,8 @@ export class SocketController {
 
 	private chat(socket: Player_Socket, msg: Chat_Message): void {
 		const game_id = socket.data.game_id
-		if (!game_id || !msg.content) return
-		this.io.to(game_id).emit("chat", { content: msg.content })
+		if (!game_id || !msg.content || !msg.name) return
+		this.io.to(game_id).emit("chat", msg)
 	}
 
 	private get_game_of_socket(socket: Player_Socket): Game | undefined {
