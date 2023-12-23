@@ -20,14 +20,13 @@
 
 ### DESIGN ####
 - animation of pieces (WIP)
-- show previously made move (to both players)
+- show previously made move (to both players) <- that is important
 
 ### STRUCTURE ###
 - refactor SocketController class
 - try to decouple game class from socket controller class
 - try to reduce god class "Game" to simpler modules
 - write more Jest Tests
-	- also for config.ts
 	- get_save_moves in Piece class
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
