@@ -20,4 +20,10 @@
 		display: flex;
 		flex-direction: column;
 	}
+
+	@supports (height: 100dvh) {
+		.page {
+			height: 100dvh;
+		}
+	}
 </style>
