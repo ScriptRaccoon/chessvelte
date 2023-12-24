@@ -10,7 +10,7 @@
 	$: shortened_names = player_names?.map((name) => abridge(name, 9)) ?? null
 </script>
 
-<header>
+<div class="wrapper">
 	<h1>{TITLE}</h1>
 	<div class="names">
 		{#if shortened_names}
@@ -29,34 +29,34 @@
 			<Fa icon={faHome} />
 		</a>
 	</menu>
-</header>
+</div>
 
 <style>
-	header {
+	.wrapper {
 		display: flex;
 		align-items: end;
 		padding-block: 1.5rem 0.75rem;
 		text-align: right;
 	}
 
-	header h1 {
+	h1 {
 		font-size: 1.25rem;
 		font-weight: initial;
 	}
 
 	.names {
-		margin-right: 0.5rem;
 		margin-left: auto;
 		color: var(--secondary-font-color);
 	}
 
 	menu {
 		display: flex;
-		gap: 0.5rem;
+		gap: 0.75rem;
+		margin-left: 1rem;
 	}
 
 	@media (min-width: 32rem) {
-		header h1 {
+		h1 {
 			font-size: 2rem;
 		}
 	}
