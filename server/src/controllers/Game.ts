@@ -16,12 +16,10 @@ import { Player } from "./Player"
 import { PlayerGroup } from "./PlayerGroup"
 
 export class Game {
-	private static dictionary: Record<string, Game> = {}
+	private static dictionary: Record<string, Game | undefined> = {}
 
-	public static get_by_id(id: string): Game | undefined {
-		if (typeof id === "string" && id.length > 0) {
-			return Game.dictionary[id]
-		}
+	public static get_or_create_by_id(id: string): Game {
+		return Game.dictionary[id] ?? new Game(id)
 	}
 
 	public id: string
@@ -113,12 +111,16 @@ export class Game {
 		socket_id: string,
 		client_id: string,
 		name: string,
-	): { is_new: boolean; player: Player } | null {
-		const player_info = this.player_group.add(socket_id, client_id, name)
-		if (this.status === "waiting" && this.player_group.is_full) {
+	): { success: boolean; is_new: boolean } {
+		const { success, is_new } = this.player_group.add(
+			socket_id,
+			client_id,
+			name,
+		)
+		if (success && this.status === "waiting" && this.player_group.is_full) {
 			this.status = "playing"
 		}
-		return player_info
+		return { success, is_new }
 	}
 
 	public get_player(socket_id: string): Player {

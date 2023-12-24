@@ -48,7 +48,7 @@ export class PlayerGroup {
 		socket_id: string,
 		client_id: string,
 		name: string,
-	): { is_new: boolean; player: Player } | null {
+	): { success: boolean; is_new: boolean } {
 		const old_socket_id = this.keys.find(
 			(id) => this.get_by_id(id).client_id === client_id,
 		)
@@ -58,10 +58,10 @@ export class PlayerGroup {
 			this.remove_by_id(old_socket_id)
 			old_player.set_name(name)
 			this.set(socket_id, old_player)
-			return { player: old_player, is_new: false }
+			return { success: true, is_new: false }
 		}
 
-		if (this.size >= 2) return null
+		if (this.size >= 2) return { success: false, is_new: false }
 
 		let new_player: Player
 
@@ -75,7 +75,7 @@ export class PlayerGroup {
 
 		this.set(socket_id, new_player)
 
-		return { player: new_player, is_new: true }
+		return { success: true, is_new: true }
 	}
 
 	public switch_colors(): void {

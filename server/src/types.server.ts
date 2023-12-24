@@ -1,12 +1,5 @@
-import {
-	Coord,
-	Piece_Type,
-	Client_Event,
-	Server_Event,
-	Coord_Key,
-} from "$shared/types"
-import { type Socket } from "socket.io"
-import { Piece } from "./controllers/Piece"
+import { Coord, Piece_Type, Coord_Key } from "$shared/types"
+import { type Piece } from "./controllers/Piece"
 
 export type Piece_Map = Record<Coord_Key, Piece | undefined>
 
@@ -24,9 +17,3 @@ export type Capture = {
 	coord: Coord
 	piece: Piece
 }
-
-export type Socket_Data = {
-	game_id: string
-}
-
-export type Player_Socket = Socket<Client_Event, Server_Event, {}, Socket_Data>
