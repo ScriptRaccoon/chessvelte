@@ -15,7 +15,8 @@
 		Piece_Type,
 		Chat_Message,
 	} from "$shared/types"
-	import { STORAGE_KEYS } from "$shared/config"
+	import { DEFAULT_THEME, STORAGE_KEYS } from "$shared/config"
+	import { set_theme } from "$shared/utils"
 
 	import Toast, { send_toast } from "./ui/Toast.svelte"
 	import Dialog, { close_dialog, open_dialog } from "./ui/Dialog.svelte"
@@ -41,6 +42,7 @@
 	let pending_messages: boolean = false
 	let show_settings: boolean = false
 	let show_highlights: boolean = true
+	let current_theme: string = DEFAULT_THEME
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -93,6 +95,11 @@
 		if (window.localStorage.getItem(STORAGE_KEYS.NO_HIGHLIGHTS)) {
 			show_highlights = false
 		}
+
+		current_theme =
+			window.localStorage.getItem(STORAGE_KEYS.BOARD_THEME) ?? DEFAULT_THEME
+
+		set_theme(current_theme)
 	}
 
 	function select(event: CustomEvent<Coord>) {
@@ -228,7 +235,7 @@
 	<svelte:fragment slot="main">
 		{#if game_state && my_color}
 			{#if show_settings}
-				<Settings bind:show_highlights bind:show_settings />
+				<Settings bind:show_highlights bind:show_settings bind:current_theme />
 			{:else}
 				<div in:fade={{ duration: 200 }}>
 					<Board

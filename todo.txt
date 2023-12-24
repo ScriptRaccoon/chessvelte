@@ -9,7 +9,6 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods
-- different board designs to select on settings page
 - (maybe) profile page, avatar, auth
 - prevent delay of movement (caused by client-server communication)
   -> maybe make the move also on the client-side and only double check
@@ -23,6 +22,7 @@
 
 
 ### STRUCTURE ###
+- unify localStorage settings in App.svelte and Settings.svelte
 - merge player and socket player classes somehow
 - try to decouple game class from socket controller class
 - try to reduce god class "Game" to simpler modules

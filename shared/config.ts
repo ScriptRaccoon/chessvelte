@@ -39,4 +39,9 @@ export const CHARACTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 
 export const STORAGE_KEYS = {
 	NO_HIGHLIGHTS: "no_highlights",
+	BOARD_THEME: "board_theme",
 }
+
+export const BOARD_THEMES = ["brown", "green", "blue"]
+
+export const DEFAULT_THEME = BOARD_THEMES[0]
