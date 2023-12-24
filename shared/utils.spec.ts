@@ -1,4 +1,3 @@
-import { DEFAULT_THEME, STORAGE_KEYS } from "./config"
 import { Coord } from "./types"
 import {
 	capitalize,
@@ -15,8 +14,6 @@ import {
 	scroll_to_bottom,
 	rotate,
 	abridge,
-	reset_theme,
-	set_theme,
 } from "./utils"
 
 import { JSDOM } from "jsdom"
@@ -223,65 +220,5 @@ describe("abridge", () => {
 	it("abridges a long string and adds '...' onto the end (2)", () => {
 		const sample = "miraculix"
 		expect(abridge(sample, 8)).toBe("miracu...")
-	})
-})
-
-describe.only("set_theme function", () => {
-	const console_error_mock = jest.spyOn(console, "error").mockImplementation()
-
-	beforeEach(() => {
-		reset_theme()
-	})
-
-	it("sets the theme class on document.body", () => {
-		set_theme("green")
-		expect(document.body.className).toBe("theme-green")
-		expect(console_error_mock).toHaveBeenCalledTimes(0)
-	})
-
-	it("sets the theme in localStorage", () => {
-		set_theme("green")
-		expect(window.localStorage.getItem(STORAGE_KEYS.BOARD_THEME)).toBe("green")
-		expect(console_error_mock).toHaveBeenCalledTimes(0)
-	})
-
-	it("logs an error when localStorage is not available", () => {
-		const set_item_mock = jest.fn(() => {
-			throw new Error("localStorage not available")
-		})
-		Object.defineProperty(window, "localStorage", {
-			value: { setItem: set_item_mock },
-		})
-		set_theme("green")
-		expect(console_error_mock).toHaveBeenCalledTimes(1)
-	})
-})
-
-describe("reset_theme function", () => {
-	const console_error_mock = jest.spyOn(console, "error").mockImplementation()
-
-	it("resets the theme class to the default on document.body", () => {
-		set_theme("green")
-		reset_theme()
-		expect(document.body.className).toBe(`theme-${DEFAULT_THEME}`)
-		expect(console_error_mock).toHaveBeenCalledTimes(0)
-	})
-
-	it("removes the theme from localStorage", () => {
-		set_theme("green")
-		reset_theme()
-		expect(window.localStorage.getItem(STORAGE_KEYS.BOARD_THEME)).toBeFalsy()
-		expect(console_error_mock).toHaveBeenCalledTimes(0)
-	})
-
-	it("logs an error when localStorage is not available", () => {
-		const set_item_mock = jest.fn(() => {
-			throw new Error("localStorage not available")
-		})
-		Object.defineProperty(window, "localStorage", {
-			value: { setItem: set_item_mock },
-		})
-		reset_theme()
-		expect(console_error_mock).toHaveBeenCalledTimes(1)
 	})
 })

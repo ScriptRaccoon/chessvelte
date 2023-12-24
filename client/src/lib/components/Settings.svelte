@@ -1,30 +1,13 @@
 <script lang="ts">
-	import { browser } from "$app/environment"
-	import { BOARD_THEMES, DEFAULT_THEME, STORAGE_KEYS } from "$shared/config"
-	import { capitalize, set_theme } from "$shared/utils"
+	import { board_theme, highlight_setting } from "$lib/stores"
+	import { BOARD_THEMES } from "$shared/config"
+	import { capitalize } from "$shared/utils"
 	import GameCard from "./GameCard.svelte"
 
-	export let show_highlights: boolean = true
 	export let show_settings: boolean = false
-
-	export let current_theme: string = DEFAULT_THEME
 
 	function return_to_game() {
 		show_settings = false
-	}
-
-	function update_highlights() {
-		if (!browser) return
-		if (!show_highlights) {
-			window.localStorage.setItem(STORAGE_KEYS.NO_HIGHLIGHTS, "1")
-		} else {
-			window.localStorage.removeItem(STORAGE_KEYS.NO_HIGHLIGHTS)
-		}
-	}
-
-	function update_theme() {
-		if (!browser) return
-		set_theme(current_theme)
 	}
 </script>
 
@@ -34,20 +17,14 @@
 		<input
 			type="checkbox"
 			id="highlight_check"
-			bind:checked={show_highlights}
-			on:change={update_highlights}
+			bind:checked={$highlight_setting}
 		/>
 	</div>
 
 	<div class="group">
 		<label for="theme_select">Board theme</label>
 
-		<select
-			class="select"
-			id="theme_select"
-			bind:value={current_theme}
-			on:change={update_theme}
-		>
+		<select class="select" id="theme_select" bind:value={$board_theme}>
 			{#each BOARD_THEMES as theme}
 				<option value={theme}>{capitalize(theme)}</option>
 			{/each}

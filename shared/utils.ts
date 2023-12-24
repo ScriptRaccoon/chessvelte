@@ -1,4 +1,4 @@
-import { CHARACTERS, DEFAULT_THEME, SIZE, STORAGE_KEYS } from "./config"
+import { CHARACTERS, DEFAULT_THEME, SIZE } from "./config"
 import type { Color, Coord, Coord_Key, Piece_Type } from "./types"
 
 export function generate_short_id(length: number): string {
@@ -90,22 +90,4 @@ export function rotate(coord: Coord, flipped: boolean = true): Coord {
 export function abridge(text: string, length: number): string {
 	if (text.length <= length) return text
 	return `${text.slice(0, length - 2)}...`
-}
-
-export function set_theme(name: string): void {
-	document.body.className = `theme-${name}`
-	try {
-		window.localStorage.setItem(STORAGE_KEYS.BOARD_THEME, name)
-	} catch (_) {
-		console.error("localStorage not available")
-	}
-}
-
-export function reset_theme(): void {
-	document.body.className = `theme-${DEFAULT_THEME}`
-	try {
-		window.localStorage.removeItem(STORAGE_KEYS.BOARD_THEME)
-	} catch (_) {
-		console.error("localStorage not available")
-	}
 }

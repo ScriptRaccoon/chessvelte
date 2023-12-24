@@ -5,13 +5,13 @@
 	import type { Board_State, Coord, Move_State } from "$shared/types"
 	import { COLS, ROWS, SIZE } from "$shared/config"
 	import { has_coord, gen_coord, key, rotate } from "$shared/utils"
+	import { highlight_setting } from "$lib/stores"
 
 	export let board_state: Board_State
 	export let possible_targets: Coord[] = []
 	export let selected_coord: Coord | null = null
 	export let flipped: boolean = false
 	export let last_move: Move_State | null = null
-	export let show_highlights: boolean = false
 </script>
 
 <div class="board" style:--size={SIZE}>
@@ -22,8 +22,8 @@
 				<Square
 					{coord}
 					light={(row + col) % 2 == 0}
-					highlighted={show_highlights && has_coord(possible_targets, coord)}
-					last_move={show_highlights &&
+					highlighted={$highlight_setting && has_coord(possible_targets, coord)}
+					last_move={$highlight_setting &&
 						last_move !== null &&
 						has_coord(Object.values(last_move), coord)}
 					selected={selected_coord != null && key(coord) == key(selected_coord)}

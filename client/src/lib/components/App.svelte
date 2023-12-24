@@ -15,8 +15,6 @@
 		Piece_Type,
 		Chat_Message,
 	} from "$shared/types"
-	import { DEFAULT_THEME, STORAGE_KEYS } from "$shared/config"
-	import { set_theme } from "$shared/utils"
 
 	import Toast, { send_toast } from "./ui/Toast.svelte"
 	import Dialog, { close_dialog, open_dialog } from "./ui/Dialog.svelte"
@@ -41,8 +39,6 @@
 	let board_flipped: boolean = false
 	let pending_messages: boolean = false
 	let show_settings: boolean = false
-	let show_highlights: boolean = true
-	let current_theme: string = DEFAULT_THEME
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -91,15 +87,6 @@
 		socket.on("outcome", (msg) => {
 			open_outcome_modal(msg)
 		})
-
-		if (window.localStorage.getItem(STORAGE_KEYS.NO_HIGHLIGHTS)) {
-			show_highlights = false
-		}
-
-		current_theme =
-			window.localStorage.getItem(STORAGE_KEYS.BOARD_THEME) ?? DEFAULT_THEME
-
-		set_theme(current_theme)
 	}
 
 	function select(event: CustomEvent<Coord>) {
@@ -235,7 +222,7 @@
 	<svelte:fragment slot="main">
 		{#if game_state && my_color}
 			{#if show_settings}
-				<Settings bind:show_highlights bind:show_settings bind:current_theme />
+				<Settings bind:show_settings />
 			{:else}
 				<div in:fade={{ duration: 200 }}>
 					<Board
@@ -244,7 +231,6 @@
 						selected_coord={game_state.selected_coord}
 						flipped={game_state.is_started && board_flipped}
 						last_move={game_state.last_move}
-						{show_highlights}
 						on:select={select}
 					/>
 					{#if game_state.is_started}
