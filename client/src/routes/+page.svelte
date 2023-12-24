@@ -21,9 +21,9 @@
 		flex-direction: column;
 	}
 
-	@supports (height: 100dvh) {
+	@supports (height: 100svh) {
 		.page {
-			height: 100dvh;
+			height: 100svh;
 		}
 	}
 </style>
