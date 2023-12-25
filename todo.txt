@@ -6,7 +6,6 @@
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods
-- (maybe) profile page, avatar, auth
 - prevent delay of movement (caused by client-server communication)
   -> maybe make the move also on the client-side and only double check
      on the server-side
@@ -15,10 +14,13 @@
 
 ### DESIGN ####
 - animation of pieces (WIP)
+- captured pieces card is too prominent
+- captures pieces are not centered vertically
 
 
 ### STRUCTURE ###
-- check if if(browser) is necessary in App.svelte and other places
+- after removing use:enhance to fix the clearing bug, the URLs are not so nice anymore:
+  - game/9G99LG?/start for example. try to find a different solution.
 - game.status should not be 'promotion', promotion should be event-based
 - try to reduce god class "Game" to simpler modules
 - increase Jest test coverage
