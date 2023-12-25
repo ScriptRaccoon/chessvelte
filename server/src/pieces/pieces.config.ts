@@ -6,6 +6,9 @@ import { Pawn } from "./Pawn"
 import { Queen } from "./Queen"
 import { Rook } from "./Rook"
 
+/**
+ * Black pieces of the standard configation
+ */
 const BLACK_PIECES: Piece_Map = {
 	"00": new Rook("black"),
 	"07": new Rook("black"),
@@ -25,6 +28,9 @@ const BLACK_PIECES: Piece_Map = {
 	"17": new Pawn("black"),
 }
 
+/**
+ * White pieces of the standard configation
+ */
 const WHITE_PICES: Piece_Map = {
 	"70": new Rook("white"),
 	"77": new Rook("white"),
@@ -44,65 +50,15 @@ const WHITE_PICES: Piece_Map = {
 	"67": new Pawn("white"),
 }
 
-// STANDARD CONFIG
-
-const STANDARD_CONFIG: Piece_Map = {
+/**
+ * Standard configuration for the chess board
+ */
+export const STANDARD_CONFIG: Piece_Map = {
 	...BLACK_PIECES,
 	...WHITE_PICES,
 }
 
-// TESTING CONFIGURATIONS
-
-const CHECK: Piece_Map = {
-	"55": new King("white"),
-	"22": new King("black"),
-	"27": new Rook("white"),
-	"24": new Rook("black"),
-}
-
-const END_GAME: Piece_Map = {
-	"22": new King("black"),
-	"56": new Bishop("black"),
-	"43": new King("white"),
-	"72": new Bishop("white"),
-	"57": new Pawn("white"),
-}
-
-const CHECK_MATE: Piece_Map = {
-	"00": new King("black"),
-	"34": new Knight("white"),
-	"21": new King("white"),
-	"45": new Rook("white"),
-}
-
-const CASTLING: Piece_Map = {
-	"44": new King("black"),
-	"74": new King("white"),
-	"70": new Rook("white"),
-	"77": new Rook("white"),
-	"00": new Rook("black"),
-	"07": new Rook("black"),
-}
-
-const PROMOTION: Piece_Map = {
-	"44": new King("black"),
-	"77": new King("white"),
-	"12": new Pawn("white"),
-	"64": new Pawn("black"),
-}
-
-const EN_PASSANT: Piece_Map = {
-	"00": new King("black"),
-	"02": new King("white"),
-	"45": new Pawn("black"),
-	"66": new Pawn("white"),
-}
-
-const LONELY_KINGS: Piece_Map = {
-	"22": new King("white"),
-	"55": new King("black"),
-}
-
-// INITIAL CONFIG
-
-export const INITIAL_CONFIG: Piece_Map = CASTLING
+/**
+ * Initial configuration for the chess board
+ */
+export const INITIAL_CONFIG: Piece_Map = STANDARD_CONFIG
