@@ -6,6 +6,7 @@
 	import { browser } from "$app/environment"
 
 	import { io, type Socket } from "socket.io-client"
+
 	import type {
 		Server_Event,
 		Client_Event,
@@ -42,6 +43,18 @@
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
+	const when_playing =
+		<T extends any[]>(fun: (...args: T) => void) =>
+		(...args: T) => {
+			if (game_state?.is_playing) fun(...args)
+		}
+
+	const when_not_playing =
+		<T extends any[]>(fun: (...args: T) => void) =>
+		(...args: T) => {
+			if (!game_state?.is_playing) fun(...args)
+		}
+
 	const socket: Socket<Server_Event, Client_Event> = io(PUBLIC_SERVER_URL)
 
 	if (browser) {
@@ -58,12 +71,7 @@
 
 		socket.on("color", (color) => {
 			my_color = color
-
-			if (my_color === "black") {
-				board_flipped = true
-			} else {
-				board_flipped = false
-			}
+			board_flipped = my_color === "black"
 		})
 
 		socket.on("toast", (message, variant) => {
@@ -89,48 +97,27 @@
 		})
 	}
 
-	function select(event: CustomEvent<Coord>) {
-		if (!my_turn || !game_state?.is_playing) return
-		const coord = event.detail
-		socket.emit("select", coord)
-	}
+	const select = when_playing((e: CustomEvent<Coord>) => {
+		if (!my_turn) return
+		socket.emit("select", e.detail)
+	})
 
-	function resign() {
-		if (!game_state?.is_playing) return
-		socket.emit("resign")
-	}
+	const resign = when_playing(() => socket.emit("resign"))
 
-	function restart() {
-		if (game_state?.is_playing) return
-		socket.emit("restart")
-	}
+	const restart = when_not_playing(() => socket.emit("restart"))
 
-	function finish_promotion(e: CustomEvent<Piece_Type>) {
-		if (!game_state?.is_playing) return
+	const finish_promotion = when_not_playing((e: CustomEvent<Piece_Type>) => {
 		close_dialog()
-		const type = e.detail
-		socket.emit("finish_promotion", type)
-	}
+		socket.emit("finish_promotion", e.detail)
+	})
 
-	function cancel_promotion() {
-		if (!game_state?.is_playing) return
-		socket.emit("cancel_promotion")
-	}
+	const cancel_promotion = when_playing(() => socket.emit("cancel_promotion"))
 
-	function offer_draw() {
-		if (!game_state?.is_playing) return
-		socket.emit("offer_draw")
-	}
+	const offer_draw = when_playing(() => socket.emit("offer_draw"))
 
-	function accept_draw() {
-		if (!game_state?.is_playing) return
-		socket.emit("accept_draw")
-	}
+	const accept_draw = when_playing(() => socket.emit("accept_draw"))
 
-	function reject_draw() {
-		if (!game_state?.is_playing) return
-		socket.emit("reject_draw")
-	}
+	const reject_draw = when_playing(() => socket.emit("reject_draw"))
 
 	function open_invitation_dialog() {
 		setTimeout(() => {
@@ -193,9 +180,7 @@
 
 	function toggle_chat() {
 		show_chat = !show_chat
-		if (show_chat && pending_messages) {
-			pending_messages = false
-		}
+		if (show_chat) pending_messages = false
 	}
 
 	function flip_board() {

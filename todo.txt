@@ -20,6 +20,8 @@
 
 
 ### STRUCTURE ###
+- check if if(browser) is necessary in App.svelte and other places
+- game.status should not be 'promotion', promotion should be event-based
 - try to reduce god class "Game" to simpler modules
 - increase Jest test coverage
 - more defensive programming
