@@ -44,8 +44,8 @@ describe("Pairing class", () => {
 		it("checks if a player belongs to the list of players", () => {
 			const pairing = new Pairing("123")
 			pairing.add_player("abc")
-			expect(pairing.get_players().includes("abc")).toBe(true)
-			expect(pairing.get_players().includes("def")).toBe(false)
+			expect(pairing.has_player("abc")).toBe(true)
+			expect(pairing.has_player("def")).toBe(false)
 		})
 	})
 

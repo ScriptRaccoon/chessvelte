@@ -14,6 +14,7 @@ import {
 	scroll_to_bottom,
 	rotate,
 	abridge,
+	piece_src,
 } from "./utils"
 
 import { JSDOM } from "jsdom"
@@ -220,5 +221,12 @@ describe("abridge", () => {
 	it("abridges a long string and adds '...' onto the end (2)", () => {
 		const sample = "miraculix"
 		expect(abridge(sample, 8)).toBe("miracu...")
+	})
+})
+
+describe("piece_str", () => {
+	it("returns the image source of a piece", () => {
+		expect(piece_src("king", "white")).toBe("../sprite.svg#king_white")
+		expect(piece_src("queen", "black")).toBe("../sprite.svg#queen_black")
 	})
 })
