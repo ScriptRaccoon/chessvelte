@@ -1,5 +1,6 @@
 ### BUGS ###
 - check if app works on safari
+- player who resigns / draws does not see the modal
 
 
 ### FEATURES ###
@@ -18,8 +19,6 @@
 
 
 ### STRUCTURE ###
-- merge player and socket player classes somehow
-- try to decouple game class from socket controller class
 - try to reduce god class "Game" to simpler modules
 - increase Jest test coverage
 - more defensive programming

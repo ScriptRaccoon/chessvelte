@@ -56,7 +56,7 @@
 			}
 		})
 
-		socket.on("your_color", (color) => {
+		socket.on("color", (color) => {
 			my_color = color
 
 			if (my_color === "black") {

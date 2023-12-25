@@ -61,7 +61,7 @@ export type Server_Event = {
 	game_state: (state: Game_State) => void
 	toast: (msg: string, variant: Toast_Variant) => void
 	offer_draw: (name: string) => void
-	your_color: (color: Color) => void
+	color: (color: Color) => void
 	chat: (msg: Chat_Message) => void
 	outcome: (msg: string) => void
 }

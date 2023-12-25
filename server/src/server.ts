@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 import { Server } from "socket.io"
 import type { Client_Event, Server_Event } from "$shared/types"
 import { Game } from "./controllers/Game"
-import { PlayerSocket } from "./controllers/PlayerSocket"
+import { SocketController } from "./controllers/SocketController"
 
 dotenv.config()
 
@@ -29,18 +29,18 @@ io.on("connection", (socket) => {
 		const { success, is_new } = game.add_player(socket.id, client_id, name)
 		if (!success) return
 
-		const player = new PlayerSocket(socket, io, game)
-		player.start(is_new)
+		const controller = new SocketController(socket, io, game)
+		controller.start(is_new)
 
-		socket.on("resign", () => player.resign())
-		socket.on("offer_draw", () => player.offer_draw())
-		socket.on("reject_draw", () => player.reject_draw())
-		socket.on("accept_draw", () => player.accept_draw())
-		socket.on("select", (coord) => player.select(coord))
-		socket.on("restart", () => player.restart())
-		socket.on("cancel_promotion", () => player.cancel_promotion())
-		socket.on("finish_promotion", (type) => player.finish_promotion(type))
-		socket.on("disconnect", () => player.disconnect())
-		socket.on("chat", (msg) => player.chat(msg))
+		socket.on("resign", () => controller.resign())
+		socket.on("offer_draw", () => controller.offer_draw())
+		socket.on("reject_draw", () => controller.reject_draw())
+		socket.on("accept_draw", () => controller.accept_draw())
+		socket.on("select", (coord) => controller.select(coord))
+		socket.on("restart", () => controller.restart())
+		socket.on("cancel_promotion", () => controller.cancel_promotion())
+		socket.on("finish_promotion", (type) => controller.finish_promotion(type))
+		socket.on("disconnect", () => controller.handle_disconnect())
+		socket.on("chat", (msg) => controller.chat(msg))
 	})
 })

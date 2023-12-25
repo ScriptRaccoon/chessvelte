@@ -105,4 +105,4 @@ const LONELY_KINGS: Piece_Map = {
 
 // INITIAL CONFIG
 
-export const INITIAL_CONFIG: Piece_Map = STANDARD_CONFIG
+export const INITIAL_CONFIG: Piece_Map = CASTLING
