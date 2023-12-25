@@ -5,6 +5,10 @@ import type { Move } from "../types.server"
 import { SIZE, PIECE_VALUES } from "$shared/config"
 import { generate_short_id, is_valid } from "$shared/utils"
 
+/**
+ * This abstract class represents a generic chess piece.
+ * It is extended by the concrete classes Pawn, Rook, Knight, Bishop, Queen and King.
+ */
 export abstract class Piece {
 	constructor(
 		public type: Piece_Type,

@@ -8,6 +8,9 @@ import { SocketController } from "./controllers/SocketController"
 
 dotenv.config()
 
+/**
+ * Express Server
+ */
 const app = express()
 const PORT = process.env.PORT ?? 5000
 
@@ -15,6 +18,9 @@ const server = app.listen(PORT, () => {
 	console.info(chalk.cyan(`Server listening on port ${PORT}`))
 })
 
+/**
+ * Socket IO Server
+ */
 const io = new Server<Client_Event, Server_Event, {}, {}>(server, {
 	cors: {
 		origin: process.env.CLIENT_URL,
@@ -22,6 +28,9 @@ const io = new Server<Client_Event, Server_Event, {}, {}>(server, {
 	},
 })
 
+/**
+ * Socket IO Event Handling
+ */
 io.on("connection", (socket) => {
 	socket.on("join", (game_id, client_id, name) => {
 		const game = Game.get_or_create_by_id(game_id)

@@ -1,6 +1,10 @@
 type Client_ID = string
 type Game_ID = string
 
+/**
+ * This class is responsible for keeping track of which clients are paired together.
+ * In particular, it prevents clients from joining a game that already has two players.
+ */
 export class Pairing {
 	private static dictionary: Record<Game_ID, Pairing> = {}
 

@@ -9,6 +9,10 @@ import type { Game } from "./Game"
 import type { Server, Socket } from "socket.io"
 import type { Player } from "./Player"
 
+/**
+ * This class is responsible for handling all events for a given socket.
+ * It connects the server with the methods in Game class.
+ */
 export class SocketController {
 	private player: Player
 

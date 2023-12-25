@@ -15,6 +15,10 @@ import { Capture, Move } from "../types.server"
 import { Player } from "./Player"
 import { PlayerGroup } from "./PlayerGroup"
 
+/**
+ * This class represents a chess game. It is responsible for storing the state of the game
+ * and for handling all the game logic.
+ */
 export class Game {
 	private static dictionary: Record<string, Game | undefined> = {}
 

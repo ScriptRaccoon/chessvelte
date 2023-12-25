@@ -1,4 +1,4 @@
-import { CHARACTERS, DEFAULT_THEME, SIZE } from "./config"
+import { CHARACTERS, SIZE } from "./config"
 import type { Color, Coord, Coord_Key, Piece_Type } from "./types"
 
 export function generate_short_id(length: number): string {

@@ -5,6 +5,10 @@ import { INITIAL_CONFIG } from "../pieces/pieces.config"
 import { create_piece } from "../pieces/create"
 import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
 
+/**
+ * This class represents a chess board. It is responsible for storing and updating
+ * the positions of the chess pieces.
+ */
 export class Board {
 	private map: Piece_Map
 

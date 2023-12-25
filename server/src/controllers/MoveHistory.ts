@@ -1,6 +1,9 @@
 import { Move } from "../types.server"
 import type { Piece } from "./Piece"
 
+/**
+ * This class keeps track of all the moves that have been made in the game.
+ */
 export class MoveHistory {
 	private moves: Move[] = []
 	constructor() {

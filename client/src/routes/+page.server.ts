@@ -9,6 +9,9 @@ export const load = (event) => {
 	return { name }
 }
 
+/**
+ * Set cookies 'name' and 'client_id'
+ */
 function set_cookies(event: RequestEvent, name: string) {
 	event.cookies.set("name", name, COOKIE_OPTIONS)
 	let client_id = event.cookies.get("client_id")
@@ -18,7 +21,9 @@ function set_cookies(event: RequestEvent, name: string) {
 }
 
 export const actions = {
-	// start a new game
+	/**
+	 * Create a new game and redirect to it
+	 */
 	start: async (event) => {
 		const form_data = await event.request.formData()
 		const name = form_data.get("name")
@@ -29,13 +34,17 @@ export const actions = {
 		set_cookies(event, name)
 
 		const game_id = generate_short_id(6)
+
 		if (!Pairing.exists(game_id)) {
 			new Pairing(game_id)
 		}
+
 		redirect(303, `/game/${game_id}`)
 	},
 
-	// join an existing game
+	/**
+	 * Join an existing game if possible and redirect to it
+	 */
 	join: async (event) => {
 		const form_data = await event.request.formData()
 		const name = form_data.get("name")

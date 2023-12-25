@@ -1,6 +1,9 @@
 import { Color } from "$shared/types"
 import { get_other_color } from "$shared/utils"
 
+/**
+ * This class is responsible for storing information about a player.
+ */
 export class Player {
 	constructor(
 		public client_id: string,

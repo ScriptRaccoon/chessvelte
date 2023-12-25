@@ -4,6 +4,7 @@
 
 
 ### FEATURES ###
+- generate game when /game/xyz is opened, not before
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods

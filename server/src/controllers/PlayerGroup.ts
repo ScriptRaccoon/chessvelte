@@ -1,6 +1,9 @@
 import { get_other_color, get_random_color } from "$shared/utils"
 import { Player } from "./Player"
 
+/**
+ * This class is responsible for pairing two players for the chess game.
+ */
 export class PlayerGroup {
 	private dictionary: Record<string, Player> = {}
 

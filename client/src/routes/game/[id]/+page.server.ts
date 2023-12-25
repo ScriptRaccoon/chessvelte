@@ -1,8 +1,11 @@
 import { Pairing } from "$lib/Pairing"
-import { error, redirect } from "@sveltejs/kit"
+import { error, redirect, type ServerLoadEvent } from "@sveltejs/kit"
 
 export const prerender = false
 
+/**
+ * Adds the client to a game if possible.
+ */
 export const load = (event) => {
 	const game_id = event.params.id
 	const client_id = event.cookies.get("client_id")
