@@ -1,8 +1,5 @@
 ### BUGS ###
 - check if app works on safari
-- when user tries to join non-existing game, their name is cleared from the form
-- similarly, when non-authenticated user joins game by id and doesn't fill the name,
-  the game ID is cleared from the form
 
 
 ### FEATURES ###
@@ -24,7 +21,6 @@
 - merge player and socket player classes somehow
 - try to decouple game class from socket controller class
 - try to reduce god class "Game" to simpler modules
-- write more Jest Tests
-	- get_save_moves in Piece class
+- increase Jest test coverage
 - more defensive programming
 - technical documentation about project structure and dependencies in readme

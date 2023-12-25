@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from "$app/forms"
 	import { page } from "$app/stores"
 	import Card from "./ui/Card.svelte"
 
@@ -9,10 +8,17 @@
 	$: game_id_from_url = $page.url.searchParams.get("id") ?? ""
 </script>
 
-<form action="/" method="POST" use:enhance>
+<form action="/" method="POST">
 	<div class="name_input">
 		<label for="name">Your name</label>
-		<input class="input" type="text" name="name" id="name" value={name ?? ""} />
+		<input
+			class="input"
+			type="text"
+			name="name"
+			id="name"
+			value={name}
+			required
+		/>
 	</div>
 
 	<div class="cards">
