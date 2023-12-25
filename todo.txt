@@ -18,16 +18,13 @@
 
 ### DESIGN ####
 - animation of pieces (WIP)
-- check mobile design again
 
 
 ### STRUCTURE ###
-- unify localStorage settings in App.svelte and Settings.svelte
 - merge player and socket player classes somehow
 - try to decouple game class from socket controller class
 - try to reduce god class "Game" to simpler modules
 - write more Jest Tests
 	- get_save_moves in Piece class
-  - playergroup.add - return values
 - more defensive programming
 - technical documentation about project structure and dependencies in readme

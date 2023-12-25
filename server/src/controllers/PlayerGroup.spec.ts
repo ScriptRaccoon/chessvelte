@@ -25,6 +25,34 @@ describe("PlayerGroup class", () => {
 		expect(player_group.get_by_id("123").name === "john")
 	})
 
+	it("'add' returns whether the player is new", () => {
+		const player_group = new PlayerGroup()
+		expect(player_group.add("123", "xyz", "john")).toEqual({
+			success: true,
+			is_new: true,
+		})
+		expect(player_group.add("456", "xyz", "john")).toEqual({
+			success: true,
+			is_new: false,
+		})
+	})
+
+	it("'add' returns whether the player has been added successfully", () => {
+		const player_group = new PlayerGroup()
+		expect(player_group.add("123", "abc", "john")).toEqual({
+			success: true,
+			is_new: true,
+		})
+		expect(player_group.add("456", "def", "marie")).toEqual({
+			success: true,
+			is_new: true,
+		})
+		expect(player_group.add("789", "ghi", "helen")).toEqual({
+			success: false,
+			is_new: false,
+		})
+	})
+
 	describe("chooses a random, but different color for each player", () => {
 		it("black can appear first", () => {
 			const player_group_1 = new PlayerGroup()
