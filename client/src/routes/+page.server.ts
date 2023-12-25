@@ -33,10 +33,16 @@ export const actions = {
 		}
 		set_cookies(event, name)
 
-		const game_id = generate_short_id(6)
+		let game_id = generate_short_id(6)
+		let attempts = 0
 
-		if (!Pairing.exists(game_id)) {
-			new Pairing(game_id)
+		while (Pairing.exists(game_id) && attempts < 10) {
+			game_id = generate_short_id(6 + attempts)
+			attempts++
+		}
+
+		if (Pairing.exists(game_id)) {
+			return { error: "Failed to create a new game" }
 		}
 
 		redirect(303, `/game/${game_id}`)

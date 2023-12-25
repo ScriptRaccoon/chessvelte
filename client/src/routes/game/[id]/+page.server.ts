@@ -15,9 +15,10 @@ export const load = (event) => {
 		redirect(303, `/?id=${game_id}`)
 	}
 
-	const pairing = Pairing.get_by_id(game_id)
+	let pairing = Pairing.get_by_id(game_id)
+
 	if (!pairing) {
-		error(404, "Game not found")
+		pairing = new Pairing(game_id)
 	}
 
 	if (pairing.has_player(client_id)) {
@@ -25,7 +26,7 @@ export const load = (event) => {
 	}
 
 	if (pairing.is_full) {
-		error(401, "Game is already full")
+		error(401, "You are not allowed to join this game")
 	}
 
 	pairing.add_player(client_id)
