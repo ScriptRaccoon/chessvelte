@@ -1,6 +1,5 @@
 ### BUGS ###
 - check if app works on safari
-- player who resigns / draws does not see the modal
 
 
 ### FEATURES ###

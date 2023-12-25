@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import { writable } from "svelte/store"
+	import { get, writable } from "svelte/store"
 
 	let dialog: HTMLDialogElement
 
@@ -39,6 +39,7 @@
 	}
 
 	function _close() {
+		if (get(visible)) return
 		dialog_state.set(null)
 		dialog?.close()
 	}
