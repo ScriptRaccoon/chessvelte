@@ -1,7 +1,5 @@
 import { Pairing } from "$lib/Pairing"
-import { error, redirect, type ServerLoadEvent } from "@sveltejs/kit"
-
-export const prerender = false
+import { error, redirect } from "@sveltejs/kit"
 
 /**
  * Adds the client to a game if possible.

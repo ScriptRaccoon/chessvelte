@@ -57,45 +57,43 @@
 
 	const socket: Socket<Server_Event, Client_Event> = io(PUBLIC_SERVER_URL)
 
-	if (browser) {
-		socket.emit("join", game_id, client_id, name)
+	socket.emit("join", game_id, client_id, name)
 
-		socket.on("game_state", (server_game_state) => {
-			game_state = server_game_state
-			if (!game_state.is_started) {
-				open_invitation_dialog()
-			} else if (game_state.status === "promotion") {
-				open_promotion_modal()
-			}
-		})
+	socket.on("game_state", (server_game_state) => {
+		game_state = server_game_state
+		if (!game_state.is_started) {
+			open_invitation_dialog()
+		} else if (game_state.status === "promotion") {
+			open_promotion_modal()
+		}
+	})
 
-		socket.on("color", (color) => {
-			my_color = color
-			board_flipped = my_color === "black"
-		})
+	socket.on("color", (color) => {
+		my_color = color
+		board_flipped = my_color === "black"
+	})
 
-		socket.on("toast", (message, variant) => {
-			send_toast({
-				description: message,
-				variant,
-			})
+	socket.on("toast", (message, variant) => {
+		send_toast({
+			description: message,
+			variant,
 		})
+	})
 
-		socket.on("offer_draw", (name: string) => {
-			open_draw_modal(name)
-		})
+	socket.on("offer_draw", (name: string) => {
+		open_draw_modal(name)
+	})
 
-		socket.on("chat", (msg) => {
-			chat_messages = [...chat_messages, msg]
-			if (!show_chat && msg.name) {
-				pending_messages = true
-			}
-		})
+	socket.on("chat", (msg) => {
+		chat_messages = [...chat_messages, msg]
+		if (!show_chat && msg.name) {
+			pending_messages = true
+		}
+	})
 
-		socket.on("outcome", (msg) => {
-			open_outcome_modal(msg)
-		})
-	}
+	socket.on("outcome", (msg) => {
+		open_outcome_modal(msg)
+	})
 
 	const select = when_playing((e: CustomEvent<Coord>) => {
 		if (!my_turn) return
