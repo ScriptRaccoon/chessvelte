@@ -7,6 +7,7 @@ import type {
 	Piece_Type,
 	Piece_State,
 	Move_State,
+	Coord_Selection,
 } from "$shared/types"
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
@@ -55,8 +56,6 @@ export class Game {
 			is_playing: this.is_playing,
 			current_color: this.current_color,
 			board_state: this.board.state,
-			selected_coord: this.selected_coord,
-			possible_targets: this.possible_targets,
 			captured_pieces: this.captured_pieces,
 			player_names: this.player_group.player_names,
 			last_move: this.last_move,
@@ -97,8 +96,11 @@ export class Game {
 		return ""
 	}
 
-	private get possible_targets(): Coord[] {
-		return this.possible_moves.map((move) => move.end)
+	public get selection(): Coord_Selection {
+		return {
+			selected_coord: this.selected_coord,
+			possible_targets: this.possible_moves.map((move) => move.end),
+		}
 	}
 
 	private get captured_pieces(): Piece_State[] {
@@ -143,9 +145,7 @@ export class Game {
 	}
 
 	public select_coord(coord: Coord): boolean {
-		if (this.is_ended) {
-			return false
-		}
+		if (this.is_ended) return false
 		const piece = this.board.get(coord)
 		if (this.selected_coord) {
 			if (key(this.selected_coord) == key(coord)) {
@@ -172,7 +172,6 @@ export class Game {
 	}
 
 	private generate_move(coord: Coord): boolean {
-		if (!this.selected_coord) return false
 		const move = this.possible_moves?.find(
 			(move) => key(move.end) == key(coord),
 		)

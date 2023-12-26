@@ -14,6 +14,7 @@
 		Color,
 		Piece_Type,
 		Chat_Message,
+		Coord_Selection,
 	} from "$shared/types"
 
 	import Toast, { send_toast } from "./ui/Toast.svelte"
@@ -34,12 +35,16 @@
 
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
+	let selection: Coord_Selection = {
+		selected_coord: null,
+		possible_targets: [],
+	}
+	let during_promotion: boolean = false
 	let chat_messages: Chat_Message[] = []
 	let show_chat: boolean = false
 	let board_flipped: boolean = false
 	let pending_messages: boolean = false
 	let show_settings: boolean = false
-	let during_promotion: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -70,6 +75,10 @@
 	socket.on("color", (color) => {
 		my_color = color
 		board_flipped = my_color === "black"
+	})
+
+	socket.on("selection", (selection_from_server) => {
+		selection = selection_from_server
 	})
 
 	socket.on("toast", (message, variant) => {
@@ -215,8 +224,7 @@
 				<div in:fade={{ duration: 200 }}>
 					<Board
 						board_state={game_state.board_state}
-						possible_targets={game_state.possible_targets}
-						selected_coord={game_state.selected_coord}
+						{...selection}
 						flipped={game_state.is_started && board_flipped}
 						last_move={game_state.last_move}
 						on:select={select}

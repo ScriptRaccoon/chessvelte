@@ -1,7 +1,4 @@
 ### BUGS ###
-- selected coord of player (and possible coords) is also sent to other player when
-  they disconnected and reconnect. security issue: just by refreshing the browser
-  they see the opponent's current move in progress. -> should not be part of game state
 
 
 ### FEATURES ###

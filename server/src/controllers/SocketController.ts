@@ -110,14 +110,12 @@ export class SocketController {
 	public select(coord: Coord): void {
 		if (!this.may_move()) return
 		const actionable = this.game.select_coord(coord)
+		this.send_me("selection", this.game.selection)
 		if (actionable) {
 			this.send_game_state()
 			this.send_game_outcome()
-		} else {
-			this.send_me("game_state", this.game.state)
-			if (this.game.during_promotion) {
-				this.send_me("open_promotion_modal")
-			}
+		} else if (this.game.during_promotion) {
+			this.send_me("open_promotion_modal")
 		}
 	}
 

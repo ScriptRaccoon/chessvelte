@@ -39,8 +39,6 @@ export type Game_Status =
 
 export type Game_State = {
 	current_color: Color
-	selected_coord: Coord | null
-	possible_targets: Coord[]
 	board_state: Board_State
 	status: Game_Status
 	captured_pieces: Piece_State[]
@@ -49,6 +47,11 @@ export type Game_State = {
 	is_playing: boolean
 	player_names: [string, string] | null
 	last_move: Move_State | null
+}
+
+export type Coord_Selection = {
+	selected_coord: Coord | null
+	possible_targets: Coord[]
 }
 
 export type Chat_Message = {
@@ -64,6 +67,7 @@ export type Server_Event = {
 	chat: (msg: Chat_Message) => void
 	outcome: (msg: string) => void
 	open_promotion_modal: () => void
+	selection: (selection: Coord_Selection) => void
 }
 
 export type Client_Event = {
