@@ -4,13 +4,15 @@
 ### FEATURES ###
 - currently, the complete game state is replaced by a new one which causes
   the game to flicker on safari for example, but it is also bad performance
-  and is connected to the delay issue below. we should only send the diff.
+  and is connected to the delay issue below. we should only send the diff,
+  resp. the mode that is being made.
 - prevent delay of movement (caused by client-server communication), maybe
-  make the move also on the client-side and only double check on the server-side
+  make the move also on the client-side, send it to the server and to the other
+  clients, and send it back to the original to verify its integrity and only
+  if not update it.
 
-- save gamestates in redis to prevent data loss
-  e.g. during deployment
-- to prepare for this, write Game.to_json and Game.from_json methods
+- when everything else is implemented: save gamestates in redis to prevent data loss
+  e.g. during deployment. to prepare for this, write Game.to_json and Game.from_json methods
 
 
 ### DESIGN ####
@@ -22,10 +24,12 @@
 
 
 ### STRUCTURE ###
-- simplify promotion communication: finish the whole promotion move on the client,
-  only then send it to the server.
-- after removing use:enhance to fix the clearing bug, the URLs are not so nice anymore:
-  - game/9G99LG?/start for example. try to find a different solution.
+- simplify move communication: the "during move" phase should be handled completely
+  by the client, it is only submitted once it is complete. accordingly,
+  selected_coord should not be in the game class. and we will be able to simplify
+  the game logic on the server a lot.
+- accordingly, simplify promotion communication: finish the whole promotion move
+  on the client, only then send it to the server.
 - try to reduce god class "Game" to simpler modules
 - increase Jest test coverage
 - more defensive programming
