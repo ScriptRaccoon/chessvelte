@@ -90,14 +90,16 @@ export class SocketController {
 	}
 
 	public offer_draw(): void {
-		if (!this.game.is_playing) return
+		if (!this.game.is_playing || this.game.during_draw_offer) return
 		this.send_me("toast", "Draw has been offered", "info")
 		this.send_others("offer_draw", this.player.name)
+		this.game.during_draw_offer = true
 	}
 
 	public reject_draw(): void {
 		if (!this.game.is_playing) return
 		this.send("toast", `${this.player.name} has rejected the draw`, "error")
+		this.game.during_draw_offer = false
 	}
 
 	public accept_draw(): void {
@@ -105,6 +107,7 @@ export class SocketController {
 		this.game.draw()
 		this.send_game_state()
 		this.send_game_outcome()
+		this.game.during_draw_offer = false
 	}
 
 	public select(coord: Coord): void {

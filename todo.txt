@@ -7,7 +7,6 @@
   and is connected to the delay issue below. we should only send the diff.
 - prevent delay of movement (caused by client-server communication), maybe
   make the move also on the client-side and only double check on the server-side
-- a draw should not be possible to be submitted multiple times after another
 
 - save gamestates in redis to prevent data loss
   e.g. during deployment
@@ -23,6 +22,8 @@
 
 
 ### STRUCTURE ###
+- simplify promotion communication: finish the whole promotion move on the client,
+  only then send it to the server.
 - after removing use:enhance to fix the clearing bug, the URLs are not so nice anymore:
   - game/9G99LG?/start for example. try to find a different solution.
 - try to reduce god class "Game" to simpler modules

@@ -41,6 +41,7 @@ export class Game {
 	private current_color: Color = "white"
 	private player_group = new PlayerGroup()
 	public during_promotion: boolean = false
+	public during_draw_offer: boolean = false
 
 	constructor(id: string) {
 		this.id = id
