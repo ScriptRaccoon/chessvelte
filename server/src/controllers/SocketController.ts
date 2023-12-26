@@ -139,7 +139,6 @@ export class SocketController {
 	public cancel_promotion(): void {
 		if (!this.may_move()) return
 		this.game.cancel_promotion()
-		this.send_game_state()
 	}
 
 	public finish_promotion(type: Piece_Type): void {

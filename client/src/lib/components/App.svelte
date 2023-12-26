@@ -116,12 +116,19 @@
 
 	const finish_promotion = when_playing((e: CustomEvent<Piece_Type>) => {
 		close_dialog()
+		selection = { selected_coord: null, possible_targets: [] }
 		socket.emit("finish_promotion", e.detail)
+		setTimeout(() => {
+			during_promotion = false
+		}, 200)
 	})
 
 	const cancel_promotion = when_playing(() => {
-		during_promotion = false
+		selection = { selected_coord: null, possible_targets: [] }
 		socket.emit("cancel_promotion")
+		setTimeout(() => {
+			during_promotion = false
+		}, 200)
 	})
 
 	const offer_draw = when_playing(() => socket.emit("offer_draw"))
