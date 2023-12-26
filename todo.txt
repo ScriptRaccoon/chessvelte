@@ -1,19 +1,22 @@
 ### BUGS ###
-- check if app works on safari
 
 
 ### FEATURES ###
+- currently, the complete game state is replaced by a new one which causes
+  the game to flicker on safari for example, but it is also bad performance
+  and is connected to the delay issue below. we should only send the diff.
+- prevent delay of movement (caused by client-server communication), maybe
+  make the move also on the client-side and only double check on the server-side
+
 - save gamestates in redis to prevent data loss
   e.g. during deployment
 - to prepare for this, write Game.to_json and Game.from_json methods
-- prevent delay of movement (caused by client-server communication)
-  -> maybe make the move also on the client-side and only double check
-     on the server-side
-- drag and drop on desktop to move pieces
 
 
 ### DESIGN ####
-- animation of pieces (WIP)
+- drag and drop on desktop to move pieces, since clicking is not intuitive
+- animation of pieces (for some reason, adding css transition does not work,
+  even when we add the IDs to the pieces and use a keyed-each-block)
 - captured pieces card is too prominent
 - captures pieces are not centered vertically
 
