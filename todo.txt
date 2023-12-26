@@ -30,4 +30,3 @@
 - increase Jest test coverage
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
-- getters for private vars in game class to prevent external changes

@@ -24,21 +24,13 @@ export class SocketController {
 		this.player = this.game.get_player(socket.id)
 	}
 
-	public start(is_new: boolean) {
-		this.socket.join(this.game.id)
-		this.send_me("color", this.player.color)
+	// GETTERS
 
-		const action = is_new ? "connected" : "reconnected"
-		const msg = `${this.player.name} has ${action}`
-		this.send_others("toast", msg, "success")
-		this.send("chat", { content: msg })
-
-		if (is_new && this.game.is_playing) {
-			this.send_start_messages()
-		}
-
-		this.send_game_state()
+	private get may_move(): boolean {
+		return this.game.is_allowed_to_move(this.socket.id)
 	}
+
+	// AUXILIARY PRIVATE METHODS
 
 	private send<T extends keyof Server_Event>(
 		event: T,
@@ -61,9 +53,7 @@ export class SocketController {
 		this.socket.broadcast.to(this.game.id).emit(event, ...data)
 	}
 
-	private may_move(): boolean {
-		return this.game.is_allowed_to_move(this.socket.id)
-	}
+	// PRIVATE METHODS
 
 	private send_game_state(): void {
 		this.send("game_state", this.game.state)
@@ -82,6 +72,24 @@ export class SocketController {
 		this.send("chat", { content: this.game.outcome })
 	}
 
+	// PUBLIC METHODS
+
+	public start(is_new: boolean) {
+		this.socket.join(this.game.id)
+		this.send_me("color", this.player.color)
+
+		const action = is_new ? "connected" : "reconnected"
+		const msg = `${this.player.name} has ${action}`
+		this.send_others("toast", msg, "success")
+		this.send("chat", { content: msg })
+
+		if (is_new && this.game.is_playing) {
+			this.send_start_messages()
+		}
+
+		this.send_game_state()
+	}
+
 	public resign(): void {
 		if (!this.game.is_playing) return
 		this.game.resign(this.socket.id)
@@ -90,16 +98,16 @@ export class SocketController {
 	}
 
 	public offer_draw(): void {
-		if (!this.game.is_playing || this.game.during_draw_offer) return
+		if (!this.game.is_playing || this.game.is_during_draw_offer) return
+		this.game.initialize_draw()
 		this.send_me("toast", "Draw has been offered", "info")
 		this.send_others("offer_draw", this.player.name)
-		this.game.during_draw_offer = true
 	}
 
 	public reject_draw(): void {
 		if (!this.game.is_playing) return
 		this.send("toast", `${this.player.name} has rejected the draw`, "error")
-		this.game.during_draw_offer = false
+		this.game.cancel_draw()
 	}
 
 	public accept_draw(): void {
@@ -107,23 +115,23 @@ export class SocketController {
 		this.game.draw()
 		this.send_game_state()
 		this.send_game_outcome()
-		this.game.during_draw_offer = false
+		this.game.cancel_draw()
 	}
 
 	public select(coord: Coord): void {
-		if (!this.may_move()) return
+		if (!this.may_move) return
 		const actionable = this.game.select_coord(coord)
 		this.send_me("selection", this.game.selection)
 		if (actionable) {
 			this.send_game_state()
 			this.send_game_outcome()
-		} else if (this.game.during_promotion) {
+		} else if (this.game.is_during_promotion) {
 			this.send_me("open_promotion_modal")
 		}
 	}
 
 	public restart(): void {
-		if (!this.game.is_ended) return
+		if (!this.game.has_ended) return
 		this.game.reset()
 		this.game.switch_player_colors()
 		this.send_game_state()
@@ -133,19 +141,19 @@ export class SocketController {
 	}
 
 	public send_new_colors(): void {
-		for (const socket_id of this.game.list_of_sockets()) {
+		for (const socket_id of this.game.list_of_sockets) {
 			const new_color = this.game.get_player(socket_id).color
 			this.io.to(socket_id).emit("color", new_color)
 		}
 	}
 
 	public cancel_promotion(): void {
-		if (!this.may_move()) return
+		if (!this.may_move) return
 		this.game.cancel_promotion()
 	}
 
 	public finish_promotion(type: Piece_Type): void {
-		if (!this.may_move()) return
+		if (!this.may_move) return
 		this.game.finish_promotion(type)
 		this.send_game_state()
 	}
@@ -156,7 +164,7 @@ export class SocketController {
 	}
 
 	public handle_disconnect(): void {
-		if (this.may_move()) this.game.cancel_promotion()
+		if (this.may_move) this.game.cancel_promotion()
 		const msg = `${this.player.name ?? "Player"} has disconnected`
 		this.send("toast", msg, "error")
 		this.send_others("chat", { content: msg })

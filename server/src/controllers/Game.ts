@@ -27,7 +27,7 @@ export class Game {
 		return Game.dictionary[id] ?? new Game(id)
 	}
 
-	public id: string
+	#id: string
 	private move_history: MoveHistory = new MoveHistory()
 	private board: Board = new Board()
 	private status: Game_Status = "waiting"
@@ -37,14 +37,14 @@ export class Game {
 	private selected_coord: Coord | null = null
 	private promotion_move: Move | null = null
 	private captures: Capture[] = []
-	public is_ended: boolean = false
+	private is_ended: boolean = false
 	private current_color: Color = "white"
 	private player_group = new PlayerGroup()
-	public during_promotion: boolean = false
-	public during_draw_offer: boolean = false
+	private during_promotion: boolean = false
+	private during_draw_offer: boolean = false
 
 	constructor(id: string) {
-		this.id = id
+		this.#id = id
 		this.compute_all_moves()
 		Game.dictionary[id] = this
 	}
@@ -53,7 +53,7 @@ export class Game {
 		return {
 			status: this.status,
 			is_started: this.is_started,
-			is_ended: this.is_ended,
+			is_ended: this.has_ended,
 			is_playing: this.is_playing,
 			current_color: this.current_color,
 			board_state: this.board.state,
@@ -61,6 +61,22 @@ export class Game {
 			player_names: this.player_group.player_names,
 			last_move: this.last_move,
 		}
+	}
+
+	public get id(): string {
+		return this.#id
+	}
+
+	public get has_ended(): boolean {
+		return this.is_ended
+	}
+
+	public get is_during_promotion(): boolean {
+		return this.during_promotion
+	}
+
+	public get is_during_draw_offer(): boolean {
+		return this.during_draw_offer
 	}
 
 	private get is_started(): boolean {
@@ -73,6 +89,10 @@ export class Game {
 
 	public get start_messages(): string[] | null {
 		return this.player_group.start_messages
+	}
+
+	public get list_of_sockets(): string[] {
+		return this.player_group.keys
 	}
 
 	public get outcome(): string {
@@ -115,6 +135,8 @@ export class Game {
 		return { start, end }
 	}
 
+	// METHODS
+
 	public add_player(
 		socket_id: string,
 		client_id: string,
@@ -133,10 +155,6 @@ export class Game {
 
 	public get_player(socket_id: string): Player {
 		return this.player_group.get_by_id(socket_id)
-	}
-
-	public list_of_sockets(): string[] {
-		return this.player_group.keys
 	}
 
 	public is_allowed_to_move(socket_id: string): boolean {
@@ -273,5 +291,13 @@ export class Game {
 	public draw(): void {
 		this.status = "drawn"
 		this.is_ended = true
+	}
+
+	public initialize_draw(): void {
+		this.during_draw_offer = true
+	}
+
+	public cancel_draw(): void {
+		this.during_draw_offer = false
 	}
 }
