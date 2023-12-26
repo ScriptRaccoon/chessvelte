@@ -32,7 +32,6 @@ export type Board_State = Located_Piece_State[]
 export type Game_Status =
 	| "waiting"
 	| "playing"
-	| "promotion"
 	| "drawn"
 	| `checkmate-${Color}`
 	| `resigned-${Color}`
@@ -64,6 +63,7 @@ export type Server_Event = {
 	color: (color: Color) => void
 	chat: (msg: Chat_Message) => void
 	outcome: (msg: string) => void
+	open_promotion_modal: () => void
 }
 
 export type Client_Event = {

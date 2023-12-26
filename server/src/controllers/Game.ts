@@ -39,6 +39,7 @@ export class Game {
 	public is_ended: boolean = false
 	private current_color: Color = "white"
 	private player_group = new PlayerGroup()
+	public during_promotion: boolean = false
 
 	constructor(id: string) {
 		this.id = id
@@ -136,7 +137,9 @@ export class Game {
 	}
 
 	public is_allowed_to_move(socket_id: string): boolean {
-		return this.get_player(socket_id).color === this.current_color
+		return (
+			this.is_playing && this.get_player(socket_id).color === this.current_color
+		)
 	}
 
 	public select_coord(coord: Coord): boolean {
@@ -176,7 +179,7 @@ export class Game {
 		if (!move) return false
 		if (move.type === "promotion") {
 			this.promotion_move = move
-			this.status = "promotion"
+			this.during_promotion = true
 			return false
 		} else {
 			this.finish_move(move)
@@ -214,18 +217,18 @@ export class Game {
 	}
 
 	public finish_promotion(type: Piece_Type): void {
-		if (!this.promotion_move) return
-		this.promotion_move.promotion_type = type
-		this.finish_move(this.promotion_move)
-		this.promotion_move = null
-		this.status = "playing"
+		if (this.promotion_move) {
+			this.promotion_move.promotion_type = type
+			this.finish_move(this.promotion_move)
+		}
+		this.cancel_promotion()
 	}
 
 	public cancel_promotion(): void {
 		this.promotion_move = null
 		this.selected_coord = null
 		this.possible_moves = []
-		this.status = "playing"
+		this.during_promotion = false
 	}
 
 	public reset(): void {
@@ -234,6 +237,7 @@ export class Game {
 		this.selected_coord = null
 		this.possible_moves = []
 		this.promotion_move = null
+		this.during_promotion = false
 		this.captures = []
 		this.is_ended = false
 		this.move_history.clear()

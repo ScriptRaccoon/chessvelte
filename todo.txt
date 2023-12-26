@@ -1,4 +1,7 @@
 ### BUGS ###
+- selected coord of player (and possible coords) is also sent to other player when
+  they disconnected and reconnect. security issue: just by refreshing the browser
+  they see the opponent's current move in progress. -> should not be part of game state
 
 
 ### FEATURES ###
@@ -7,6 +10,7 @@
   and is connected to the delay issue below. we should only send the diff.
 - prevent delay of movement (caused by client-server communication), maybe
   make the move also on the client-side and only double check on the server-side
+- a draw should not be possible to be submitted multiple times after another
 
 - save gamestates in redis to prevent data loss
   e.g. during deployment
@@ -24,8 +28,8 @@
 ### STRUCTURE ###
 - after removing use:enhance to fix the clearing bug, the URLs are not so nice anymore:
   - game/9G99LG?/start for example. try to find a different solution.
-- game.status should not be 'promotion', promotion should be event-based
 - try to reduce god class "Game" to simpler modules
 - increase Jest test coverage
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
+- getters for private vars in game class to prevent external changes

@@ -61,6 +61,10 @@ export class SocketController {
 		this.socket.broadcast.to(this.game.id).emit(event, ...data)
 	}
 
+	private may_move(): boolean {
+		return this.game.is_allowed_to_move(this.socket.id)
+	}
+
 	private send_game_state(): void {
 		this.send("game_state", this.game.state)
 	}
@@ -104,14 +108,16 @@ export class SocketController {
 	}
 
 	public select(coord: Coord): void {
-		if (!this.game.is_playing || !this.game.is_allowed_to_move(this.socket.id))
-			return
+		if (!this.may_move()) return
 		const actionable = this.game.select_coord(coord)
 		if (actionable) {
 			this.send_game_state()
 			this.send_game_outcome()
 		} else {
 			this.send_me("game_state", this.game.state)
+			if (this.game.during_promotion) {
+				this.send_me("open_promotion_modal")
+			}
 		}
 	}
 
@@ -133,13 +139,13 @@ export class SocketController {
 	}
 
 	public cancel_promotion(): void {
-		if (!this.game.is_playing) return
+		if (!this.may_move()) return
 		this.game.cancel_promotion()
 		this.send_game_state()
 	}
 
 	public finish_promotion(type: Piece_Type): void {
-		if (!this.game.is_playing) return
+		if (!this.may_move()) return
 		this.game.finish_promotion(type)
 		this.send_game_state()
 	}
@@ -150,6 +156,7 @@ export class SocketController {
 	}
 
 	public handle_disconnect(): void {
+		if (this.may_move()) this.game.cancel_promotion()
 		const msg = `${this.player.name ?? "Player"} has disconnected`
 		this.send("toast", msg, "error")
 		this.send_others("chat", { content: msg })

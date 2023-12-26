@@ -3,7 +3,6 @@
 	import { onDestroy } from "svelte"
 	import { fade } from "svelte/transition"
 	import { PUBLIC_SERVER_URL } from "$env/static/public"
-	import { browser } from "$app/environment"
 
 	import { io, type Socket } from "socket.io-client"
 
@@ -40,6 +39,7 @@
 	let board_flipped: boolean = false
 	let pending_messages: boolean = false
 	let show_settings: boolean = false
+	let during_promotion: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
@@ -61,10 +61,9 @@
 
 	socket.on("game_state", (server_game_state) => {
 		game_state = server_game_state
+
 		if (!game_state.is_started) {
 			open_invitation_dialog()
-		} else if (game_state.status === "promotion") {
-			open_promotion_modal()
 		}
 	})
 
@@ -95,6 +94,8 @@
 		open_outcome_modal(msg)
 	})
 
+	socket.on("open_promotion_modal", open_promotion_modal)
+
 	const select = when_playing((e: CustomEvent<Coord>) => {
 		if (!my_turn) return
 		socket.emit("select", e.detail)
@@ -104,12 +105,15 @@
 
 	const restart = when_not_playing(() => socket.emit("restart"))
 
-	const finish_promotion = when_not_playing((e: CustomEvent<Piece_Type>) => {
+	const finish_promotion = when_playing((e: CustomEvent<Piece_Type>) => {
 		close_dialog()
 		socket.emit("finish_promotion", e.detail)
 	})
 
-	const cancel_promotion = when_playing(() => socket.emit("cancel_promotion"))
+	const cancel_promotion = when_playing(() => {
+		during_promotion = false
+		socket.emit("cancel_promotion")
+	})
 
 	const offer_draw = when_playing(() => socket.emit("offer_draw"))
 
@@ -162,6 +166,7 @@
 	}
 
 	function open_promotion_modal() {
+		during_promotion = true
 		open_dialog({
 			confirm: null,
 			cancel: { text: "Cancel", action: cancel_promotion },
@@ -247,7 +252,7 @@
 <Toast />
 
 <Dialog>
-	{#if game_state?.status === "promotion" && my_color}
+	{#if during_promotion && my_color}
 		<Promotion color={my_color} on:finish_promotion={finish_promotion} />
 	{/if}
 </Dialog>
