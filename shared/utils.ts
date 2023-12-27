@@ -91,3 +91,12 @@ export function abridge(text: string, length: number): string {
 	if (text.length <= length) return text
 	return `${text.slice(0, length - 2)}...`
 }
+
+export function map_object<K extends string, V, W>(
+	obj: Record<K, V>,
+	transform: (value: V) => W,
+): Record<K, W> {
+	return Object.fromEntries(
+		Object.entries(obj).map(([key, value]: [K, V]) => [key, transform(value)]),
+	) as Record<K, W>
+}

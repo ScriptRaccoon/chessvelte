@@ -3,7 +3,7 @@ import type { Capture, Move, Piece_Map } from "../types.server"
 import type { Piece } from "./Piece"
 import { INITIAL_CONFIG } from "../pieces/pieces.config"
 import { create_piece } from "../pieces/create"
-import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
+import { deep_copy, typed_keys, key, unkey, map_object } from "$shared/utils"
 
 /**
  * This class represents a chess board. It is responsible for storing and updating
@@ -17,7 +17,7 @@ export class Board {
 	}
 
 	get state(): Board_State {
-		return this.coords.map((coord) => ({ ...this.get(coord)!, coord }))
+		return map_object(this.map, (piece) => piece!.state)
 	}
 
 	public copy(): Board {
@@ -54,8 +54,8 @@ export class Board {
 		}
 		this.remove(move.start)
 		if (move.type === "promotion") {
-			if (move.promotion_type) {
-				const new_piece = create_piece(move.promotion_type, move.piece.color)
+			if (move.promotion_choice) {
+				const new_piece = create_piece(move.promotion_choice, move.piece.color)
 				this.set(move.end, new_piece)
 			}
 		} else if (move.type === "castle") {

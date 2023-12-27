@@ -1,16 +1,12 @@
 <script lang="ts">
 	import { piece_src } from "$shared/utils"
-	import type { Located_Piece_State } from "$shared/types"
+	import type { Coord, Piece_State } from "$shared/types"
 
-	export let piece: Located_Piece_State
+	export let piece: Piece_State
+	export let coord: Coord
 </script>
 
-<svg
-	class="piece"
-	style:--x={piece.coord[1]}
-	style:--y={piece.coord[0]}
-	role="img"
->
+<svg class="piece" style:--x={coord[1]} style:--y={coord[0]} role="img">
 	<use xlink:href={piece_src(piece.type, piece.color)} />
 </svg>
 

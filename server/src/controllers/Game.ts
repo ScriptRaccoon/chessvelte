@@ -1,18 +1,18 @@
 import type {
 	Color,
-	Coord,
 	Coord_Key,
 	Game_Status,
 	Game_State,
-	Piece_Type,
 	Piece_State,
 	Move_State,
-	Coord_Selection,
+	Possible_Moves_State,
 } from "$shared/types"
+import { Capture, Move } from "../types.server"
+import { PROMOTION_PIECE_TYPES } from "$shared/config"
+import { get_other_color, key, map_object } from "$shared/utils"
+
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
-import { get_other_color, key } from "$shared/utils"
-import { Capture, Move } from "../types.server"
 import { Player } from "./Player"
 import { PlayerGroup } from "./PlayerGroup"
 
@@ -31,36 +31,37 @@ export class Game {
 	private move_history: MoveHistory = new MoveHistory()
 	private board: Board = new Board()
 	private status: Game_Status = "waiting"
-	private all_moves: Record<Coord_Key, Move[]> = {}
-	private number_all_moves: number = 0
-	private possible_moves: Move[] = []
-	private selected_coord: Coord | null = null
-	private promotion_move: Move | null = null
+	private possible_moves: Record<Coord_Key, Move[]> = {}
+	private number_of_possible_moves: number = 0
 	private captures: Capture[] = []
 	private is_ended: boolean = false
 	private current_color: Color = "white"
 	private player_group = new PlayerGroup()
-	private during_promotion: boolean = false
 	private during_draw_offer: boolean = false
 
 	constructor(id: string) {
 		this.#id = id
-		this.compute_all_moves()
+		this.compute_possible_moves()
 		Game.dictionary[id] = this
 	}
 
 	public get state(): Game_State {
 		return {
-			status: this.status,
 			is_started: this.is_started,
 			is_ended: this.has_ended,
-			is_playing: this.is_playing,
 			current_color: this.current_color,
 			board_state: this.board.state,
 			captured_pieces: this.captured_pieces,
 			player_names: this.player_group.player_names,
 			last_move: this.last_move,
+			possible_moves: this.possible_moves_state,
 		}
+	}
+
+	private get possible_moves_state(): Possible_Moves_State {
+		return map_object(this.possible_moves, (moves) =>
+			moves.map(({ start, end, type }) => ({ start, end, type })),
+		)
 	}
 
 	public get id(): string {
@@ -69,10 +70,6 @@ export class Game {
 
 	public get has_ended(): boolean {
 		return this.is_ended
-	}
-
-	public get is_during_promotion(): boolean {
-		return this.during_promotion
 	}
 
 	public get is_during_draw_offer(): boolean {
@@ -117,13 +114,6 @@ export class Game {
 		return ""
 	}
 
-	public get selection(): Coord_Selection {
-		return {
-			selected_coord: this.selected_coord,
-			possible_targets: this.possible_moves.map((move) => move.end),
-		}
-	}
-
 	private get captured_pieces(): Piece_State[] {
 		return this.captures.map((capture) => capture.piece.state)
 	}
@@ -131,8 +121,8 @@ export class Game {
 	private get last_move(): Move_State | null {
 		const last = this.move_history.get_last()
 		if (!last) return null
-		const { start, end } = last
-		return { start, end }
+		const { start, end, type } = last
+		return { start, end, type }
 	}
 
 	// METHODS
@@ -163,122 +153,68 @@ export class Game {
 		)
 	}
 
-	public select_coord(coord: Coord): boolean {
-		if (this.is_ended) return false
-		const piece = this.board.get(coord)
-		if (this.selected_coord) {
-			if (key(this.selected_coord) == key(coord)) {
-				this.cancel_move()
-			} else if (piece?.color === this.current_color) {
-				this.start_move(coord)
-			} else {
-				return this.generate_move(coord)
-			}
-		} else if (piece?.color === this.current_color) {
-			this.start_move(coord)
-		}
-		return false
-	}
-
-	private cancel_move(): void {
-		this.selected_coord = null
-		this.possible_moves = []
-	}
-
-	private start_move(coord: Coord): void {
-		this.selected_coord = coord
-		this.possible_moves = this.all_moves[key(coord)]
-	}
-
-	private generate_move(coord: Coord): boolean {
-		const move = this.possible_moves?.find(
-			(move) => key(move.end) == key(coord),
-		)
-		if (!move) return false
+	public execute_move(move_attempt: Move_State): void {
+		const { start, end } = move_attempt
+		const moves = this.possible_moves[key(start)]
+		const move = moves.find((move) => key(move.end) === key(end))
+		if (!move) return
 		if (move.type === "promotion") {
-			this.promotion_move = move
-			this.during_promotion = true
-			return false
-		} else {
-			this.finish_move(move)
-			return true
+			move.promotion_choice = move_attempt.promotion_choice
+			const is_valid =
+				move.promotion_choice !== undefined &&
+				PROMOTION_PIECE_TYPES.includes(move.promotion_choice)
+			if (!is_valid) return
 		}
-	}
-
-	private finish_move(move: Move): void {
-		this.execute_move(move)
+		this.apply_move(move)
 		this.switch_color()
-		this.compute_all_moves()
+		this.compute_possible_moves()
 		this.check_for_ending()
 	}
 
-	private execute_move(move: Move): void {
+	private apply_move(move: Move): void {
 		this.move_history.push(move)
 		const capture = this.board.apply_move(move)
-		if (capture) {
-			this.captures.push(capture)
-		}
+		if (capture) this.captures.push(capture)
 	}
 
 	private switch_color(): void {
-		this.selected_coord = null
-		this.possible_moves = []
 		this.current_color = get_other_color(this.current_color)
 	}
 
 	private check_for_ending(): void {
-		const color = this.current_color
-		if (this.number_all_moves > 0) return
-		const checked = this.board.is_check(color)
+		if (this.number_of_possible_moves > 0) return
 		this.is_ended = true
+		const color = this.current_color
+		const checked = this.board.is_check(color)
 		this.status = checked ? `checkmate-${color}` : "stalemate"
-	}
-
-	public finish_promotion(type: Piece_Type): void {
-		if (this.promotion_move) {
-			this.promotion_move.promotion_type = type
-			this.finish_move(this.promotion_move)
-		}
-		this.cancel_promotion()
-	}
-
-	public cancel_promotion(): void {
-		this.promotion_move = null
-		this.selected_coord = null
-		this.possible_moves = []
-		this.during_promotion = false
 	}
 
 	public reset(): void {
 		this.current_color = "white"
 		this.status = "playing"
-		this.selected_coord = null
-		this.possible_moves = []
-		this.promotion_move = null
-		this.during_promotion = false
 		this.captures = []
 		this.is_ended = false
 		this.move_history.clear()
 		this.board.reset()
-		this.compute_all_moves()
+		this.compute_possible_moves()
 	}
 
 	public switch_player_colors(): void {
 		this.player_group.switch_colors()
 	}
 
-	private compute_all_moves(): void {
-		let number_all_moves = 0
+	private compute_possible_moves(): void {
+		let counter = 0
 		const all_moves: Record<Coord_Key, Move[]> = {}
 		for (const coord of this.board.coords) {
 			const piece = this.board.get(coord)
 			if (!piece || piece.color !== this.current_color) continue
 			const moves = piece.get_save_moves(coord, this.board, this.move_history)
 			all_moves[key(coord)] = moves
-			number_all_moves += moves.length
+			counter += moves.length
 		}
-		this.all_moves = all_moves
-		this.number_all_moves = number_all_moves
+		this.number_of_possible_moves = counter
+		this.possible_moves = all_moves
 	}
 
 	public resign(socket_id: string): void {

@@ -15,6 +15,7 @@ import {
 	rotate,
 	abridge,
 	piece_src,
+	map_object,
 } from "./utils"
 
 import { JSDOM } from "jsdom"
@@ -228,5 +229,14 @@ describe("piece_str", () => {
 	it("returns the image source of a piece", () => {
 		expect(piece_src("king", "white")).toBe("../sprite.svg#king_white")
 		expect(piece_src("queen", "black")).toBe("../sprite.svg#queen_black")
+	})
+})
+
+describe("map_object", () => {
+	it("transforms the values of an object", () => {
+		const obj: Record<string, number> = { a: 1, b: 2, c: 3 }
+		const transform = (value: number) => value * 2
+		const expected = { a: 2, b: 4, c: 6 }
+		expect(map_object(obj, transform)).toEqual(expected)
 	})
 })

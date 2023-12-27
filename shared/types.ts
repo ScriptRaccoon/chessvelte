@@ -6,10 +6,7 @@ export type Coord_Key = `${number}${number}`
 
 export type Color = "black" | "white"
 
-export type Move_State = {
-	start: Coord
-	end: Coord
-}
+export type Move_Type = "regular" | "en passant" | "promotion" | "castle"
 
 export type Piece_Type =
 	| "pawn"
@@ -25,9 +22,16 @@ export type Piece_State = {
 	value: number
 }
 
-export type Located_Piece_State = Piece_State & { coord: Coord }
+export type Board_State = Record<Coord_Key, Piece_State>
 
-export type Board_State = Located_Piece_State[]
+export type Move_State = {
+	start: Coord
+	end: Coord
+	type: Move_Type
+	promotion_choice?: Piece_Type
+}
+
+export type Possible_Moves_State = Record<Coord_Key, Move_State[]>
 
 export type Game_Status =
 	| "waiting"
@@ -40,18 +44,12 @@ export type Game_Status =
 export type Game_State = {
 	current_color: Color
 	board_state: Board_State
-	status: Game_Status
 	captured_pieces: Piece_State[]
 	is_started: boolean
 	is_ended: boolean
-	is_playing: boolean
 	player_names: [string, string] | null
 	last_move: Move_State | null
-}
-
-export type Coord_Selection = {
-	selected_coord: Coord | null
-	possible_targets: Coord[]
+	possible_moves: Possible_Moves_State
 }
 
 export type Chat_Message = {
@@ -66,19 +64,15 @@ export type Server_Event = {
 	color: (color: Color) => void
 	chat: (msg: Chat_Message) => void
 	outcome: (msg: string) => void
-	open_promotion_modal: () => void
-	selection: (selection: Coord_Selection) => void
 }
 
 export type Client_Event = {
+	move: (move: Move_State) => void
 	join: (game_id: string, client_id: string, name: string) => void
-	select: (coord: Coord) => void
 	restart: () => void
 	resign: () => void
 	offer_draw: () => void
 	accept_draw: () => void
 	reject_draw: () => void
-	finish_promotion: (type: Piece_Type) => void
-	cancel_promotion: () => void
 	chat: (msg: Chat_Message) => void
 }

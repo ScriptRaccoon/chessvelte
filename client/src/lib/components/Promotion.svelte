@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { PROMOTION_PIECE_TYPES } from "$shared/config"
-	import type { Color } from "$shared/types"
+	import type { Color, Piece_Type } from "$shared/types"
 	import { piece_src } from "$shared/utils"
-	import { createEventDispatcher } from "svelte"
-	const dispatch = createEventDispatcher()
 
 	export let color: Color
+	export let finish_promotion: (type: Piece_Type) => void
 </script>
 
 <div class="choices">
 	{#each PROMOTION_PIECE_TYPES as type}
-		<button on:click={() => dispatch("finish_promotion", type)}>
+		<button on:click={() => finish_promotion(type)}>
 			<svg role="img">
 				<use xlink:href={piece_src(type, color)} />
 			</svg>

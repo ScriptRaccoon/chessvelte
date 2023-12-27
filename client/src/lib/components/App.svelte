@@ -14,8 +14,10 @@
 		Color,
 		Piece_Type,
 		Chat_Message,
-		Coord_Selection,
+		Move_State,
+		Possible_Moves_State,
 	} from "$shared/types"
+	import { key } from "$shared/utils"
 
 	import Toast, { send_toast } from "./ui/Toast.svelte"
 	import Dialog, { close_dialog, open_dialog } from "./ui/Dialog.svelte"
@@ -35,37 +37,39 @@
 
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
-	let selection: Coord_Selection = {
-		selected_coord: null,
-		possible_targets: [],
-	}
+	let selected_coord: Coord | null = null
+	let possible_moves: Possible_Moves_State = {}
 	let during_promotion: boolean = false
+	let promotion_target: Coord | null = null
+
 	let chat_messages: Chat_Message[] = []
 	let show_chat: boolean = false
-	let board_flipped: boolean = false
 	let pending_messages: boolean = false
+
+	let board_flipped: boolean = false
 	let show_settings: boolean = false
 
 	$: my_turn = game_state !== null && game_state.current_color === my_color
 
-	const when_playing =
-		<T extends any[]>(fun: (...args: T) => void) =>
-		(...args: T) => {
-			if (game_state?.is_playing) fun(...args)
-		}
+	$: possible_targets = selected_coord
+		? possible_moves[key(selected_coord)].map((move) => move.end)
+		: []
 
-	const when_not_playing =
-		<T extends any[]>(fun: (...args: T) => void) =>
-		(...args: T) => {
-			if (!game_state?.is_playing) fun(...args)
-		}
+	// SOCKET CONNECTION
 
 	const socket: Socket<Server_Event, Client_Event> = io(PUBLIC_SERVER_URL)
 
 	socket.emit("join", game_id, client_id, name)
 
+	onDestroy(() => {
+		socket.disconnect()
+	})
+
+	// LISTENERS
+
 	socket.on("game_state", (server_game_state) => {
 		game_state = server_game_state
+		possible_moves = game_state.possible_moves
 
 		if (!game_state.is_started) {
 			open_invitation_dialog()
@@ -75,10 +79,6 @@
 	socket.on("color", (color) => {
 		my_color = color
 		board_flipped = my_color === "black"
-	})
-
-	socket.on("selection", (selection_from_server) => {
-		selection = selection_from_server
 	})
 
 	socket.on("toast", (message, variant) => {
@@ -103,39 +103,87 @@
 		open_outcome_modal(msg)
 	})
 
-	socket.on("open_promotion_modal", open_promotion_modal)
+	// ACTIONS
 
-	const select = when_playing((e: CustomEvent<Coord>) => {
-		if (!my_turn) return
-		socket.emit("select", e.detail)
-	})
+	function select(coord: Coord): void {
+		if (!game_state || game_state?.is_ended || !my_turn) return
+		const piece = game_state.board_state[key(coord)]
+		if (selected_coord) {
+			if (key(selected_coord) === key(coord)) {
+				selected_coord = null
+			} else if (piece?.color === my_color) {
+				selected_coord = coord
+			} else {
+				generate_move(selected_coord, coord)
+			}
+		} else if (piece.color === my_color) {
+			selected_coord = coord
+		}
+	}
 
-	const resign = when_playing(() => socket.emit("resign"))
+	function generate_move(start: Coord, end: Coord): void {
+		const move = possible_moves[key(start)]?.find(
+			(move) => key(move.end) === key(end),
+		)
+		if (!move) return
+		if (move.type === "promotion") {
+			promotion_target = end
+			open_promotion_modal()
+		} else {
+			socket.emit("move", move)
+			selected_coord = null
+		}
+	}
 
-	const restart = when_not_playing(() => socket.emit("restart"))
+	function resign() {
+		socket.emit("resign")
+	}
 
-	const finish_promotion = when_playing((e: CustomEvent<Piece_Type>) => {
+	function restart() {
+		socket.emit("restart")
+	}
+
+	function finish_promotion(type: Piece_Type) {
+		if (!selected_coord || !promotion_target) return
+		const move: Move_State = {
+			start: selected_coord,
+			end: promotion_target,
+			type: "promotion",
+			promotion_choice: type,
+		}
+		socket.emit("move", move)
+		cancel_promotion()
 		close_dialog()
-		selection = { selected_coord: null, possible_targets: [] }
-		socket.emit("finish_promotion", e.detail)
+	}
+
+	function cancel_promotion() {
+		selected_coord = null
+		promotion_target = null
 		setTimeout(() => {
 			during_promotion = false
 		}, 200)
-	})
+	}
 
-	const cancel_promotion = when_playing(() => {
-		selection = { selected_coord: null, possible_targets: [] }
-		socket.emit("cancel_promotion")
-		setTimeout(() => {
-			during_promotion = false
-		}, 200)
-	})
+	function offer_draw() {
+		socket.emit("offer_draw")
+	}
 
-	const offer_draw = when_playing(() => socket.emit("offer_draw"))
+	function accept_draw() {
+		socket.emit("accept_draw")
+	}
 
-	const accept_draw = when_playing(() => socket.emit("accept_draw"))
+	function reject_draw() {
+		socket.emit("reject_draw")
+	}
 
-	const reject_draw = when_playing(() => socket.emit("reject_draw"))
+	function chat(e: CustomEvent<string>) {
+		socket.emit("chat", {
+			name,
+			content: e.detail,
+		})
+	}
+
+	// DIALOGS AND MODALS
 
 	function open_invitation_dialog() {
 		setTimeout(() => {
@@ -190,12 +238,7 @@
 		})
 	}
 
-	function chat(e: CustomEvent<string>) {
-		socket.emit("chat", {
-			name,
-			content: e.detail,
-		})
-	}
+	// UI TOGGLES
 
 	function toggle_chat() {
 		show_chat = !show_chat
@@ -209,10 +252,6 @@
 	function toggle_settings() {
 		show_settings = !show_settings
 	}
-
-	onDestroy(() => {
-		socket.disconnect()
-	})
 </script>
 
 <AppLayout two_sided={game_state?.is_started && !show_settings}>
@@ -231,10 +270,11 @@
 				<div in:fade={{ duration: 200 }}>
 					<Board
 						board_state={game_state.board_state}
-						{...selection}
+						{selected_coord}
+						{possible_targets}
 						flipped={game_state.is_started && board_flipped}
 						last_move={game_state.last_move}
-						on:select={select}
+						on:select={(e) => select(e.detail)}
 					/>
 					{#if game_state.is_started}
 						<Menu
@@ -268,6 +308,6 @@
 
 <Dialog>
 	{#if during_promotion && my_color}
-		<Promotion color={my_color} on:finish_promotion={finish_promotion} />
+		<Promotion color={my_color} {finish_promotion} />
 	{/if}
 </Dialog>

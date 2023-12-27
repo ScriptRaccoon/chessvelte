@@ -24,12 +24,9 @@
 
 
 ### STRUCTURE ###
-- simplify move communication: the "during move" phase should be handled completely
-  by the client, it is only submitted once it is complete. accordingly,
-  selected_coord should not be in the game class. and we will be able to simplify
-  the game logic on the server a lot.
-- accordingly, simplify promotion communication: finish the whole promotion move
-  on the client, only then send it to the server.
+- utility for copy_url with callback
+- game db class to extract the ID and DB feature
+- move class to validate promotion for example
 - try to reduce god class "Game" to simpler modules
 - increase Jest test coverage
 - more defensive programming

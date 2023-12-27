@@ -1,8 +1,7 @@
 import {
 	Chat_Message,
 	Client_Event,
-	Coord,
-	Piece_Type,
+	Move_State,
 	Server_Event,
 } from "$shared/types"
 import type { Game } from "./Game"
@@ -90,6 +89,14 @@ export class SocketController {
 		this.send_game_state()
 	}
 
+	public execute_move(move: Move_State): void {
+		if (!this.game.is_playing) return
+		if (!this.may_move) return
+		this.game.execute_move(move)
+		this.send_game_state()
+		this.send_game_outcome()
+	}
+
 	public resign(): void {
 		if (!this.game.is_playing) return
 		this.game.resign(this.socket.id)
@@ -118,18 +125,6 @@ export class SocketController {
 		this.game.cancel_draw()
 	}
 
-	public select(coord: Coord): void {
-		if (!this.may_move) return
-		const actionable = this.game.select_coord(coord)
-		this.send_me("selection", this.game.selection)
-		if (actionable) {
-			this.send_game_state()
-			this.send_game_outcome()
-		} else if (this.game.is_during_promotion) {
-			this.send_me("open_promotion_modal")
-		}
-	}
-
 	public restart(): void {
 		if (!this.game.has_ended) return
 		this.game.reset()
@@ -147,24 +142,12 @@ export class SocketController {
 		}
 	}
 
-	public cancel_promotion(): void {
-		if (!this.may_move) return
-		this.game.cancel_promotion()
-	}
-
-	public finish_promotion(type: Piece_Type): void {
-		if (!this.may_move) return
-		this.game.finish_promotion(type)
-		this.send_game_state()
-	}
-
 	public chat(msg: Chat_Message): void {
 		if (!msg.content || !msg.name) return
 		this.send("chat", msg)
 	}
 
 	public handle_disconnect(): void {
-		if (this.may_move) this.game.cancel_promotion()
 		const msg = `${this.player.name ?? "Player"} has disconnected`
 		this.send("toast", msg, "error")
 		this.send_others("chat", { content: msg })
