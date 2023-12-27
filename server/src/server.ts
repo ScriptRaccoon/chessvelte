@@ -35,10 +35,15 @@ io.on("connection", (socket) => {
 	socket.on("join", (game_id, client_id, name) => {
 		const game = Game.get_or_create_by_id(game_id)
 
-		const { success, is_new } = game.add_player(socket.id, client_id, name)
-		if (!success) return
+		const { success, is_new, player } = game.add_player(
+			socket.id,
+			client_id,
+			name,
+		)
 
-		const controller = new SocketController(socket, io, game)
+		if (!success || !player) return
+
+		const controller = new SocketController(socket, io, game, player)
 		controller.start(is_new)
 
 		socket.on("resign", () => controller.resign())

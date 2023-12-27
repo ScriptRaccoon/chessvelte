@@ -13,13 +13,13 @@ describe("Pairing class", () => {
 		})
 	})
 
-	describe("get_by_id", () => {
+	describe("get", () => {
 		it("returns the pairing of the given ID if it exists", () => {
 			const pairing = new Pairing("123")
-			expect(Pairing.get_by_id("123")).toBe(pairing)
+			expect(Pairing.get("123")).toBe(pairing)
 		})
 		it("returns 'undefined' for a pairing that does not exist", () => {
-			expect(Pairing.get_by_id("123")).toBeUndefined()
+			expect(Pairing.get("123")).toBeUndefined()
 		})
 	})
 
@@ -68,6 +68,19 @@ describe("Pairing class", () => {
 			expect(Pairing.exists("123")).toBe(false)
 			expect(Pairing.exists("456")).toBe(false)
 			expect(Pairing.exists("789")).toBe(false)
+		})
+	})
+
+	describe("get_or_create_by_id", () => {
+		it("should return existing Pairing if it exists", () => {
+			const pairing = new Pairing("123")
+			expect(Pairing.get_or_create_by_id("123")).toBe(pairing)
+		})
+
+		it("should create new Pairing if it does not exist", () => {
+			const pairing = Pairing.get_or_create_by_id("456")
+			expect(pairing).toBeDefined()
+			expect(pairing).toBeInstanceOf(Pairing)
 		})
 	})
 })

@@ -13,15 +13,12 @@ import type { Player } from "./Player"
  * It connects the server with the methods in Game class.
  */
 export class SocketController {
-	private player: Player
-
 	constructor(
 		private socket: Socket<Client_Event, Server_Event, {}, {}>,
 		private io: Server<Client_Event, Server_Event, {}, {}>,
 		private game: Game,
-	) {
-		this.player = this.game.get_player(socket.id)
-	}
+		private player: Player,
+	) {}
 
 	// GETTERS
 
@@ -137,7 +134,7 @@ export class SocketController {
 
 	public send_new_colors(): void {
 		for (const socket_id of this.game.list_of_sockets) {
-			const new_color = this.game.get_player(socket_id).color
+			const new_color = this.game.get_player(socket_id)!.color
 			this.io.to(socket_id).emit("color", new_color)
 		}
 	}

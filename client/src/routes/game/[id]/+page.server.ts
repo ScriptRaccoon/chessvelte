@@ -13,11 +13,7 @@ export const load = (event) => {
 		redirect(303, `/?id=${game_id}`)
 	}
 
-	let pairing = Pairing.get_by_id(game_id)
-
-	if (!pairing) {
-		pairing = new Pairing(game_id)
-	}
+	const pairing = Pairing.get_or_create_by_id(game_id)
 
 	if (pairing.has_player(client_id)) {
 		return { game_id, client_id, name }

@@ -10,6 +10,7 @@ import type {
 import { Capture, Move } from "../types.server"
 import { PROMOTION_PIECE_TYPES } from "$shared/config"
 import { get_other_color, key, map_object } from "$shared/utils"
+import { SimpleDB } from "$shared/SimpleDB"
 
 import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
@@ -21,10 +22,11 @@ import { PlayerGroup } from "./PlayerGroup"
  * and for handling all the game logic.
  */
 export class Game {
-	private static dictionary: Record<string, Game | undefined> = {}
+	private static db = new SimpleDB<Game>()
 
 	public static get_or_create_by_id(id: string): Game {
-		return Game.dictionary[id] ?? new Game(id)
+		if (Game.db.has(id)) return this.db.get(id)!
+		return new Game(id)
 	}
 
 	#id: string
@@ -42,7 +44,7 @@ export class Game {
 	constructor(id: string) {
 		this.#id = id
 		this.compute_possible_moves()
-		Game.dictionary[id] = this
+		Game.db.add(id, this)
 	}
 
 	public get state(): Game_State {
@@ -131,25 +133,26 @@ export class Game {
 		socket_id: string,
 		client_id: string,
 		name: string,
-	): { success: boolean; is_new: boolean } {
-		const { success, is_new } = this.player_group.add(
-			socket_id,
-			client_id,
-			name,
-		)
-		if (success && this.status === "waiting" && this.player_group.is_full) {
+	): { success: boolean; is_new: boolean; player?: Player } {
+		const result = this.player_group.add(socket_id, client_id, name)
+		if (
+			result.success &&
+			this.status === "waiting" &&
+			this.player_group.is_full
+		) {
 			this.status = "playing"
 		}
-		return { success, is_new }
+		return result
 	}
 
-	public get_player(socket_id: string): Player {
-		return this.player_group.get_by_id(socket_id)
+	public get_player(socket_id: string): Player | undefined {
+		return this.player_group.get(socket_id)
 	}
 
 	public is_allowed_to_move(socket_id: string): boolean {
 		return (
-			this.is_playing && this.get_player(socket_id).color === this.current_color
+			this.is_playing &&
+			this.get_player(socket_id)?.color === this.current_color
 		)
 	}
 

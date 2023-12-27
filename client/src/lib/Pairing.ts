@@ -1,3 +1,5 @@
+import { SimpleDB } from "$shared/SimpleDB"
+
 type Client_ID = string
 type Game_ID = string
 
@@ -6,25 +8,30 @@ type Game_ID = string
  * In particular, it prevents clients from joining a game that already has two players.
  */
 export class Pairing {
-	private static dictionary: Record<Game_ID, Pairing> = {}
+	private static db = new SimpleDB<Pairing>()
 
-	public static exists(id: Game_ID): boolean {
-		return id in Pairing.dictionary
+	public static get_or_create_by_id(id: string): Pairing {
+		if (Pairing.db.has(id)) return this.db.get(id)!
+		return new Pairing(id)
 	}
 
-	public static get_by_id(id: Game_ID): Pairing | undefined {
-		return Pairing.dictionary[id]
+	public static exists(id: Game_ID): boolean {
+		return this.db.has(id)
+	}
+
+	public static get(id: Game_ID): Pairing | undefined {
+		return this.db.get(id)
 	}
 
 	public static clear(): void {
-		Pairing.dictionary = {}
+		this.db.clear()
 	}
 
 	constructor(
 		id: Game_ID,
 		private players: Client_ID[] = [],
 	) {
-		Pairing.dictionary[id] = this
+		Pairing.db.add(id, this)
 	}
 
 	public add_player(client_id: Client_ID): void {
