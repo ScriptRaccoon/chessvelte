@@ -8,7 +8,7 @@ import type {
 	Possible_Moves_State,
 } from "$shared/types"
 import { Capture, Move } from "../types.server"
-import { PROMOTION_PIECE_TYPES } from "$shared/config"
+import { OUTCOME_MESSAGES, PROMOTION_PIECE_TYPES } from "$shared/config"
 import { get_other_color, key, map_object } from "$shared/utils"
 import { SimpleDB } from "$shared/SimpleDB"
 
@@ -47,13 +47,15 @@ export class Game {
 		Game.db.add(id, this)
 	}
 
+	// GETTERS
+
 	public get state(): Game_State {
 		return {
-			is_started: this.is_started,
-			is_ended: this.has_ended,
 			current_color: this.current_color,
 			board_state: this.board.state,
 			captured_pieces: this.captured_pieces,
+			is_started: this.is_started,
+			is_ended: this.has_ended,
 			player_names: this.player_group.player_names,
 			last_move: this.last_move,
 			possible_moves: this.possible_moves_state,
@@ -95,25 +97,7 @@ export class Game {
 	}
 
 	public get outcome(): string {
-		if (this.status === "checkmate-white") {
-			return "Checkmate against White"
-		}
-		if (this.status === "checkmate-black") {
-			return "Checkmate against Black"
-		}
-		if (this.status === "stalemate") {
-			return "Stalemate"
-		}
-		if (this.status === "resigned-white") {
-			return "White has resigned"
-		}
-		if (this.status === "resigned-black") {
-			return "Black has resigned"
-		}
-		if (this.status === "drawn") {
-			return "Drawn by agreement"
-		}
-		return ""
+		return OUTCOME_MESSAGES[this.status]
 	}
 
 	private get captured_pieces(): Piece_State[] {

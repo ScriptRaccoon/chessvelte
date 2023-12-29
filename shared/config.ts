@@ -1,4 +1,4 @@
-import type { Color, Piece_Type } from "./types"
+import type { Color, Game_Status, Piece_Type } from "./types"
 
 export const TITLE = "Chessvelte"
 
@@ -40,3 +40,14 @@ export const CHARACTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 export const BOARD_THEMES = ["brown", "green", "blue"]
 
 export const DEFAULT_THEME = BOARD_THEMES[0]
+
+export const OUTCOME_MESSAGES: Record<Game_Status, string> = {
+	"waiting": "",
+	"playing": "",
+	"checkmate-white": "Checkmate against White",
+	"checkmate-black": "Checkmate against Black",
+	"stalemate": "Stalemate",
+	"resigned-white": "White has resigned",
+	"resigned-black": "Black has resigned",
+	"drawn": "Drawn by agreement",
+}
