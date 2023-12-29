@@ -7,9 +7,14 @@ import type {
 	Move_State,
 	Possible_Moves_State,
 } from "$shared/types"
-import { Capture, Move } from "../types.server"
-import { OUTCOME_MESSAGES, PROMOTION_PIECE_TYPES } from "$shared/config"
-import { get_other_color, key, map_object } from "$shared/utils"
+import { Capture, Move, Possible_Moves } from "../types.server"
+import { OUTCOME_MESSAGES } from "$shared/config"
+import {
+	get_other_color,
+	is_valid_promotion_choice,
+	key,
+	map_object,
+} from "$shared/utils"
 import { SimpleDB } from "$shared/SimpleDB"
 
 import { MoveHistory } from "./MoveHistory"
@@ -30,16 +35,16 @@ export class Game {
 	}
 
 	#id: string
-	private move_history: MoveHistory = new MoveHistory()
+	private player_group = new PlayerGroup()
 	private board: Board = new Board()
+	private move_history: MoveHistory = new MoveHistory()
 	private status: Game_Status = "waiting"
-	private possible_moves: Record<Coord_Key, Move[]> = {}
+	private current_color: Color = "white"
+	private possible_moves: Possible_Moves = {}
 	private number_of_possible_moves: number = 0
 	private captures: Capture[] = []
-	private is_ended: boolean = false
-	private current_color: Color = "white"
-	private player_group = new PlayerGroup()
 	private during_draw_offer: boolean = false
+	private is_ended: boolean = false
 
 	constructor(id: string) {
 		this.#id = id
@@ -141,19 +146,16 @@ export class Game {
 	}
 
 	public execute_move(move_attempt: Move_State): void {
-		const { start, end } = move_attempt
+		const { start, end, promotion_choice } = move_attempt
 		const moves = this.possible_moves[key(start)]
 		const move = moves.find((move) => key(move.end) === key(end))
 		if (!move) return
 		if (move.type === "promotion") {
-			move.promotion_choice = move_attempt.promotion_choice
-			const is_valid =
-				move.promotion_choice !== undefined &&
-				PROMOTION_PIECE_TYPES.includes(move.promotion_choice)
-			if (!is_valid) return
+			if (!is_valid_promotion_choice(promotion_choice)) return
+			move.promotion_choice = promotion_choice
 		}
 		this.apply_move(move)
-		this.switch_color()
+		this.switch_current_color()
 		this.compute_possible_moves()
 		this.check_for_ending()
 	}
@@ -164,8 +166,12 @@ export class Game {
 		if (capture) this.captures.push(capture)
 	}
 
-	private switch_color(): void {
+	private switch_current_color(): void {
 		this.current_color = get_other_color(this.current_color)
+	}
+
+	public switch_player_colors(): void {
+		this.player_group.switch_colors()
 	}
 
 	private check_for_ending(): void {
@@ -181,18 +187,15 @@ export class Game {
 		this.status = "playing"
 		this.captures = []
 		this.is_ended = false
+		this.during_draw_offer = false
 		this.move_history.clear()
 		this.board.reset()
 		this.compute_possible_moves()
 	}
 
-	public switch_player_colors(): void {
-		this.player_group.switch_colors()
-	}
-
 	private compute_possible_moves(): void {
 		let counter = 0
-		const all_moves: Record<Coord_Key, Move[]> = {}
+		const all_moves: Possible_Moves = {}
 		for (const coord of this.board.coords) {
 			const piece = this.board.get(coord)
 			if (!piece || piece.color !== this.current_color) continue

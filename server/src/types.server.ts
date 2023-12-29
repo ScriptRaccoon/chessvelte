@@ -17,3 +17,5 @@ export type Capture = {
 	coord: Coord
 	piece: Piece
 }
+
+export type Possible_Moves = Record<Coord_Key, Move[]>

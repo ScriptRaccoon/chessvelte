@@ -1,4 +1,4 @@
-import { CHARACTERS, SIZE } from "./config"
+import { CHARACTERS, PROMOTION_PIECE_TYPES, SIZE } from "./config"
 import type { Color, Coord, Coord_Key, Piece_Type } from "./types"
 
 export function generate_short_id(length: number): string {
@@ -104,4 +104,10 @@ export function map_object<K extends string, V, W>(
 export function display_large_number(num: number): string {
 	if (num < 10) return String(num)
 	return "9+"
+}
+
+export function is_valid_promotion_choice(
+	choice: Piece_Type | undefined,
+): choice is Piece_Type {
+	return choice !== undefined && PROMOTION_PIECE_TYPES.includes(choice)
 }

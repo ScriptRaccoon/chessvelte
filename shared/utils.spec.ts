@@ -17,6 +17,7 @@ import {
 	piece_src,
 	map_object,
 	display_large_number,
+	is_valid_promotion_choice,
 } from "./utils"
 
 import { JSDOM } from "jsdom"
@@ -254,5 +255,19 @@ describe("display_large_number", () => {
 	it("should return '9+' for numbers >= 10", () => {
 		expect(display_large_number(10)).toBe("9+")
 		expect(display_large_number(20)).toBe("9+")
+	})
+})
+
+describe("is_valid_promotion_choice", () => {
+	it("should return true for valid promotion choices", () => {
+		expect(is_valid_promotion_choice("queen")).toBe(true)
+		expect(is_valid_promotion_choice("rook")).toBe(true)
+		expect(is_valid_promotion_choice("bishop")).toBe(true)
+		expect(is_valid_promotion_choice("knight")).toBe(true)
+	})
+	it("should return false for invalid promotion choices", () => {
+		expect(is_valid_promotion_choice("king")).toBe(false)
+		expect(is_valid_promotion_choice("pawn")).toBe(false)
+		expect(is_valid_promotion_choice(undefined)).toBe(false)
 	})
 })
