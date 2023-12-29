@@ -100,3 +100,8 @@ export function map_object<K extends string, V, W>(
 		Object.entries(obj).map(([key, value]: [K, V]) => [key, transform(value)]),
 	) as Record<K, W>
 }
+
+export function display_large_number(num: number): string {
+	if (num < 10) return String(num)
+	return "9+"
+}

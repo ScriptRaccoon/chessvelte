@@ -44,7 +44,7 @@
 
 	let chat_messages: Chat_Message[] = []
 	let show_chat: boolean = false
-	let pending_messages: boolean = false
+	let pending_messages: number = 0
 
 	let board_flipped: boolean = false
 	let show_settings: boolean = false
@@ -95,7 +95,7 @@
 	socket.on("chat", (msg) => {
 		chat_messages = [...chat_messages, msg]
 		if (!show_chat && msg.name) {
-			pending_messages = true
+			pending_messages++
 		}
 	})
 
@@ -242,7 +242,7 @@
 
 	function toggle_chat() {
 		show_chat = !show_chat
-		if (show_chat) pending_messages = false
+		if (show_chat) pending_messages = 0
 	}
 
 	function flip_board() {

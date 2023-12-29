@@ -1,14 +1,17 @@
 <script lang="ts">
-	import type { Color } from "$shared/types"
+	import { fly } from "svelte/transition"
+	import { createEventDispatcher } from "svelte"
 	import Fa from "svelte-fa"
 	import { faComments } from "@fortawesome/free-solid-svg-icons"
-	import { createEventDispatcher } from "svelte"
+	import type { Color } from "$shared/types"
+	import { display_large_number } from "$shared/utils"
+
 	const dispatch = createEventDispatcher()
 
 	export let my_turn: boolean
 	export let current_color: Color
 	export let is_ended: boolean
-	export let pending_messages: boolean
+	export let pending_messages: number = 0
 
 	$: turn_message = my_turn ? "It's your turn" : "Wait"
 </script>
@@ -29,11 +32,15 @@
 	<menu>
 		<button
 			class="button"
-			class:pulse={pending_messages}
 			aria-label="toggle chat"
 			on:click={() => dispatch("toggle_chat")}
 		>
 			<Fa icon={faComments} />
+			{#if pending_messages > 0}
+				<span transition:fly={{ duration: 200, x: 10 }} class="counter"
+					>{display_large_number(pending_messages)}</span
+				>
+			{/if}
 		</button>
 		<button class="button" on:click={() => dispatch("flip")}>Flip</button>
 		{#if is_ended}
@@ -82,16 +89,17 @@
 		margin-left: auto;
 	}
 
-	.pulse :global(svg) {
-		animation: pulse 1s infinite ease-in alternate;
-	}
-
-	@keyframes pulse {
-		0% {
-			scale: 0.8;
-		}
-		100% {
-			scale: 1;
-		}
+	.counter {
+		position: absolute;
+		top: -0.25rem;
+		left: -1rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 1.4rem;
+		height: 1.4rem;
+		font-size: 0.9rem;
+		border-radius: 100vw;
+		background-color: var(--error-color);
 	}
 </style>

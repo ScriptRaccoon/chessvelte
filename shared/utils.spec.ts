@@ -16,6 +16,7 @@ import {
 	abridge,
 	piece_src,
 	map_object,
+	display_large_number,
 } from "./utils"
 
 import { JSDOM } from "jsdom"
@@ -238,5 +239,20 @@ describe("map_object", () => {
 		const transform = (value: number) => value * 2
 		const expected = { a: 2, b: 4, c: 6 }
 		expect(map_object(obj, transform)).toEqual(expected)
+	})
+})
+
+describe("display_large_number", () => {
+	it("should transform numbers to strings", () => {
+		expect(typeof display_large_number(1)).toBe("string")
+		expect(typeof display_large_number(20)).toBe("string")
+	})
+	it("should not change numbers < 10", () => {
+		expect(display_large_number(1)).toBe("1")
+		expect(display_large_number(9)).toBe("9")
+	})
+	it("should return '9+' for numbers >= 10", () => {
+		expect(display_large_number(10)).toBe("9+")
+		expect(display_large_number(20)).toBe("9+")
 	})
 })
