@@ -1,37 +1,7 @@
 import { Coord, Piece_State } from "./types"
-import {
-	capitalize,
-	deep_copy,
-	gen_coord,
-	generate_short_id,
-	get_other_color,
-	get_random_color,
-	has_coord,
-	inner_range,
-	is_valid,
-	key,
-	unkey,
-	scroll_to_bottom,
-	rotate,
-	abridge,
-	piece_src,
-	map_object,
-	display_large_number,
-	is_valid_promotion_choice,
-	filter_pieces,
-} from "./utils"
+import * as utils from "./utils"
 
-import { JSDOM } from "jsdom"
-
-const dom = new JSDOM("<!doctype html><html><body></body></html>", {
-	url: "http://localhost",
-	storageQuota: 10_000_000,
-})
-
-global.document = dom.window.document
-global.window = dom.window
-
-const mocked_random = jest.spyOn(global.Math, "random")
+const mocked_random = jest.spyOn(Math, "random")
 
 afterAll(() => {
 	jest.clearAllMocks()
@@ -39,7 +9,7 @@ afterAll(() => {
 
 describe("generate_short_id", () => {
 	it("returns an id of the correct type and length", () => {
-		const id = generate_short_id(6)
+		const id = utils.generate_short_id(6)
 		expect(typeof id).toBe("string")
 		expect(id.length).toBe(6)
 	})
@@ -51,33 +21,33 @@ describe("generate_short_id", () => {
 			.mockReturnValueOnce(0.6)
 			.mockReturnValueOnce(0.2)
 
-		const id = generate_short_id(4)
+		const id = utils.generate_short_id(4)
 		expect(id).toBe("DSVG")
 	})
 })
 
 describe("key", () => {
 	it("maps a coordinate to its string representation", () => {
-		expect(key([0, 0])).toEqual("00")
-		expect(key([2, 3])).toEqual("23")
+		expect(utils.key([0, 0])).toEqual("00")
+		expect(utils.key([2, 3])).toEqual("23")
 	})
 
 	it("inverts the unkey function", () => {
-		expect(key(unkey("45"))).toEqual("45")
-		expect(unkey(key([2, 1]))).toEqual([2, 1])
+		expect(utils.key(utils.unkey("45"))).toEqual("45")
+		expect(utils.unkey(utils.key([2, 1]))).toEqual([2, 1])
 	})
 })
 
 describe("unkey", () => {
 	it("maps a coordinate key to the coordinate", () => {
-		expect(unkey("00")).toEqual([0, 0])
-		expect(unkey("23")).toEqual([2, 3])
+		expect(utils.unkey("00")).toEqual([0, 0])
+		expect(utils.unkey("23")).toEqual([2, 3])
 	})
 })
 
 describe("gen_coord", () => {
 	it("generates a coordinate from two numbers", () => {
-		expect(gen_coord(2, 3)).toEqual([2, 3])
+		expect(utils.gen_coord(2, 3)).toEqual([2, 3])
 	})
 })
 
@@ -85,23 +55,23 @@ describe("has_coord", () => {
 	it("checks if a coordinate is contained in a list of coordinates", () => {
 		// prettier-ignore
 		const coords: Coord[] = [[0, 0], [1, 1], [2, 3]]
-		expect(has_coord(coords, [1, 1])).toBe(true)
-		expect(has_coord(coords, [0, 1])).toBe(false)
+		expect(utils.has_coord(coords, [1, 1])).toBe(true)
+		expect(utils.has_coord(coords, [0, 1])).toBe(false)
 	})
 })
 
 describe("is_valid", () => {
 	it("returns false for invalid coordinates", () => {
-		expect(is_valid([-1, -1])).toBe(false)
-		expect(is_valid([-1, 1])).toBe(false)
-		expect(is_valid([8, 1])).toBe(false)
-		expect(is_valid([1, 9])).toBe(false)
+		expect(utils.is_valid([-1, -1])).toBe(false)
+		expect(utils.is_valid([-1, 1])).toBe(false)
+		expect(utils.is_valid([8, 1])).toBe(false)
+		expect(utils.is_valid([1, 9])).toBe(false)
 	})
 
 	it("returns true for valid coordinates", () => {
-		expect(is_valid([1, 1])).toBe(true)
-		expect(is_valid([6, 7])).toBe(true)
-		expect(is_valid([5, 0])).toBe(true)
+		expect(utils.is_valid([1, 1])).toBe(true)
+		expect(utils.is_valid([6, 7])).toBe(true)
+		expect(utils.is_valid([5, 0])).toBe(true)
 	})
 })
 
@@ -115,7 +85,7 @@ describe("deep_copy", () => {
 	const original: Record<string, List<number>> = {
 		"11": new List([1, 2, 3]),
 	}
-	const copy = deep_copy(original)
+	const copy = utils.deep_copy(original)
 
 	it("creates a deep copy", () => {
 		expect(copy["11"]?.data).toEqual(original["11"].data)
@@ -132,32 +102,32 @@ describe("deep_copy", () => {
 
 describe("inner_range", () => {
 	it("maps (2,5) to the list [3,4]", () => {
-		expect(inner_range(2, 5)).toEqual([3, 4])
+		expect(utils.inner_range(2, 5)).toEqual([3, 4])
 	})
 
 	it("maps (5,1) to the list [2,3,4]", () => {
-		expect(inner_range(5, 1)).toEqual([2, 3, 4])
+		expect(utils.inner_range(5, 1)).toEqual([2, 3, 4])
 	})
 
 	it("maps (1,2) to the list []", () => {
-		expect(inner_range(1, 2)).toEqual([])
+		expect(utils.inner_range(1, 2)).toEqual([])
 	})
 })
 
 describe("capitalize", () => {
 	it("transforms 'black' to 'Black'", () => {
-		expect(capitalize("black")).toBe("Black")
+		expect(utils.capitalize("black")).toBe("Black")
 	})
 
 	it("transforms 'tEsT' to 'TEsT'", () => {
-		expect(capitalize("tEsT")).toBe("TEsT")
+		expect(utils.capitalize("tEsT")).toBe("TEsT")
 	})
 })
 
 describe("other_color", () => {
 	it("maps white to black and vice versa", () => {
-		expect(get_other_color("white")).toBe("black")
-		expect(get_other_color("black")).toBe("white")
+		expect(utils.get_other_color("white")).toBe("black")
+		expect(utils.get_other_color("black")).toBe("white")
 	})
 })
 
@@ -168,10 +138,10 @@ describe("get_random_color", () => {
 			.mockReturnValueOnce(0.2)
 			.mockReturnValueOnce(0.7)
 			.mockReturnValueOnce(0.9)
-		expect(get_random_color()).toBe("white")
-		expect(get_random_color()).toBe("white")
-		expect(get_random_color()).toBe("black")
-		expect(get_random_color()).toBe("black")
+		expect(utils.get_random_color()).toBe("white")
+		expect(utils.get_random_color()).toBe("white")
+		expect(utils.get_random_color()).toBe("black")
+		expect(utils.get_random_color()).toBe("black")
 	})
 })
 
@@ -181,7 +151,7 @@ describe("scroll_to_bottom", () => {
 			scrollTop: 0,
 			scrollHeight: 100,
 		}
-		scroll_to_bottom(element_mock as HTMLElement)
+		utils.scroll_to_bottom(element_mock as HTMLElement)
 		expect(element_mock.scrollTop).toBe(100)
 	})
 })
@@ -197,41 +167,41 @@ describe("rotate", () => {
 	]
 
 	it.each(samples)("maps %p to %p", (coord, expected) => {
-		expect(rotate(coord as Coord)).toEqual(expected)
+		expect(utils.rotate(coord as Coord)).toEqual(expected)
 	})
 
 	it("leaves coordinates untouched when specified", () => {
-		expect(rotate([5, 6], false)).toEqual([5, 6])
-		expect(rotate([0, 0], false)).toEqual([0, 0])
+		expect(utils.rotate([5, 6], false)).toEqual([5, 6])
+		expect(utils.rotate([0, 0], false)).toEqual([0, 0])
 	})
 })
 
 describe("abridge", () => {
 	it("does not change strings which are short enough (1)", () => {
 		const sample = "sample"
-		expect(abridge(sample, 6)).toBe(sample)
+		expect(utils.abridge(sample, 6)).toBe(sample)
 	})
 
 	it("does not change strings which are short enough (2)", () => {
 		const sample = "lalalala"
-		expect(abridge(sample, 10)).toBe(sample)
+		expect(utils.abridge(sample, 10)).toBe(sample)
 	})
 
 	it("abridges a long string and adds '...' onto the end (1)", () => {
 		const sample = "toolongname"
-		expect(abridge(sample, 6)).toBe("tool...")
+		expect(utils.abridge(sample, 6)).toBe("tool...")
 	})
 
 	it("abridges a long string and adds '...' onto the end (2)", () => {
 		const sample = "miraculix"
-		expect(abridge(sample, 8)).toBe("miracu...")
+		expect(utils.abridge(sample, 8)).toBe("miracu...")
 	})
 })
 
 describe("piece_str", () => {
 	it("returns the image source of a piece", () => {
-		expect(piece_src("king", "white")).toBe("../sprite.svg#king_white")
-		expect(piece_src("queen", "black")).toBe("../sprite.svg#queen_black")
+		expect(utils.piece_src("king", "white")).toBe("../sprite.svg#king_white")
+		expect(utils.piece_src("queen", "black")).toBe("../sprite.svg#queen_black")
 	})
 })
 
@@ -240,36 +210,36 @@ describe("map_object", () => {
 		const obj: Record<string, number> = { a: 1, b: 2, c: 3 }
 		const transform = (value: number) => value * 2
 		const expected = { a: 2, b: 4, c: 6 }
-		expect(map_object(obj, transform)).toEqual(expected)
+		expect(utils.map_object(obj, transform)).toEqual(expected)
 	})
 })
 
 describe("display_large_number", () => {
 	it("should transform numbers to strings", () => {
-		expect(typeof display_large_number(1)).toBe("string")
-		expect(typeof display_large_number(20)).toBe("string")
+		expect(typeof utils.display_large_number(1)).toBe("string")
+		expect(typeof utils.display_large_number(20)).toBe("string")
 	})
 	it("should not change numbers < 10", () => {
-		expect(display_large_number(1)).toBe("1")
-		expect(display_large_number(9)).toBe("9")
+		expect(utils.display_large_number(1)).toBe("1")
+		expect(utils.display_large_number(9)).toBe("9")
 	})
 	it("should return '9+' for numbers >= 10", () => {
-		expect(display_large_number(10)).toBe("9+")
-		expect(display_large_number(20)).toBe("9+")
+		expect(utils.display_large_number(10)).toBe("9+")
+		expect(utils.display_large_number(20)).toBe("9+")
 	})
 })
 
 describe("is_valid_promotion_choice", () => {
 	it("should return true for valid promotion choices", () => {
-		expect(is_valid_promotion_choice("queen")).toBe(true)
-		expect(is_valid_promotion_choice("rook")).toBe(true)
-		expect(is_valid_promotion_choice("bishop")).toBe(true)
-		expect(is_valid_promotion_choice("knight")).toBe(true)
+		expect(utils.is_valid_promotion_choice("queen")).toBe(true)
+		expect(utils.is_valid_promotion_choice("rook")).toBe(true)
+		expect(utils.is_valid_promotion_choice("bishop")).toBe(true)
+		expect(utils.is_valid_promotion_choice("knight")).toBe(true)
 	})
 	it("should return false for invalid promotion choices", () => {
-		expect(is_valid_promotion_choice("king")).toBe(false)
-		expect(is_valid_promotion_choice("pawn")).toBe(false)
-		expect(is_valid_promotion_choice(undefined)).toBe(false)
+		expect(utils.is_valid_promotion_choice("king")).toBe(false)
+		expect(utils.is_valid_promotion_choice("pawn")).toBe(false)
+		expect(utils.is_valid_promotion_choice(undefined)).toBe(false)
 	})
 })
 
@@ -283,7 +253,7 @@ describe("filter_pieces", () => {
 			{ type: "rook", color: "black", value: 5 },
 		]
 
-		const filtered = filter_pieces(pieces, "white")
+		const filtered = utils.filter_pieces(pieces, "white")
 
 		expect(filtered).toEqual([
 			{ type: "pawn", color: "white", value: 1 },
