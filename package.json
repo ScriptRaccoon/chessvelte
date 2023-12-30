@@ -11,6 +11,7 @@
 		"start:server": "cd server && pnpm build && pnpm start",
 		"build": "pnpm run build:client && pnpm run build:server",
 		"test": "jest --passWithNoTests",
+		"testnew": "jest --passWithNoTests --onlyChanged",
 		"test:coverage": "jest --passWithNoTests --coverage",
 		"prepare": "husky install"
 	},
