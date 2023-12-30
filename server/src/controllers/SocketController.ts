@@ -20,12 +20,6 @@ export class SocketController {
 		private player: Player,
 	) {}
 
-	// GETTERS
-
-	private get may_move(): boolean {
-		return this.game.is_allowed_to_move(this.socket.id)
-	}
-
 	// AUXILIARY PRIVATE METHODS
 
 	private send<T extends keyof Server_Event>(
@@ -63,9 +57,10 @@ export class SocketController {
 	}
 
 	private send_game_outcome(): void {
-		if (!this.game.outcome) return
-		this.send("outcome", this.game.outcome)
-		this.send("chat", { content: this.game.outcome })
+		const outcome = this.game.status.outcome
+		if (!outcome) return
+		this.send("outcome", outcome)
+		this.send("chat", { content: outcome })
 	}
 
 	// PUBLIC METHODS
@@ -79,7 +74,7 @@ export class SocketController {
 		this.send_others("toast", msg, "success")
 		this.send("chat", { content: msg })
 
-		if (is_new && this.game.is_playing) {
+		if (is_new && this.game.status.is_playing) {
 			this.send_start_messages()
 		}
 
@@ -87,43 +82,45 @@ export class SocketController {
 	}
 
 	public execute_move(move: Move_State): void {
-		if (!this.game.is_playing) return
-		if (!this.may_move) return
+		const player = this.game.get_player(this.socket.id)
+		if (!player || !this.game.status.is_allowed_to_move(player.color)) return
 		this.game.execute_move(move)
 		this.send_game_state()
 		this.send_game_outcome()
 	}
 
 	public resign(): void {
-		if (!this.game.is_playing) return
-		this.game.resign(this.socket.id)
+		const player = this.game.get_player(this.socket.id)
+		if (!this.game.status.is_playing || !player) return
+		this.game.status.resign(player.color)
 		this.send_game_state()
 		this.send_game_outcome()
 	}
 
 	public offer_draw(): void {
-		if (!this.game.is_playing || this.game.is_during_draw_offer) return
-		this.game.initialize_draw()
+		if (!this.game.status.is_playing || this.game.status.during_draw_offer)
+			return
+		this.game.status.initialize_draw()
 		this.send_me("toast", "Draw has been offered", "info")
 		this.send_others("offer_draw", this.player.name)
 	}
 
 	public reject_draw(): void {
-		if (!this.game.is_playing) return
+		if (!this.game.status.is_playing) return
 		this.send("toast", `${this.player.name} has rejected the draw`, "error")
-		this.game.cancel_draw()
+		this.game.status.cancel_draw()
 	}
 
 	public accept_draw(): void {
-		if (!this.game.is_playing) return
-		this.game.draw()
+		if (!this.game.status.is_playing) return
+		this.game.status.draw()
 		this.send_game_state()
 		this.send_game_outcome()
-		this.game.cancel_draw()
+		this.game.status.cancel_draw()
 	}
 
 	public restart(): void {
-		if (!this.game.has_ended) return
+		if (!this.game.status.is_ended) return
 		this.game.reset()
 		this.game.switch_player_colors()
 		this.send_game_state()
