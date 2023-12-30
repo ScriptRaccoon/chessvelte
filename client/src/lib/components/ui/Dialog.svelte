@@ -21,16 +21,19 @@
 	}
 
 	export function open_dialog(options: Partial<Dialog_State>) {
-		const all_options = { ...DEFAULT_STATE, ...options }
-		dialog_state.set(all_options)
+		const delay = get(dialog_state) ? 200 : 0
+		setTimeout(() => {
+			const all_options = { ...DEFAULT_STATE, ...options }
+			dialog_state.set(all_options)
 
-		if (all_options.modal) {
-			dialog?.showModal()
-		} else {
-			dialog?.show()
-		}
+			if (all_options.modal) {
+				dialog?.showModal()
+			} else {
+				dialog?.show()
+			}
 
-		visible.set(true)
+			visible.set(true)
+		}, delay)
 	}
 
 	export function close_dialog() {
