@@ -2,16 +2,8 @@
 - on mobile prod, the resign modal is still not shown for the resigning player
   need to fix the close logic for the modal
 
+
 ### FEATURES ###
-- currently, on the client the complete game state is replaced by a new one which
-  causes the game to flicker on safari for example, but it is also bad performance
-  and is connected to the delay issue below. we should only send the diff,
-  resp. the mode that is being made.
-  alternatively, we can calculate the diff on the client-side.
-- prevent delay of movement (caused by client-server communication), maybe
-  make the move also on the client-side, send it to the server and to the other
-  clients, and send it back to the original to verify its integrity and only
-  if not update it.
 
 
 ### DESIGN ####
@@ -20,7 +12,6 @@
 
 
 ### STRUCTURE ###
-- move class to validate promotion for example
 - try to reduce god class "Game" to simpler modules
 - increase Jest test coverage
 - more defensive programming
