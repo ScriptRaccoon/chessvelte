@@ -1,11 +1,10 @@
 import type {
 	Color,
-	Coord_Key,
 	Game_Status,
 	Game_State,
 	Piece_State,
 	Move_State,
-	Possible_Moves_State,
+	Coord_Key,
 } from "$shared/types"
 import { Capture, Move, Possible_Moves } from "../types.server"
 import { OUTCOME_MESSAGES } from "$shared/config"
@@ -57,7 +56,7 @@ export class Game {
 	public get state(): Game_State {
 		return {
 			current_color: this.current_color,
-			board_state: this.board.state,
+			pieces: this.board.pieces,
 			captured_pieces: this.captured_pieces,
 			is_started: this.is_started,
 			is_ended: this.has_ended,
@@ -67,7 +66,7 @@ export class Game {
 		}
 	}
 
-	private get possible_moves_state(): Possible_Moves_State {
+	private get possible_moves_state(): Record<Coord_Key, Move_State[]> {
 		return map_object(this.possible_moves, (moves) =>
 			moves.map(({ start, end, type }) => ({ start, end, type })),
 		)
@@ -106,7 +105,7 @@ export class Game {
 	}
 
 	private get captured_pieces(): Piece_State[] {
-		return this.captures.map((capture) => capture.piece.state)
+		return this.captures.map((capture) => capture.piece.state(capture.coord))
 	}
 
 	private get last_move(): Move_State | null {

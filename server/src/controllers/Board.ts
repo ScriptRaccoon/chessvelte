@@ -1,9 +1,9 @@
-import type { Coord, Color, Board_State } from "$shared/types"
+import type { Coord, Color, Piece_State } from "$shared/types"
 import type { Capture, Move, Piece_Map } from "../types.server"
 import type { Piece } from "./Piece"
 import { INITIAL_CONFIG } from "../pieces/pieces.config"
 import { create_piece } from "../pieces/create"
-import { deep_copy, typed_keys, key, unkey, map_object } from "$shared/utils"
+import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
 
 /**
  * This class represents a chess board. It is responsible for storing and updating
@@ -16,8 +16,11 @@ export class Board {
 		this.map = map ?? deep_copy(INITIAL_CONFIG)
 	}
 
-	get state(): Board_State {
-		return map_object(this.map, (piece) => piece!.state)
+	get pieces(): Piece_State[] {
+		return this.coords.map((coord) => {
+			const piece = this.get(coord)!
+			return piece.state(coord)
+		})
 	}
 
 	public copy(): Board {

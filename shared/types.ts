@@ -20,9 +20,9 @@ export type Piece_State = {
 	type: Piece_Type
 	color: Color
 	value: number
+	coord: Coord
+	id: string
 }
-
-export type Board_State = Record<Coord_Key, Piece_State>
 
 export type Move_State = {
 	start: Coord
@@ -30,8 +30,6 @@ export type Move_State = {
 	type: Move_Type
 	promotion_choice?: Piece_Type
 }
-
-export type Possible_Moves_State = Record<Coord_Key, Move_State[]>
 
 export type Game_Status =
 	| "waiting"
@@ -43,13 +41,13 @@ export type Game_Status =
 
 export type Game_State = {
 	current_color: Color
-	board_state: Board_State
+	pieces: Piece_State[]
 	captured_pieces: Piece_State[]
 	is_started: boolean
 	is_ended: boolean
 	player_names: [string, string] | null
 	last_move: Move_State | null
-	possible_moves: Possible_Moves_State
+	possible_moves: Record<Coord_Key, Move_State[]>
 }
 
 export type Chat_Message = {

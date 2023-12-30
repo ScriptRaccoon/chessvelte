@@ -246,19 +246,19 @@ describe("is_valid_promotion_choice", () => {
 describe("filter_pieces", () => {
 	it("should filter and sort pieces by color and value", () => {
 		const pieces: Piece_State[] = [
-			{ type: "pawn", color: "white", value: 1 },
-			{ type: "queen", color: "white", value: 9 },
-			{ type: "pawn", color: "black", value: 1 },
-			{ type: "bishop", color: "white", value: 3 },
-			{ type: "rook", color: "black", value: 5 },
+			{ type: "pawn", color: "white", value: 1, coord: [0, 1], id: "1" },
+			{ type: "queen", color: "white", value: 9, coord: [0, 1], id: "2" },
+			{ type: "pawn", color: "black", value: 1, coord: [0, 1], id: "3" },
+			{ type: "bishop", color: "white", value: 3, coord: [0, 1], id: "4" },
+			{ type: "rook", color: "black", value: 5, coord: [0, 1], id: "5" },
 		]
 
 		const filtered = utils.filter_pieces(pieces, "white")
 
 		expect(filtered).toEqual([
-			{ type: "pawn", color: "white", value: 1 },
-			{ type: "bishop", color: "white", value: 3 },
-			{ type: "queen", color: "white", value: 9 },
+			{ type: "pawn", color: "white", value: 1, coord: [0, 1], id: "1" },
+			{ type: "bishop", color: "white", value: 3, coord: [0, 1], id: "4" },
+			{ type: "queen", color: "white", value: 9, coord: [0, 1], id: "2" },
 		])
 	})
 })

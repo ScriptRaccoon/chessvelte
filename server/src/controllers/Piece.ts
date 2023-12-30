@@ -17,11 +17,13 @@ export abstract class Piece {
 		public id: string = generate_short_id(4),
 	) {}
 
-	get state(): Piece_State {
+	public state(coord: Coord): Piece_State {
 		return {
 			type: this.type,
 			color: this.color,
 			value: this.value,
+			id: this.id,
+			coord,
 		}
 	}
 

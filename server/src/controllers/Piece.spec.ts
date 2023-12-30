@@ -39,20 +39,15 @@ describe("Piece class", () => {
 	})
 
 	describe("state", () => {
-		it("returns an object with type, color and value", () => {
+		it("returns an object with coord, type, color, value and id", () => {
+			id_mock.mockReturnValue("123")
 			const pawn = new _Piece("pawn", "white")
-			expect(pawn.state).toEqual({
-				type: "pawn",
-				color: "white",
-				value: 1,
-			})
-
-			const queen = new _Piece("queen", "black")
-			expect(queen.state).toEqual({
-				type: "queen",
-				color: "black",
-				value: 9,
-			})
+			const state = pawn.state([0, 1])
+			expect(state.coord).toEqual([0, 1])
+			expect(state.type).toBe("pawn")
+			expect(state.color).toBe("white")
+			expect(state.value).toBe(1)
+			expect(state.id).toBe("123")
 		})
 	})
 

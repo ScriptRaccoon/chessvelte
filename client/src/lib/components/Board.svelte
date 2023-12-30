@@ -2,19 +2,12 @@
 	import Piece from "./Piece.svelte"
 	import Square from "./Square.svelte"
 
-	import type { Board_State, Coord, Move_State } from "$shared/types"
+	import type { Piece_State, Coord, Move_State } from "$shared/types"
 	import { COLS, ROWS, SIZE } from "$shared/config"
-	import {
-		has_coord,
-		gen_coord,
-		key,
-		rotate,
-		typed_keys,
-		unkey,
-	} from "$shared/utils"
+	import { has_coord, gen_coord, key, rotate } from "$shared/utils"
 	import { highlight_setting } from "$lib/stores"
 
-	export let board_state: Board_State
+	export let pieces: Piece_State[]
 	export let selected_coord: Coord | null = null
 	export let possible_targets: Coord[] = []
 	export let flipped: boolean = false
@@ -39,10 +32,8 @@
 			{/each}
 		{/each}
 	</div>
-	{#each typed_keys(board_state) as coord_key}
-		{@const rotated_coord = rotate(unkey(coord_key), flipped)}
-		{@const piece = board_state[coord_key]}
-		<Piece {piece} coord={rotated_coord} />
+	{#each pieces as piece (piece.id)}
+		<Piece {piece} coord={rotate(piece.coord, flipped)} />
 	{/each}
 </div>
 

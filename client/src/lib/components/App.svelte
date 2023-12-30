@@ -15,7 +15,6 @@
 		Piece_Type,
 		Chat_Message,
 		Move_State,
-		Possible_Moves_State,
 	} from "$shared/types"
 	import { key } from "$shared/utils"
 
@@ -31,14 +30,17 @@
 	import Board from "./Board.svelte"
 	import Settings from "./Settings.svelte"
 
+	// PROPS
+
 	export let game_id: string
 	export let client_id: string
 	export let name: string
 
+	// GLOBAL VARIABLES
+
 	let my_color: Color | null = null
 	let game_state: Game_State | null = null
 	let selected_coord: Coord | null = null
-	let possible_moves: Possible_Moves_State = {}
 	let during_promotion: boolean = false
 	let promotion_target: Coord | null = null
 
@@ -49,7 +51,11 @@
 	let board_flipped: boolean = false
 	let show_settings: boolean = false
 
-	$: my_turn = game_state !== null && game_state.current_color === my_color
+	// COMPUTED VARIABLES
+
+	$: my_turn = game_state?.current_color === my_color
+
+	$: possible_moves = game_state?.possible_moves ?? {}
 
 	$: possible_targets = selected_coord
 		? possible_moves[key(selected_coord)].map((move) => move.end)
@@ -69,7 +75,6 @@
 
 	socket.on("game_state", (server_game_state) => {
 		game_state = server_game_state
-		possible_moves = game_state.possible_moves
 
 		if (!game_state.is_started) {
 			open_invitation_dialog()
@@ -107,7 +112,11 @@
 
 	function select(coord: Coord): void {
 		if (!game_state || game_state?.is_ended || !my_turn) return
-		const piece = game_state.board_state[key(coord)]
+
+		const piece = game_state.pieces.find(
+			(piece) => key(piece.coord) === key(coord),
+		)
+
 		if (selected_coord) {
 			if (key(selected_coord) === key(coord)) {
 				selected_coord = null
@@ -116,7 +125,7 @@
 			} else {
 				generate_move(selected_coord, coord)
 			}
-		} else if (piece.color === my_color) {
+		} else if (piece?.color === my_color) {
 			selected_coord = coord
 		}
 	}
@@ -269,7 +278,7 @@
 			{:else}
 				<div in:fade={{ duration: 200 }}>
 					<Board
-						board_state={game_state.board_state}
+						pieces={game_state.pieces}
 						{selected_coord}
 						{possible_targets}
 						flipped={game_state.is_started && board_flipped}
