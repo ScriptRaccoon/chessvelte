@@ -26,5 +26,6 @@
 			calc(var(--y) * var(--unit))
 		);
 		z-index: 2;
+		transition: transform 180ms ease-out;
 	}
 </style>

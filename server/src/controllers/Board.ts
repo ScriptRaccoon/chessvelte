@@ -17,10 +17,12 @@ export class Board {
 	}
 
 	get pieces(): Piece_State[] {
-		return this.coords.map((coord) => {
-			const piece = this.get(coord)!
-			return piece.state(coord)
-		})
+		return this.coords
+			.map((coord) => {
+				const piece = this.get(coord)!
+				return piece.state(coord)
+			})
+			.sort((p, q) => p.id.localeCompare(q.id))
 	}
 
 	public copy(): Board {
