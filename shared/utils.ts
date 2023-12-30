@@ -1,5 +1,5 @@
 import { CHARACTERS, PROMOTION_PIECE_TYPES, SIZE } from "./config"
-import type { Color, Coord, Coord_Key, Piece_Type } from "./types"
+import type { Color, Coord, Coord_Key, Piece_State, Piece_Type } from "./types"
 
 export function generate_short_id(length: number): string {
 	let result = ""
@@ -110,4 +110,13 @@ export function is_valid_promotion_choice(
 	choice: Piece_Type | undefined,
 ): choice is Piece_Type {
 	return choice !== undefined && PROMOTION_PIECE_TYPES.includes(choice)
+}
+
+export function filter_pieces(
+	pieces: Piece_State[],
+	color: string,
+): Piece_State[] {
+	return pieces
+		.filter((piece) => piece.color === color)
+		.sort((p, q) => p.value - q.value)
 }

@@ -19,8 +19,6 @@
 - that should also work on mobile if possible
 - animation of pieces (for some reason, adding css transition does not work,
   even when we add the IDs to the pieces and use a keyed-each-block)
-- captured pieces card is too prominent
-- captures pieces are not centered vertically
 
 
 ### STRUCTURE ###

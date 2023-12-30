@@ -1,4 +1,4 @@
-import { Coord } from "./types"
+import { Coord, Piece_State } from "./types"
 import {
 	capitalize,
 	deep_copy,
@@ -18,6 +18,7 @@ import {
 	map_object,
 	display_large_number,
 	is_valid_promotion_choice,
+	filter_pieces,
 } from "./utils"
 
 import { JSDOM } from "jsdom"
@@ -269,5 +270,25 @@ describe("is_valid_promotion_choice", () => {
 		expect(is_valid_promotion_choice("king")).toBe(false)
 		expect(is_valid_promotion_choice("pawn")).toBe(false)
 		expect(is_valid_promotion_choice(undefined)).toBe(false)
+	})
+})
+
+describe("filter_pieces", () => {
+	it("should filter and sort pieces by color and value", () => {
+		const pieces: Piece_State[] = [
+			{ type: "pawn", color: "white", value: 1 },
+			{ type: "queen", color: "white", value: 9 },
+			{ type: "pawn", color: "black", value: 1 },
+			{ type: "bishop", color: "white", value: 3 },
+			{ type: "rook", color: "black", value: 5 },
+		]
+
+		const filtered = filter_pieces(pieces, "white")
+
+		expect(filtered).toEqual([
+			{ type: "pawn", color: "white", value: 1 },
+			{ type: "bishop", color: "white", value: 3 },
+			{ type: "queen", color: "white", value: 9 },
+		])
 	})
 })
