@@ -13,7 +13,7 @@
 	export let is_ended: boolean
 	export let pending_messages: number = 0
 
-	$: turn_message = my_turn ? "It's your turn" : "Wait"
+	$: turn_message = my_turn ? "Your turn" : "Wait"
 </script>
 
 <div class="wrapper">
@@ -23,7 +23,7 @@
 		</div>
 	</span>
 
-	<div class="message" aria-live="polite">
+	<div aria-live="polite">
 		{#if !is_ended}
 			<span class="turn_message">{turn_message}</span>
 		{/if}
@@ -101,5 +101,11 @@
 		font-size: 0.9rem;
 		border-radius: 100vw;
 		background-color: var(--error-color);
+	}
+
+	@media (max-width: 22rem) {
+		.turn_message {
+			font-size: 0.75rem;
+		}
 	}
 </style>
