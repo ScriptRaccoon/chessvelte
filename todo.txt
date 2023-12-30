@@ -1,6 +1,4 @@
 ### BUGS ###
-- on mobile prod, the resign modal is still not shown for the resigning player
-  need to fix the close logic for the modal
 
 
 ### FEATURES ###
@@ -9,6 +7,7 @@
 ### DESIGN ####
 - drag and drop on desktop to move pieces, since clicking is not intuitive,
   that should also work on mobile if possible
+- remove piece animations during reset or flip
 
 
 ### STRUCTURE ###

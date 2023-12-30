@@ -6,7 +6,7 @@ import type {
 	Move_State,
 	Coord_Key,
 } from "$shared/types"
-import { Capture, Move, Possible_Moves } from "../types.server"
+import { Move, Possible_Moves } from "../types.server"
 import { OUTCOME_MESSAGES } from "$shared/config"
 import {
 	get_other_color,
@@ -16,10 +16,11 @@ import {
 } from "$shared/utils"
 import { SimpleDB } from "$shared/SimpleDB"
 
-import { MoveHistory } from "./MoveHistory"
 import { Board } from "./Board"
 import { Player } from "./Player"
 import { PlayerGroup } from "./PlayerGroup"
+import { MoveHistory } from "./MoveHistory"
+import { CaptureHistory } from "./CaptureHistory"
 
 /**
  * This class represents a chess game. It is responsible for storing the state of the game
@@ -35,13 +36,13 @@ export class Game {
 
 	#id: string
 	private player_group = new PlayerGroup()
-	private board: Board = new Board()
-	private move_history: MoveHistory = new MoveHistory()
+	private board = new Board()
+	private move_history = new MoveHistory()
+	private capture_history = new CaptureHistory()
 	private status: Game_Status = "waiting"
 	private current_color: Color = "white"
 	private possible_moves: Possible_Moves = {}
 	private number_of_possible_moves: number = 0
-	private captures: Capture[] = []
 	private during_draw_offer: boolean = false
 	private is_ended: boolean = false
 
@@ -57,7 +58,7 @@ export class Game {
 		return {
 			current_color: this.current_color,
 			pieces: this.board.pieces,
-			captured_pieces: this.captured_pieces,
+			captured_pieces: this.capture_history.pieces,
 			is_started: this.is_started,
 			is_ended: this.has_ended,
 			player_names: this.player_group.player_names,
@@ -102,10 +103,6 @@ export class Game {
 
 	public get outcome(): string {
 		return OUTCOME_MESSAGES[this.status]
-	}
-
-	private get captured_pieces(): Piece_State[] {
-		return this.captures.map((capture) => capture.piece.state(capture.coord))
 	}
 
 	private get last_move(): Move_State | null {
@@ -162,7 +159,7 @@ export class Game {
 	private apply_move(move: Move): void {
 		this.move_history.push(move)
 		const capture = this.board.apply_move(move)
-		if (capture) this.captures.push(capture)
+		if (capture) this.capture_history.add(capture)
 	}
 
 	private switch_current_color(): void {
@@ -184,9 +181,9 @@ export class Game {
 	public reset(): void {
 		this.current_color = "white"
 		this.status = "playing"
-		this.captures = []
 		this.is_ended = false
 		this.during_draw_offer = false
+		this.capture_history.clear()
 		this.move_history.clear()
 		this.board.reset()
 		this.compute_possible_moves()
