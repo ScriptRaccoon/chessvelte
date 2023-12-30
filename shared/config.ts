@@ -51,3 +51,5 @@ export const OUTCOME_MESSAGES: Record<Game_Status, string> = {
 	"resigned-black": "Black has resigned",
 	"drawn": "Drawn by agreement",
 }
+
+export const PIECE_SPEED = 180

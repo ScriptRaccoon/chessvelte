@@ -17,6 +17,8 @@
 		Move_State,
 	} from "$shared/types"
 	import { key } from "$shared/utils"
+	import { animate_pieces } from "$lib/stores"
+	import { PIECE_SPEED } from "$shared/config"
 
 	import Toast, { send_toast } from "./ui/Toast.svelte"
 	import Dialog, { close_dialog, open_dialog } from "./ui/Dialog.svelte"
@@ -83,7 +85,9 @@
 
 	socket.on("color", (color) => {
 		my_color = color
+		$animate_pieces = false
 		board_flipped = my_color === "black"
+		setTimeout(() => ($animate_pieces = true), PIECE_SPEED)
 	})
 
 	socket.on("toast", (message, variant) => {
@@ -255,7 +259,9 @@
 	}
 
 	function flip_board() {
+		$animate_pieces = false
 		board_flipped = !board_flipped
+		setTimeout(() => ($animate_pieces = true), PIECE_SPEED)
 	}
 
 	function toggle_settings() {
