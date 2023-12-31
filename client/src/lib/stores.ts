@@ -36,5 +36,3 @@ export const board_theme = local_store<string>(
 	DEFAULT_THEME,
 	(theme) => (document.body.className = `theme-${theme}`),
 )
-
-export const animate_pieces = writable<boolean>(false)

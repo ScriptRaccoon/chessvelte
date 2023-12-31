@@ -12,6 +12,7 @@
 	export let possible_targets: Coord[] = []
 	export let flipped: boolean = false
 	export let last_move: Move_State | null = null
+	export let animate_pieces: boolean = false
 </script>
 
 <div class="board" style:--size={SIZE}>
@@ -33,7 +34,11 @@
 		{/each}
 	</div>
 	{#each pieces as piece (piece.id)}
-		<Piece {piece} coord={rotate(piece.coord, flipped)} />
+		<Piece
+			{piece}
+			coord={rotate(piece.coord, flipped)}
+			animated={animate_pieces}
+		/>
 	{/each}
 </div>
 

@@ -127,10 +127,10 @@ export class SocketController {
 		this.send_game_state()
 		this.send("toast", `${this.player.name} has restarted the game`, "info")
 		this.send_start_messages()
-		this.send_new_colors()
+		this.send_colors()
 	}
 
-	public send_new_colors(): void {
+	public send_colors(): void {
 		for (const socket_id of this.game.player_group.keys) {
 			const new_color = this.game.player_group.get(socket_id)!.color
 			this.io.to(socket_id).emit("color", new_color)
