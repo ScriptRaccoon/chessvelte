@@ -50,8 +50,9 @@ export class SocketController {
 	}
 
 	private send_start_messages(): void {
-		if (!this.game.start_messages) return
-		for (const msg of this.game.start_messages) {
+		const messages = this.game.player_group.start_messages
+		if (!messages) return
+		for (const msg of messages) {
 			this.send("chat", { content: msg })
 		}
 	}
@@ -82,7 +83,7 @@ export class SocketController {
 	}
 
 	public execute_move(move: Move_State): void {
-		const player = this.game.get_player(this.socket.id)
+		const player = this.game.player_group.get(this.socket.id)
 		if (!player || !this.game.status.is_allowed_to_move(player.color)) return
 		this.game.execute_move(move)
 		this.send_game_state()
@@ -90,7 +91,7 @@ export class SocketController {
 	}
 
 	public resign(): void {
-		const player = this.game.get_player(this.socket.id)
+		const player = this.game.player_group.get(this.socket.id)
 		if (!this.game.status.is_playing || !player) return
 		this.game.status.resign(player.color)
 		this.send_game_state()
@@ -122,7 +123,7 @@ export class SocketController {
 	public restart(): void {
 		if (!this.game.status.is_ended) return
 		this.game.reset()
-		this.game.switch_player_colors()
+		this.game.player_group.switch_colors()
 		this.send_game_state()
 		this.send("toast", `${this.player.name} has restarted the game`, "info")
 		this.send_start_messages()
@@ -130,8 +131,8 @@ export class SocketController {
 	}
 
 	public send_new_colors(): void {
-		for (const socket_id of this.game.list_of_sockets) {
-			const new_color = this.game.get_player(socket_id)!.color
+		for (const socket_id of this.game.player_group.keys) {
+			const new_color = this.game.player_group.get(socket_id)!.color
 			this.io.to(socket_id).emit("color", new_color)
 		}
 	}

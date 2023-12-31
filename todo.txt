@@ -1,4 +1,5 @@
 ### BUGS ###
+- disabling of piece animation on startup is not always working
 
 
 ### FEATURES ###
@@ -10,7 +11,7 @@
 
 
 ### STRUCTURE ###
-- try to reduce god class "Game" to simpler modules
+- try to reduce god class "Game" to simpler modules (WIP)
 - increase Jest test coverage
 - more defensive programming
 - technical documentation about project structure and dependencies in readme

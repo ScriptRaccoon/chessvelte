@@ -3,7 +3,7 @@ import type { Board } from "./Board"
 import type { Color, Coord, Piece_Type, Piece_State } from "$shared/types"
 import type { Move } from "../types.server"
 import { SIZE, PIECE_VALUES } from "$shared/config"
-import { generate_short_id, is_valid } from "$shared/utils"
+import { generate_short_id, is_valid, key } from "$shared/utils"
 
 /**
  * This abstract class represents a generic chess piece.
@@ -94,6 +94,12 @@ export abstract class Piece {
 	): Move[] {
 		return directions.flatMap((direction) =>
 			Array.from(this.moves_in_direction(direction, coord, board)),
+		)
+	}
+
+	public attacks(coord: Coord, board: Board, target: Coord): boolean {
+		return this.get_moves(coord, board, null, false).some(
+			(move) => key(move.end) === key(target),
 		)
 	}
 }

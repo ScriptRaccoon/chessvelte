@@ -23,7 +23,7 @@ export class Game {
 	}
 
 	#id: string
-	private player_group = new PlayerGroup()
+	public player_group = new PlayerGroup()
 	private board = new Board()
 	private move_history = new MoveHistory()
 	private capture_history = new CaptureHistory()
@@ -62,14 +62,6 @@ export class Game {
 		return this.#id
 	}
 
-	public get start_messages(): string[] | null {
-		return this.player_group.start_messages
-	}
-
-	public get list_of_sockets(): string[] {
-		return this.player_group.keys
-	}
-
 	private get last_move(): Move_State | null {
 		const last = this.move_history.get_last()
 		if (!last) return null
@@ -95,10 +87,6 @@ export class Game {
 		return result
 	}
 
-	public get_player(socket_id: string): Player | undefined {
-		return this.player_group.get(socket_id)
-	}
-
 	public execute_move(move_attempt: Move_State): void {
 		const { start, end, promotion_choice } = move_attempt
 		const moves = this.possible_moves[key(start)]
@@ -120,10 +108,6 @@ export class Game {
 		this.move_history.push(move)
 		const capture = this.board.apply_move(move)
 		if (capture) this.capture_history.add(capture)
-	}
-
-	public switch_player_colors(): void {
-		this.player_group.switch_colors()
 	}
 
 	private handle_ending(): void {

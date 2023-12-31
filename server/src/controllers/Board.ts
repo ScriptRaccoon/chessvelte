@@ -1,4 +1,4 @@
-import type { Coord, Color, Piece_State } from "$shared/types"
+import type { Coord, Color, Piece_State, Piece_Type } from "$shared/types"
 import type { Capture, Move, Piece_Map } from "../types.server"
 import type { Piece } from "./Piece"
 import { INITIAL_CONFIG } from "../pieces/pieces.config"
@@ -72,21 +72,24 @@ export class Board {
 		return move.capture
 	}
 
-	public is_check(color: Color): boolean {
-		const king_coord = this.coords.find((coord) => {
-			const king = this.get(coord)
-			return king?.type === "king" && king.color === color
-		})
-		if (!king_coord) return false
-		for (const coord of this.coords) {
+	private coord_by_type(type: Piece_Type, color: Color): Coord | undefined {
+		return this.coords.find((coord) => {
 			const piece = this.get(coord)
-			if (!piece || piece.color === color) continue
-			const moves = piece.get_moves(coord, this, null, false)
-			for (const move of moves) {
-				const is_attacking = key(move.end) === key(king_coord)
-				if (is_attacking) return true
-			}
-		}
-		return false
+			return piece?.type === type && piece.color === color
+		})
+	}
+
+	public is_check(color: Color): boolean {
+		const king_coord = this.coord_by_type("king", color)
+		if (!king_coord) return false
+
+		return this.coords.some((coord) => {
+			const piece = this.get(coord)
+			return (
+				piece !== undefined &&
+				piece.color !== color &&
+				piece.attacks(coord, this, king_coord)
+			)
+		})
 	}
 }
