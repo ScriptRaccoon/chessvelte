@@ -39,19 +39,23 @@ export function typed_keys<T extends {}>(obj: T): (keyof T)[] {
 	return Object.keys(obj) as (keyof T)[]
 }
 
+export function map_object<K extends string, V, W>(
+	obj: Record<K, V>,
+	transform: (value: V) => W,
+): Record<K, W> {
+	return Object.fromEntries(
+		Object.entries(obj).map(([key, value]: [K, V]) => [key, transform(value)]),
+	) as Record<K, W>
+}
+
 interface copyable<T> {
 	copy: () => T
 }
 
-export function deep_copy<S extends string | number, T extends copyable<T>>(
+export function deep_copy<S extends string, T extends copyable<T>>(
 	obj: Record<S, T | undefined>,
 ): Record<S, T | undefined> {
-	const keys = typed_keys(obj)
-	const copy = {} as Record<S, T | undefined>
-	for (const key of keys) {
-		copy[key] = obj[key] ? obj[key]?.copy() : undefined
-	}
-	return copy
+	return map_object(obj, (value) => value?.copy())
 }
 
 export function inner_range(a: number, b: number): number[] {
@@ -90,15 +94,6 @@ export function rotate(coord: Coord, flipped: boolean = true): Coord {
 export function abridge(text: string, length: number): string {
 	if (text.length <= length) return text
 	return `${text.slice(0, length - 2)}...`
-}
-
-export function map_object<K extends string, V, W>(
-	obj: Record<K, V>,
-	transform: (value: V) => W,
-): Record<K, W> {
-	return Object.fromEntries(
-		Object.entries(obj).map(([key, value]: [K, V]) => [key, transform(value)]),
-	) as Record<K, W>
 }
 
 export function display_large_number(num: number): string {
