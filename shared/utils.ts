@@ -1,5 +1,5 @@
-import { CHARACTERS, PROMOTION_PIECE_TYPES, SIZE } from "./config"
 import type { Color, Coord, Coord_Key, Piece_State, Piece_Type } from "./types"
+import { CHARACTERS, PROMOTION_PIECE_TYPES, SIZE } from "./config"
 
 export function generate_short_id(length: number): string {
 	let result = ""

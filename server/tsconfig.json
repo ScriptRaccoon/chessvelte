@@ -6,7 +6,8 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"paths": {
-			"$shared/*": ["../shared/*"]
+			"$shared/*": ["../shared/*"],
+			"$src/*": ["./src/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "../shared/**/*.ts"],

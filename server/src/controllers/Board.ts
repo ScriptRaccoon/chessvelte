@@ -1,8 +1,8 @@
 import type { Coord, Color, Piece_State, Piece_Type } from "$shared/types"
-import type { Capture, Move, Piece_Map } from "../types.server"
+import type { Capture, Move, Piece_Map } from "$src/types.server"
 import type { Piece } from "./Piece"
-import { INITIAL_CONFIG } from "../pieces/pieces.config"
-import { create_piece } from "../pieces/create"
+import { INITIAL_CONFIG } from "$src/pieces/pieces.config"
+import { create_piece } from "$src/pieces/create"
 import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
 
 /**

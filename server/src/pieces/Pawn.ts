@@ -1,10 +1,10 @@
-import type { Board } from "../controllers/Board"
-import type { MoveHistory } from "../controllers/MoveHistory"
-import { Piece } from "../controllers/Piece"
+import type { Board } from "$src/controllers/Board"
+import type { MoveHistory } from "$src/controllers/MoveHistory"
+import type { Color, Coord } from "$shared/types"
+import type { Move } from "$src/types.server"
+import { Piece } from "$src/controllers/Piece"
 import { DIRECTION, ROWS } from "$shared/config"
 import { is_valid } from "$shared/utils"
-import type { Color, Coord } from "$shared/types"
-import type { Move } from "../types.server"
 
 export class Pawn extends Piece {
 	constructor(color: Color) {

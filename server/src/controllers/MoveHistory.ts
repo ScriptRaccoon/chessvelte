@@ -1,4 +1,4 @@
-import { Move } from "../types.server"
+import { Move } from "$src/types.server"
 import type { Piece } from "./Piece"
 
 /**

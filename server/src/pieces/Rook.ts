@@ -1,7 +1,7 @@
 import type { Color, Coord } from "$shared/types"
-import type { Move } from "../types.server"
-import { Piece } from "../controllers/Piece"
-import type { Board } from "../controllers/Board"
+import type { Move } from "$src/types.server"
+import type { Board } from "$src/controllers/Board"
+import { Piece } from "$src/controllers/Piece"
 
 export class Rook extends Piece {
 	constructor(color: Color) {

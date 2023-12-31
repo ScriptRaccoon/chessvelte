@@ -1,4 +1,4 @@
-import { Piece_Map } from "../types.server"
+import { Piece_Map } from "$src/types.server"
 import { Bishop } from "./Bishop"
 import { King } from "./King"
 import { Knight } from "./Knight"

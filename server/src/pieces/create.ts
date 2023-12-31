@@ -1,4 +1,4 @@
-import type { Piece } from "../controllers/Piece"
+import type { Piece } from "$src/controllers/Piece"
 import type { Color } from "$shared/types"
 import { King } from "./King"
 import { Bishop } from "./Bishop"
