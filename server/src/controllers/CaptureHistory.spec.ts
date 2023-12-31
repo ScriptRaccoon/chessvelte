@@ -1,6 +1,6 @@
 import { CaptureHistory } from "./CaptureHistory"
 import { Capture } from "$src/types.server"
-import { create_piece } from "$src/pieces/create"
+import { create_piece } from "$src/pieces/create_piece"
 import { generate_short_id } from "$shared/utils"
 
 jest.mock("$shared/utils", () => ({
