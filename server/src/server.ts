@@ -3,8 +3,8 @@ import chalk from "chalk"
 import dotenv from "dotenv"
 import { Server } from "socket.io"
 import type { Client_Event, Server_Event } from "$shared/types"
-import { Game } from "$src/controllers/Game"
-import { SocketController } from "$src/controllers/SocketController"
+import { Game } from "$server/controllers/Game"
+import { SocketController } from "$server/controllers/SocketController"
 
 dotenv.config()
 

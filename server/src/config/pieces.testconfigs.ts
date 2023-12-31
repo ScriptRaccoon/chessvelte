@@ -1,9 +1,9 @@
-import type { Piece_Map } from "$src/types.server"
-import { Bishop } from "$src/pieces/Bishop"
-import { King } from "$src/pieces/King"
-import { Knight } from "$src/pieces/Knight"
-import { Pawn } from "$src/pieces/Pawn"
-import { Rook } from "$src/pieces/Rook"
+import type { Piece_Map } from "$server/types.server"
+import { Bishop } from "$server/pieces/Bishop"
+import { King } from "$server/pieces/King"
+import { Knight } from "$server/pieces/Knight"
+import { Pawn } from "$server/pieces/Pawn"
+import { Rook } from "$server/pieces/Rook"
 
 /**
  * Configuration to test check feature

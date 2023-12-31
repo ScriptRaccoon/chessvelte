@@ -1,5 +1,5 @@
 import { Coord, Piece_Type, Coord_Key, Move_Type } from "$shared/types"
-import { type Piece } from "$src/controllers/Piece"
+import { type Piece } from "$server/controllers/Piece"
 
 export type Piece_Map = Record<Coord_Key, Piece | undefined>
 

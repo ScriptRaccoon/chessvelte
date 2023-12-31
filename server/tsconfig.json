@@ -7,7 +7,7 @@
 		"esModuleInterop": true,
 		"paths": {
 			"$shared/*": ["../shared/*"],
-			"$src/*": ["./src/*"]
+			"$server/*": ["./src/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "../shared/**/*.ts"],

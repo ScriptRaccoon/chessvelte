@@ -1,6 +1,6 @@
-import { Queen } from "$src/pieces/Queen"
-import { Rook } from "$src/pieces/Rook"
-import { Move } from "$src/types.server"
+import { Queen } from "$server/pieces/Queen"
+import { Rook } from "$server/pieces/Rook"
+import { Move } from "$server/types.server"
 import { MoveHistory } from "./MoveHistory"
 import { Piece } from "./Piece"
 

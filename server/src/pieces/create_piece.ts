@@ -1,5 +1,5 @@
 import type { Color, Piece_Type } from "$shared/types"
-import { Piece } from "$src/controllers/Piece"
+import { Piece } from "$server/controllers/Piece"
 import { King } from "./King"
 import { Bishop } from "./Bishop"
 import { Knight } from "./Knight"

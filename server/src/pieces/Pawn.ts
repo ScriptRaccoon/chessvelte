@@ -1,8 +1,8 @@
-import type { Board } from "$src/controllers/Board"
-import type { MoveHistory } from "$src/controllers/MoveHistory"
+import type { Board } from "$server/controllers/Board"
+import type { MoveHistory } from "$server/controllers/MoveHistory"
 import type { Color, Coord } from "$shared/types"
-import type { Move } from "$src/types.server"
-import { Piece } from "$src/controllers/Piece"
+import type { Move } from "$server/types.server"
+import { Piece } from "$server/controllers/Piece"
 import { DIRECTION, ROWS } from "$shared/config"
 import { is_valid } from "$shared/utils"
 

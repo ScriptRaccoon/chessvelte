@@ -5,5 +5,6 @@ module.exports = {
 	moduleDirectories: ["node_modules", "<rootDir>"],
 	moduleNameMapper: {
 		"^\\$shared/(.*)$": "<rootDir>/shared/$1",
+		"^\\$server/(.*)$": "<rootDir>/server/src/$1",
 	},
 }

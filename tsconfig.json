@@ -3,7 +3,8 @@
 		"esModuleInterop": true,
 		"types": ["@types/jest"],
 		"paths": {
-			"$shared/*": ["./shared/*"]
+			"$shared/*": ["./shared/*"],
+			"$server/*": ["./server/src/*"]
 		}
 	}
 }

@@ -1,7 +1,7 @@
 import type { Color, Coord } from "$shared/types"
-import type { Board } from "$src/controllers/Board"
-import type { Move } from "$src/types.server"
-import { Piece } from "$src/controllers/Piece"
+import type { Board } from "$server/controllers/Board"
+import type { Move } from "$server/types.server"
+import { Piece } from "$server/controllers/Piece"
 
 export class Queen extends Piece {
 	constructor(color: Color) {
