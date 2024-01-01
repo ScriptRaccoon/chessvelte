@@ -1,7 +1,5 @@
 import type { Coord } from "$shared/types"
-import { King } from "$server/pieces/King"
-import { Queen } from "$server/pieces/Queen"
-import { Rook } from "$server/pieces/Rook"
+import { King, Queen, Rook } from "$server/pieces"
 import { generate_short_id } from "$shared/utils"
 import { Board } from "./Board"
 import { Piece } from "./Piece"

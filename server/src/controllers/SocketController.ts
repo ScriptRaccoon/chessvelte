@@ -1,4 +1,4 @@
-import {
+import type {
 	Chat_Message,
 	Client_Event,
 	Move_State,

@@ -1,5 +1,5 @@
 import type { Game_State, Move_State, Coord_Key } from "$shared/types"
-import { Move, Possible_Moves } from "$server/types.server"
+import type { Move, Possible_Moves } from "$server/types.server"
 import { is_valid_promotion_choice, key, map_object } from "$shared/utils"
 import { SimpleDB } from "$shared/SimpleDB"
 

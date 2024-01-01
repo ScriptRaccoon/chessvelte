@@ -1,4 +1,4 @@
-import { Color } from "$shared/types"
+import type { Color } from "$shared/types"
 import { get_other_color } from "$shared/utils"
 
 /**

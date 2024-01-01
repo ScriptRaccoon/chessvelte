@@ -1,9 +1,5 @@
 import type { Piece_Map } from "$server/types.server"
-import { Bishop } from "$server/pieces/Bishop"
-import { King } from "$server/pieces/King"
-import { Knight } from "$server/pieces/Knight"
-import { Pawn } from "$server/pieces/Pawn"
-import { Rook } from "$server/pieces/Rook"
+import { Bishop, Rook, Knight, Queen, King, Pawn } from "$server/pieces"
 
 /**
  * Configuration to test check feature
@@ -33,7 +29,7 @@ export const CHECKMATE: Piece_Map = {
 	"00": new King("black"),
 	"34": new Knight("white"),
 	"21": new King("white"),
-	"45": new Rook("white"),
+	"45": new Queen("white"),
 }
 
 /**

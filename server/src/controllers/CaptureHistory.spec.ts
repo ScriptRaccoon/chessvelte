@@ -1,5 +1,5 @@
+import type { Capture } from "$server/types.server"
 import { CaptureHistory } from "./CaptureHistory"
-import { Capture } from "$server/types.server"
 import { create_piece } from "$server/pieces/create_piece"
 import { generate_short_id } from "$shared/utils"
 

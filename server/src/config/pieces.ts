@@ -1,10 +1,5 @@
 import type { Piece_Map } from "$server/types.server"
-import { Bishop } from "$server/pieces/Bishop"
-import { King } from "$server/pieces/King"
-import { Knight } from "$server/pieces/Knight"
-import { Pawn } from "$server/pieces/Pawn"
-import { Queen } from "$server/pieces/Queen"
-import { Rook } from "$server/pieces/Rook"
+import { Bishop, Rook, Knight, Queen, King, Pawn } from "$server/pieces"
 
 /**
  * Black pieces of the standard configation

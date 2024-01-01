@@ -1,5 +1,5 @@
+import type { Color, Game_Status } from "$shared/types"
 import { OUTCOME_MESSAGES } from "$shared/config"
-import { Color, Game_Status } from "$shared/types"
 import { get_other_color } from "$shared/utils"
 
 /**

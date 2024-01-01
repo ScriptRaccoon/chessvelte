@@ -1,11 +1,6 @@
 import type { Color, Piece_Type } from "$shared/types"
 import { Piece } from "$server/controllers/Piece"
-import { King } from "./King"
-import { Bishop } from "./Bishop"
-import { Knight } from "./Knight"
-import { Pawn } from "./Pawn"
-import { Queen } from "./Queen"
-import { Rook } from "./Rook"
+import { Bishop, King, Knight, Pawn, Queen, Rook } from "./"
 
 export function create_piece(type: Piece_Type, color: Color): Piece {
 	switch (type) {

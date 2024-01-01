@@ -1,5 +1,5 @@
-import { Piece_State } from "$shared/types"
-import { Capture } from "$server/types.server"
+import type { Piece_State } from "$shared/types"
+import type { Capture } from "$server/types.server"
 
 /**
  * This class is responsible for storing the captured pieces.
