@@ -1,4 +1,7 @@
-import { Coord } from "$shared/types"
+import type { Coord } from "$shared/types"
+import { King } from "$server/pieces/King"
+import { Queen } from "$server/pieces/Queen"
+import { Rook } from "$server/pieces/Rook"
 import { generate_short_id } from "$shared/utils"
 import { Board } from "./Board"
 import { Piece } from "./Piece"
@@ -208,6 +211,42 @@ describe("Piece class", () => {
 			]
 			expect(actual_targets).toEqual(expect.arrayContaining(targets))
 			expect(targets).toEqual(expect.arrayContaining(actual_targets))
+		})
+	})
+
+	describe("get_save_moves", () => {
+		const black_queen = new Queen("black")
+		const white_king = new King("white")
+		const black_king = new King("black")
+		const white_rook = new Rook("white")
+		const board = new Board({
+			"00": black_queen,
+			"04": white_king,
+			"77": black_king,
+			"21": white_rook,
+		})
+		it("returns all king's moves that don't result in check", () => {
+			const moves = white_king.get_save_moves([0, 4], board)
+			expect(moves.length).toBe(3)
+		})
+		it("returns all moves that protect the king from check", () => {
+			const moves = white_rook.get_save_moves([2, 1], board)
+			expect(moves.length).toBe(1)
+			expect(moves[0].end).toEqual([0, 1])
+		})
+	})
+
+	describe("attacks", () => {
+		it("checks if a coordinate is attacked by a piece", () => {
+			const black_queen = new Queen("black")
+			const board = new Board({
+				"55": black_queen,
+			})
+			expect(black_queen.attacks([5, 5], board, [0, 0])).toBe(true)
+			expect(black_queen.attacks([5, 5], board, [7, 7])).toBe(true)
+			expect(black_queen.attacks([5, 5], board, [5, 6])).toBe(true)
+			expect(black_queen.attacks([5, 5], board, [2, 1])).toBe(false)
+			expect(black_queen.attacks([5, 5], board, [6, 7])).toBe(false)
 		})
 	})
 })

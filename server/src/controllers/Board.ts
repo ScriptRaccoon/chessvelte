@@ -12,7 +12,7 @@ import { deep_copy, typed_keys, key, unkey } from "$shared/utils"
 export class Board {
 	private map: Piece_Map
 
-	constructor(map: Piece_Map | null = null) {
+	constructor(map?: Piece_Map) {
 		this.map = map ?? deep_copy(INITIAL_CONFIG)
 	}
 

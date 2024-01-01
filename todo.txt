@@ -13,5 +13,6 @@
 - add JSDocs where appropriate
 - try to reduce god class "Game" to simpler modules (WIP)
 - increase Jest test coverage
+- write tests for Game.ts, SocketController.ts, Board.ts, and the piece classes
 - more defensive programming
 - technical documentation about project structure and dependencies in readme
