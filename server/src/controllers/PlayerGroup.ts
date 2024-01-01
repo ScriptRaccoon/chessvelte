@@ -50,7 +50,7 @@ export class PlayerGroup {
 		name: string,
 	): { success: boolean; is_new: boolean; player?: Player } {
 		const old_socket_id = this.keys.find(
-			(id) => this.get(id)?.client_id === client_id,
+			(id) => this.get(id)!.client_id === client_id,
 		)
 
 		if (old_socket_id) {

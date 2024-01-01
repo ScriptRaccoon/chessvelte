@@ -124,6 +124,15 @@ describe("utils", () => {
 			expect(copy["11"]?.data.includes(4)).toBe(true)
 			expect(original["11"]?.data.includes(4)).toBe(false)
 		})
+
+		it("also works when values are undefined", () => {
+			const original: { [x in string]?: List<number> } = {
+				"11": new List([1, 2, 3]),
+				"12": undefined,
+			}
+			const copy = utils.deep_copy(original)
+			expect(copy["12"]).toBe(undefined)
+		})
 	})
 
 	describe("inner_range", () => {
