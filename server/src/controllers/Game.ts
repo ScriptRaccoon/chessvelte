@@ -1,6 +1,6 @@
-import type { Game_State, Move_Info, Coord_Key } from "$shared/types"
-import type { Move, Possible_Moves } from "$server/types.server"
-import { is_valid_promotion_choice, key, map_object } from "$shared/utils"
+import type { Game_State, Move_Info } from "$shared/types"
+import type { Move } from "$server/types.server"
+import { is_valid_promotion_choice, key } from "$shared/utils"
 import { SimpleDB } from "$shared/SimpleDB"
 
 import { Board } from "./Board"
@@ -9,6 +9,7 @@ import { PlayerGroup } from "./PlayerGroup"
 import { MoveHistory } from "./MoveHistory"
 import { CaptureHistory } from "./CaptureHistory"
 import { StatusManager } from "./StatusManager"
+import { MoveComputer } from "./MoveComputer"
 
 /**
  * This class represents a chess game. It is responsible for storing the state of the game
@@ -23,18 +24,21 @@ export class Game {
 	}
 
 	#id: string
+	public status = new StatusManager()
 	public player_group = new PlayerGroup()
 	private board = new Board()
 	private move_history = new MoveHistory()
 	private capture_history = new CaptureHistory()
-	public status = new StatusManager()
-	private possible_moves: Possible_Moves = {}
-	private number_of_possible_moves: number = 0
+	private move_computer = new MoveComputer(
+		this.board,
+		this.status,
+		this.move_history,
+	)
 
 	constructor(id: string) {
 		this.#id = id
-		this.compute_possible_moves()
 		Game.db.add(id, this)
+		this.move_computer.update()
 	}
 
 	// GETTERS
@@ -47,26 +51,13 @@ export class Game {
 			pieces: this.board.pieces,
 			captured_pieces: this.capture_history.pieces,
 			player_names: this.player_group.player_names,
-			last_move: this.last_move,
-			possible_moves: this.possible_moves_state,
+			last_move: this.move_history.last_move_info,
+			possible_moves: this.move_computer.moves_info,
 		}
-	}
-
-	private get possible_moves_state(): Record<Coord_Key, Move_Info[]> {
-		return map_object(this.possible_moves, (moves) =>
-			moves.map(({ start, end, type }) => ({ start, end, type })),
-		)
 	}
 
 	public get id(): string {
 		return this.#id
-	}
-
-	private get last_move(): Move_Info | null {
-		const last = this.move_history.get_last()
-		if (!last) return null
-		const { start, end, type } = last
-		return { start, end, type }
 	}
 
 	// METHODS
@@ -77,19 +68,17 @@ export class Game {
 		name: string,
 	): { success: boolean; is_new: boolean; player?: Player } {
 		const result = this.player_group.add(socket_id, client_id, name)
-		if (
+		const will_start =
 			result.success &&
 			this.status.status === "waiting" &&
 			this.player_group.is_full
-		) {
-			this.status.start()
-		}
+		if (will_start) this.status.start()
 		return result
 	}
 
 	public execute_move(move_attempt: Move_Info): void {
 		const { start, end, promotion_choice } = move_attempt
-		const moves = this.possible_moves[key(start)]
+		const moves = this.move_computer.moves[key(start)]
 		const move = moves.find((move) => key(move.end) === key(end))
 		if (!move) return
 		if (move.type === "promotion") {
@@ -98,8 +87,8 @@ export class Game {
 		}
 		this.apply_move(move)
 		this.status.switch_color()
-		this.compute_possible_moves()
-		if (this.number_of_possible_moves === 0) {
+		this.move_computer.update()
+		if (this.move_computer.amount === 0) {
 			this.handle_ending()
 		}
 	}
@@ -121,20 +110,6 @@ export class Game {
 		this.capture_history.clear()
 		this.move_history.clear()
 		this.board.reset()
-		this.compute_possible_moves()
-	}
-
-	private compute_possible_moves(): void {
-		let counter = 0
-		const all_moves: Possible_Moves = {}
-		for (const coord of this.board.coords) {
-			const piece = this.board.get(coord)
-			if (!piece || piece.color !== this.status.current_color) continue
-			const moves = piece.get_save_moves(coord, this.board, this.move_history)
-			all_moves[key(coord)] = moves
-			counter += moves.length
-		}
-		this.number_of_possible_moves = counter
-		this.possible_moves = all_moves
+		this.move_computer.update()
 	}
 }

@@ -71,7 +71,7 @@ export class Pawn extends Piece {
 		}
 
 		// en passant
-		const last_move = move_history?.get_last()
+		const last_move = move_history?.last_move
 		if (!last_move) return moves
 
 		const { start, end, piece: other_piece, type } = last_move

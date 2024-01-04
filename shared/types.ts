@@ -31,6 +31,8 @@ export type Move_Info = {
 	promotion_choice?: Piece_Type
 }
 
+export type Possible_Moves_Info = Record<Coord_Key, Move_Info[]>
+
 export type Game_Status =
 	| "waiting"
 	| "playing"
@@ -47,7 +49,7 @@ export type Game_State = {
 	is_ended: boolean
 	player_names: [string, string] | null
 	last_move: Move_Info | null
-	possible_moves: Record<Coord_Key, Move_Info[]>
+	possible_moves: Possible_Moves_Info
 }
 
 export type Chat_Message = {

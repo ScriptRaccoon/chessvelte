@@ -1,7 +1,7 @@
 import type { Move } from "$server/types.server"
+import type { Piece } from "./Piece"
 import { Queen, Rook } from "$server/pieces"
 import { MoveHistory } from "./MoveHistory"
-import { Piece } from "./Piece"
 
 function generate_sample(
 	first_piece: Piece = new Rook("white"),
@@ -30,18 +30,30 @@ function generate_sample(
 }
 
 describe("MoveHistory class", () => {
-	describe("push and get_last", () => {
+	describe("push and last_move", () => {
 		it("add a move and retrieve it", () => {
 			const { second_move, move_history } = generate_sample()
-			expect(move_history.get_last()).toBe(second_move)
+			expect(move_history.last_move).toBe(second_move)
 		})
 	})
 
 	describe("clear", () => {
-		it("removes all moves, so get_last is undefined", () => {
+		it("removes all moves, so last_move is undefined", () => {
 			const { move_history } = generate_sample()
 			move_history.clear()
-			expect(move_history.get_last()).toBeUndefined()
+			expect(move_history.last_move).toBeFalsy()
+			expect(move_history.last_move_info).toBeFalsy()
+		})
+	})
+
+	describe("last_move_info", () => {
+		it("returns the info of the last move", () => {
+			const { second_move, move_history } = generate_sample()
+			expect(move_history.last_move_info).toEqual({
+				start: second_move.start,
+				end: second_move.end,
+				type: second_move.type,
+			})
 		})
 	})
 
