@@ -1,6 +1,5 @@
 import type { Game_State, Move_Info } from "$shared/types"
 import type { Move } from "$server/types.server"
-import { is_valid_promotion_choice, key } from "$shared/utils"
 import { SimpleDB } from "$shared/SimpleDB"
 
 import { Board } from "./Board"
@@ -76,27 +75,20 @@ export class Game {
 		return result
 	}
 
-	public execute_move(move_attempt: Move_Info): void {
-		const { start, end, promotion_choice } = move_attempt
-		const moves = this.move_computer.moves[key(start)]
-		const move = moves.find((move) => key(move.end) === key(end))
-		if (!move) return
-		if (move.type === "promotion") {
-			if (!is_valid_promotion_choice(promotion_choice)) return
-			move.promotion_choice = promotion_choice
-		}
-		this.apply_move(move)
+	public execute_move(move_info: Move_Info): void {
+		const move = this.move_computer.find_move(move_info)
+		if (move) this.process_move(move)
+	}
+
+	private process_move(move: Move): void {
+		this.move_history.push(move)
+		const capture = this.board.apply_move(move)
+		if (capture) this.capture_history.add(capture)
 		this.status.switch_color()
 		this.move_computer.update()
 		if (this.move_computer.amount === 0) {
 			this.handle_ending()
 		}
-	}
-
-	private apply_move(move: Move): void {
-		this.move_history.push(move)
-		const capture = this.board.apply_move(move)
-		if (capture) this.capture_history.add(capture)
 	}
 
 	private handle_ending(): void {

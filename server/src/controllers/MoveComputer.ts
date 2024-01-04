@@ -1,9 +1,9 @@
-import type { Possible_Moves_Info } from "$shared/types"
-import type { Possible_Moves } from "$server/types.server"
+import type { Move_Info, Possible_Moves_Info } from "$shared/types"
+import type { Move, Possible_Moves } from "$server/types.server"
 import type { Board } from "./Board"
 import type { MoveHistory } from "./MoveHistory"
 import type { StatusManager } from "./StatusManager"
-import { key, map_object } from "$shared/utils"
+import { is_valid_promotion_choice, key, map_object } from "$shared/utils"
 
 export class MoveComputer {
 	private _amount: number = 0
@@ -42,5 +42,17 @@ export class MoveComputer {
 		}
 		this._amount = counter
 		this._moves = all_moves
+	}
+
+	public find_move(move_info: Move_Info): Move | null {
+		const { start, end, promotion_choice } = move_info
+		const moves = this._moves[key(start)]
+		const move = moves.find((move) => key(move.end) === key(end))
+		if (!move) return null
+		if (move.type === "promotion") {
+			if (!is_valid_promotion_choice(promotion_choice)) return null
+			move.promotion_choice = promotion_choice
+		}
+		return move
 	}
 }
