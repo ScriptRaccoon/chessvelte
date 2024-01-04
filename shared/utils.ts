@@ -1,4 +1,4 @@
-import type { Color, Coord, Coord_Key, Piece_State, Piece_Type } from "./types"
+import type { Color, Coord, Coord_Key, Piece_Info, Piece_Type } from "./types"
 import { CHARACTERS, PROMOTION_PIECE_TYPES, SIZE } from "./config"
 
 export function generate_short_id(length: number): string {
@@ -108,9 +108,9 @@ export function is_valid_promotion_choice(
 }
 
 export function filter_pieces(
-	pieces: Piece_State[],
+	pieces: Piece_Info[],
 	color: string,
-): Piece_State[] {
+): Piece_Info[] {
 	return pieces
 		.filter((piece) => piece.color === color)
 		.sort((p, q) => p.value - q.value)

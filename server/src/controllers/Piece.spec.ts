@@ -39,16 +39,16 @@ describe("Piece class", () => {
 		})
 	})
 
-	describe("state", () => {
+	describe("info", () => {
 		it("returns an object with coord, type, color, value and id", () => {
 			id_mock.mockReturnValue("123")
 			const pawn = new _Piece("pawn", "white")
-			const state = pawn.state([0, 1])
-			expect(state.coord).toEqual([0, 1])
-			expect(state.type).toBe("pawn")
-			expect(state.color).toBe("white")
-			expect(state.value).toBe(1)
-			expect(state.id).toBe("123")
+			const info = pawn.info([0, 1])
+			expect(info.coord).toEqual([0, 1])
+			expect(info.type).toBe("pawn")
+			expect(info.color).toBe("white")
+			expect(info.value).toBe(1)
+			expect(info.id).toBe("123")
 		})
 	})
 

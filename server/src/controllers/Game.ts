@@ -1,4 +1,4 @@
-import type { Game_State, Move_State, Coord_Key } from "$shared/types"
+import type { Game_State, Move_Info, Coord_Key } from "$shared/types"
 import type { Move, Possible_Moves } from "$server/types.server"
 import { is_valid_promotion_choice, key, map_object } from "$shared/utils"
 import { SimpleDB } from "$shared/SimpleDB"
@@ -18,7 +18,7 @@ export class Game {
 	private static db = new SimpleDB<Game>()
 
 	public static get_or_create_by_id(id: string): Game {
-		if (Game.db.has(id)) return this.db.get(id)!
+		if (Game.db.has(id)) return Game.db.get(id)!
 		return new Game(id)
 	}
 
@@ -52,7 +52,7 @@ export class Game {
 		}
 	}
 
-	private get possible_moves_state(): Record<Coord_Key, Move_State[]> {
+	private get possible_moves_state(): Record<Coord_Key, Move_Info[]> {
 		return map_object(this.possible_moves, (moves) =>
 			moves.map(({ start, end, type }) => ({ start, end, type })),
 		)
@@ -62,7 +62,7 @@ export class Game {
 		return this.#id
 	}
 
-	private get last_move(): Move_State | null {
+	private get last_move(): Move_Info | null {
 		const last = this.move_history.get_last()
 		if (!last) return null
 		const { start, end, type } = last
@@ -87,7 +87,7 @@ export class Game {
 		return result
 	}
 
-	public execute_move(move_attempt: Move_State): void {
+	public execute_move(move_attempt: Move_Info): void {
 		const { start, end, promotion_choice } = move_attempt
 		const moves = this.possible_moves[key(start)]
 		const move = moves.find((move) => key(move.end) === key(end))

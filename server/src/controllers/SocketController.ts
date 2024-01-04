@@ -1,7 +1,7 @@
 import type {
 	Chat_Message,
 	Client_Event,
-	Move_State,
+	Move_Info,
 	Server_Event,
 } from "$shared/types"
 import type { Game } from "./Game"
@@ -82,7 +82,7 @@ export class SocketController {
 		this.send_game_state()
 	}
 
-	public execute_move(move: Move_State): void {
+	public execute_move(move: Move_Info): void {
 		const player = this.game.player_group.get(this.socket.id)
 		if (!player || !this.game.status.is_allowed_to_move(player.color)) return
 		this.game.execute_move(move)

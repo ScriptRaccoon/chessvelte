@@ -16,7 +16,7 @@ export type Piece_Type =
 	| "queen"
 	| "king"
 
-export type Piece_State = {
+export type Piece_Info = {
 	type: Piece_Type
 	color: Color
 	value: number
@@ -24,7 +24,7 @@ export type Piece_State = {
 	id: string
 }
 
-export type Move_State = {
+export type Move_Info = {
 	start: Coord
 	end: Coord
 	type: Move_Type
@@ -41,13 +41,13 @@ export type Game_Status =
 
 export type Game_State = {
 	current_color: Color
-	pieces: Piece_State[]
-	captured_pieces: Piece_State[]
+	pieces: Piece_Info[]
+	captured_pieces: Piece_Info[]
 	is_started: boolean
 	is_ended: boolean
 	player_names: [string, string] | null
-	last_move: Move_State | null
-	possible_moves: Record<Coord_Key, Move_State[]>
+	last_move: Move_Info | null
+	possible_moves: Record<Coord_Key, Move_Info[]>
 }
 
 export type Chat_Message = {
@@ -65,7 +65,7 @@ export type Server_Event = {
 }
 
 export type Client_Event = {
-	move: (move: Move_State) => void
+	move: (move: Move_Info) => void
 	join: (game_id: string, client_id: string, name: string) => void
 	restart: () => void
 	resign: () => void

@@ -14,7 +14,7 @@
 		Color,
 		Piece_Type,
 		Chat_Message,
-		Move_State,
+		Move_Info,
 	} from "$shared/types"
 	import { key } from "$shared/utils"
 
@@ -156,7 +156,7 @@
 
 	function finish_promotion(type: Piece_Type) {
 		if (!selected_coord || !promotion_target) return
-		const move: Move_State = {
+		const move: Move_Info = {
 			start: selected_coord,
 			end: promotion_target,
 			type: "promotion",

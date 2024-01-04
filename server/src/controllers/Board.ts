@@ -1,4 +1,4 @@
-import type { Coord, Color, Piece_State, Piece_Type } from "$shared/types"
+import type { Coord, Color, Piece_Info, Piece_Type } from "$shared/types"
 import type { Capture, Move, Piece_Map } from "$server/types.server"
 import type { Piece } from "./Piece"
 import { INITIAL_CONFIG } from "$server/config/pieces"
@@ -16,11 +16,11 @@ export class Board {
 		this.map = map ?? deep_copy(INITIAL_CONFIG)
 	}
 
-	get pieces(): Piece_State[] {
+	get pieces(): Piece_Info[] {
 		return this.coords
 			.map((coord) => {
 				const piece = this.get(coord)!
-				return piece.state(coord)
+				return piece.info(coord)
 			})
 			.sort((p, q) => p.id.localeCompare(q.id))
 	}

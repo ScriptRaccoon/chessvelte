@@ -1,4 +1,4 @@
-import { Coord, Piece_State } from "./types"
+import { Coord, Piece_Info } from "./types"
 import * as utils from "./utils"
 
 const mocked_random = jest.spyOn(Math, "random")
@@ -264,7 +264,7 @@ describe("utils", () => {
 
 	describe("filter_pieces", () => {
 		it("should filter and sort pieces by color and value", () => {
-			const pieces: Piece_State[] = [
+			const pieces: Piece_Info[] = [
 				{ type: "pawn", color: "white", value: 1, coord: [0, 1], id: "1" },
 				{ type: "queen", color: "white", value: 9, coord: [0, 1], id: "2" },
 				{ type: "pawn", color: "black", value: 1, coord: [0, 1], id: "3" },

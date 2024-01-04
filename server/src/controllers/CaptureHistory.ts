@@ -1,4 +1,4 @@
-import type { Piece_State } from "$shared/types"
+import type { Piece_Info } from "$shared/types"
 import type { Capture } from "$server/types.server"
 
 /**
@@ -11,8 +11,8 @@ export class CaptureHistory {
 		this.captures.push(capture)
 	}
 
-	get pieces(): Piece_State[] {
-		return this.captures.map((capture) => capture.piece.state(capture.coord))
+	get pieces(): Piece_Info[] {
+		return this.captures.map((capture) => capture.piece.info(capture.coord))
 	}
 
 	clear(): void {

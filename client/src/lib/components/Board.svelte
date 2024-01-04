@@ -2,16 +2,16 @@
 	import Piece from "./Piece.svelte"
 	import Square from "./Square.svelte"
 
-	import type { Piece_State, Coord, Move_State } from "$shared/types"
+	import type { Piece_Info, Coord, Move_Info } from "$shared/types"
 	import { COLS, ROWS, SIZE } from "$shared/config"
 	import { has_coord, gen_coord, key, rotate } from "$shared/utils"
 	import { highlight_setting } from "$lib/stores"
 
-	export let pieces: Piece_State[]
+	export let pieces: Piece_Info[]
 	export let selected_coord: Coord | null = null
 	export let possible_targets: Coord[] = []
 	export let flipped: boolean = false
-	export let last_move: Move_State | null = null
+	export let last_move: Move_Info | null = null
 	export let animate_pieces: boolean = false
 </script>
 

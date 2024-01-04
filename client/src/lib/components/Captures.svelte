@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Piece_State } from "$shared/types"
+	import type { Piece_Info } from "$shared/types"
 	import { filter_pieces, piece_src } from "$shared/utils"
 	import GameCard from "./GameCard.svelte"
 
-	export let captured_pieces: Piece_State[] = []
+	export let captured_pieces: Piece_Info[] = []
 
 	$: white_pieces = filter_pieces(captured_pieces, "white")
 	$: black_pieces = filter_pieces(captured_pieces, "black")

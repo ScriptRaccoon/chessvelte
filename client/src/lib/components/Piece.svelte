@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { piece_src } from "$shared/utils"
-	import type { Coord, Piece_State } from "$shared/types"
+	import type { Coord, Piece_Info } from "$shared/types"
 
-	export let piece: Piece_State
+	export let piece: Piece_Info
 	export let coord: Coord
 	export let animated: boolean = false
 </script>
