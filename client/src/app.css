@@ -20,8 +20,10 @@ button {
 	outline: none;
 }
 
+video,
 img {
 	display: block;
+	max-width: 100%;
 }
 
 input[type="text"] {

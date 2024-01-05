@@ -29,6 +29,7 @@
 	import Menu from "./Menu.svelte"
 	import Board from "./Board.svelte"
 	import Settings from "./Settings.svelte"
+	import Help from "./Help.svelte"
 
 	// PROPS
 
@@ -50,6 +51,7 @@
 
 	let board_flipped: boolean = false
 	let show_settings: boolean = false
+	let show_help: boolean = false
 
 	// COMPUTED VARIABLES
 
@@ -262,14 +264,21 @@
 
 	function toggle_settings() {
 		show_settings = !show_settings
+		if (show_settings) show_help = false
+	}
+
+	function toggle_help() {
+		show_help = !show_help
+		if (show_help) show_settings = false
 	}
 </script>
 
-<AppLayout two_sided={game_state?.is_started && !show_settings}>
+<AppLayout two_sided={game_state?.is_started && !show_settings && !show_help}>
 	<svelte:fragment slot="header">
 		<GameHeader
 			player_names={game_state?.player_names ?? null}
 			{toggle_settings}
+			{toggle_help}
 		/>
 	</svelte:fragment>
 
@@ -277,6 +286,8 @@
 		{#if game_state && my_color}
 			{#if show_settings}
 				<Settings bind:show_settings />
+			{:else if show_help}
+				<Help bind:show_help />
 			{:else}
 				<div in:fade={{ duration: 200 }}>
 					<Board
@@ -309,7 +320,7 @@
 	</svelte:fragment>
 
 	<svelte:fragment slot="aside">
-		{#if game_state?.is_started && !show_settings}
+		{#if game_state?.is_started && !show_settings && !show_help}
 			<Chat messages={chat_messages} {show_chat} on:chat={chat} />
 			<Captures captured_pieces={game_state?.captured_pieces ?? []} />
 		{/if}

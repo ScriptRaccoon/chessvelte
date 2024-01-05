@@ -5,9 +5,6 @@
 
 
 ### DESIGN ####
-- drag and drop on desktop to move pieces, since clicking is not intuitive,
-  that should also work on mobile if possible
-
 
 ### STRUCTURE ###
 - add JSDocs where appropriate

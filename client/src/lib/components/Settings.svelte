@@ -39,7 +39,7 @@
 	</div>
 
 	<div>
-		<button class="button" on:click={return_to_game}>Return</button>
+		<button class="button" on:click={return_to_game}>Return to the game</button>
 	</div>
 </GameCard>
 

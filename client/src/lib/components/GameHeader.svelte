@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Fa from "svelte-fa"
-	import { faCog, faHome } from "@fortawesome/free-solid-svg-icons"
+	import { faCog, faHome, faQuestion } from "@fortawesome/free-solid-svg-icons"
 	import { TITLE } from "$shared/config"
 	import { abridge } from "$shared/utils"
 
 	export let player_names: [string, string] | null = null
 	export let toggle_settings: () => void = () => {}
+	export let toggle_help: () => void = () => {}
 
 	$: shortened_names = player_names?.map((name) => abridge(name, 9)) ?? null
 </script>
@@ -24,6 +25,9 @@
 			on:click={toggle_settings}
 		>
 			<Fa icon={faCog} />
+		</button>
+		<button class="secondary" aria-label="toggle help" on:click={toggle_help}>
+			<Fa icon={faQuestion} />
 		</button>
 		<a href="/" aria-label="homepage">
 			<Fa icon={faHome} />
