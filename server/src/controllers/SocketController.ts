@@ -144,6 +144,7 @@ export class SocketController {
 
 	public handle_disconnect(): void {
 		const msg = `${this.player.name ?? "Player"} has disconnected`
+		this.game.status.cancel_draw()
 		this.send("toast", msg, "error")
 		this.send_others("chat", { content: msg })
 		this.socket.leave(this.game.id)
