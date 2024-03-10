@@ -1,12 +1,15 @@
 ### BUGS ###
 
-
 ### FEATURES ###
-
 
 ### DESIGN ####
 
 ### STRUCTURE ###
+
+
+all low prio:
+
+- bundling and compiling on server is not necessary, use tsx
 - add JSDocs where appropriate
 - increase Jest test coverage
 - write tests for Game.ts, SocketController.ts, Board.ts, and the piece classes
